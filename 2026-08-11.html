@@ -1,0 +1,1056 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Master Benchmark českých tech médií | 2026-08-11</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #111827;
+            --surface-card: #1a2234;
+            --surface-hover: #222d42;
+            --border: #2a364f;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.2);
+            --accent: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 2rem 1.5rem 5rem;
+        }
+        .container { max-width: 100%; margin: 0 auto; padding: 0 1rem; }
+        header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .header-title p { color: var(--text-muted); margin-top: 0.25rem; font-size: 0.95rem; }
+        .meta-badges { display: flex; gap: 0.75rem; align-items: center; }
+        .badge {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .badge-primary { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: var(--primary); }
+
+        .search-bar {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .search-input {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+
+        /* Master Matrix Table */
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow-x: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-height: 80vh;
+        }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 0.85rem; }
+        th {
+            background: #141d2d;
+            padding: 0.85rem 0.9rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th.sticky-col, td.sticky-col {
+            position: sticky;
+            left: 0;
+            background: #111827;
+            z-index: 15;
+            border-right: 2px solid var(--border);
+        }
+        th.sticky-col { z-index: 20; background: #141d2d; }
+        td {
+            padding: 0.75rem 0.9rem;
+            border-bottom: 1px solid rgba(42, 54, 79, 0.4);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        tr.main-row { cursor: pointer; transition: background 0.15s; }
+        tr.main-row:hover { background: var(--surface-hover); }
+        tr.main-row:hover td.sticky-col { background: var(--surface-hover); }
+        tr.active-row td { background: var(--surface-card) !important; }
+
+        .rank-badge {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.8rem;
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            margin-right: 0.5rem;
+        }
+        .rank-1 { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
+        .rank-2 { background: linear-gradient(135deg, #94a3b8, #64748b); color: #fff; border: none; }
+        .rank-3 { background: linear-gradient(135deg, #b45309, #78350f); color: #fff; border: none; }
+
+        .score-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .score-100 { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .score-good { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+        .score-mid { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .score-low { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+        .badge-ok { background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 6px; display: inline-block; }
+        .badge-warn { background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 6px; display: inline-block; }
+        .badge-err { background: rgba(239, 68, 68, 0.2); color: #f87171; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 6px; display: inline-block; }
+        .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+
+        /* Drawer Details */
+        .drawer-row { display: none; background: #0c121e; }
+        .drawer-content { padding: 1.5rem; border-bottom: 2px solid var(--primary); }
+        .reasons-box {
+            background: rgba(0,0,0,0.4);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>🏆 Master SEO & Architektonický Benchmark českých tech médií</h1>
+                <p>Detailní technická matice 25+ parametrů z živých HTTP přenosů, Schema.org E-E-A-T, OpenGraph časových zón, Google Discover a bezpečnosti.</p>
+            </div>
+            <div class="meta-badges">
+                <div class="badge badge-primary">📅 Datum auditu: 2026-08-11</div>
+                <div class="badge">🌐 Sledováno: 16 portálů</div>
+            </div>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Filtrovat portál (např. Dotekomanie, SmartMania, PCTuning, Svět Androida...)" oninput="filterTable()">
+        </div>
+
+        <div class="table-wrap">
+            <table id="masterTable">
+                <thead>
+                    <tr>
+                        <th class="sticky-col">Portál</th>
+                        <th>Celkem</th>
+                        <th>ISSN (Národní knihovna)</th>
+                        <th>Členství & Organizace</th>
+                        <th>HSTS (HTTPS)</th>
+                        <th>Nosniff & XFO</th>
+                        <th>HTTP/3 (QUIC)</th>
+                        <th>Schema.org Typ</th>
+                        <th>E-E-A-T Kodex & Tiráž</th>
+                        <th>E-E-A-T Autor sameAs</th>
+                        <th>Redakční garant (editor)</th>
+                        <th>GEO Postal Address</th>
+                        <th>Sémantické entity (mentions)</th>
+                        <th>Klady/Zápory v JSON-LD</th>
+                        <th>Google speakable</th>
+                        <th>Časové pásmo (Discover)</th>
+                        <th>Formát og:image</th>
+                        <th>Robots Discover large</th>
+                        <th>fetchpriority: high</th>
+                        <th>Speculation Rules API</th>
+                        <th>Web Manifest & PWA</th>
+                        <th>WebSub Push Hub</th>
+                        <th>AI Boti (robots.txt)</th>
+                        <th>Consent Mode v2 & CMP</th>
+                        <th>Komentářový systém</th>
+                        <th>Nadpisy H1 & DOM uzly</th>
+                        <th>Google SwG Subscriptions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Rendered by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const auditData = [
+    {
+        "Name":  "Dotekomanie.cz",
+        "HpUrl":  "https://dotekomanie.cz/",
+        "ArticleUrl":  "https://dotekomanie.cz/2026/08/nova-rada-redmi-k100-extremni-vykon-a-obri-baterie-v-cele/",
+        "ISSN":  "3029-9349",
+        "Memberships":  "IAB_TCF",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  true,
+        "OrgSchema":  "NewsMediaOrganization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  true,
+        "Masthead":  true,
+        "PostalAddress":  true,
+        "AuthorSameAs":  true,
+        "Editor":  true,
+        "EditorName":  "Přemysl Vaculík",
+        "Mentions":  true,
+        "MentionsCount":  6,
+        "ProsCons":  false,
+        "Speakable":  true,
+        "Timezone":  "+02:00",
+        "OgType":  "article",
+        "OgImageFormat":  "WebP",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  true,
+        "Manifest":  true,
+        "WebSub":  true,
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Complianz_CoMoV2",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  790,
+        "SwG":  true,
+        "TotalScore":  98,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: RedakÄŤnĂ­ garant (editor: Přemysl Vaculík), +3b: SĂ©mantickĂ© entity (mentions: Thing), +2b: Google Assistant speakable, +4b: og:type=article, +4b: OG publikovĂˇno v +02:00, +4b: Twitter Large Card, +3b: max-image-preview:large, +6b: W3C WebSub Realtime Push Huby, +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Svět Androida",
+        "HpUrl":  "https://www.svetandroida.cz/",
+        "ArticleUrl":  "https://www.svetandroida.cz/apple-naramek-bez-displeje-uvahy-gurman/",
+        "ISSN":  "none",
+        "Memberships":  "SyndikatNovinaru,IAB_TCF",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  true,
+        "OrgSchema":  "NewsMediaOrganization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  true,
+        "AuthorSameAs":  true,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+01:00",
+        "OgType":  "article",
+        "OgImageFormat":  "WebP",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  true,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  false,
+        "CMP":  "Basic_Bar",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  783,
+        "SwG":  false,
+        "TotalScore":  68,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v +02:00, +4b: Twitter Large Card, +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "SmartMania.cz",
+        "HpUrl":  "https://smartmania.cz/",
+        "ArticleUrl":  "https://smartmania.cz/nejlepsi-iphone-za-nejmin-diky-pronajmu-poridite-iphone-17-pro-za-polovinu/",
+        "ISSN":  "1801-3066",
+        "Memberships":  "IAB_TCF",
+        "HSTS":  false,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  true,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+00:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  true,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Google_FundingChoices",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  1056,
+        "SwG":  false,
+        "TotalScore":  56,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Letem světem Applem",
+        "HpUrl":  "https://www.letemsvetemapplem.eu/",
+        "ArticleUrl":  "https://www.letemsvetemapplem.eu/2026/08/11/proc-apple-stale-pouziva-60hz-displej-u-zakladnich-iphonu-je-to-prostsi-nez-si-myslite/",
+        "ISSN":  "none",
+        "Memberships":  "none",
+        "HSTS":  true,
+        "Nosniff":  false,
+        "XFO":  false,
+        "HTTP3":  false,
+        "OrgSchema":  "NewsMediaOrganization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  true,
+        "Masthead":  true,
+        "PostalAddress":  true,
+        "AuthorSameAs":  true,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+02:00",
+        "OgType":  "website",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  false,
+        "Speculation":  true,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  false,
+        "CMP":  "Custom_CMP",
+        "Comments":  "Custom",
+        "H1Count":  0,
+        "DomTags":  286,
+        "SwG":  false,
+        "TotalScore":  55,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +3b: Referrer-Policy nastavena"
+    },
+    {
+        "Name":  "Živě.cz",
+        "HpUrl":  "https://www.zive.cz/",
+        "ArticleUrl":  "https://vtm.zive.cz/clanky/kdy-bude-zatmeni-slunce-a-kolik-z-nej-uvidite/sc-870-a-242684/default.aspx",
+        "ISSN":  "none",
+        "Memberships":  "SPIR,SyndikatNovinaru",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  false,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "Z",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  false,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  true,
+        "ConsentV2":  true,
+        "CMP":  "Didomi_CPEX_TCF",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  859,
+        "SwG":  false,
+        "TotalScore":  52,
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,SyndikatNovinaru), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "PCTuning.cz",
+        "HpUrl":  "https://pctuning.cz/",
+        "ArticleUrl":  "https://pctuning.cz/article/ai-agent-naboural-rezervacni-system-a-smazal-jineho-klienta",
+        "ISSN":  "1214-0201",
+        "Memberships":  "SyndikatNovinaru,IAB_TCF",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  false,
+        "HTTP3":  true,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+02:00",
+        "OgType":  "website",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  false,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  true,
+        "ConsentV2":  true,
+        "CMP":  "Google_ConsentModeV2",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  1540,
+        "SwG":  false,
+        "TotalScore":  50,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Mobilizujeme.cz",
+        "HpUrl":  "https://mobilizujeme.cz/",
+        "ArticleUrl":  "https://mobilizujeme.cz/clanky/iphone-17-pro-jen-za-16-776-kc-trik-spociva-v-unikatni-sluzbe",
+        "ISSN":  "none",
+        "Memberships":  "none",
+        "HSTS":  false,
+        "Nosniff":  false,
+        "XFO":  false,
+        "HTTP3":  true,
+        "OrgSchema":  "NewsMediaOrganization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  true,
+        "Masthead":  true,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  19,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+02:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  false,
+        "Speculation":  false,
+        "Manifest":  false,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  false,
+        "CMP":  "Basic_Bar",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  487,
+        "SwG":  false,
+        "TotalScore":  46,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "MobilMania.cz",
+        "HpUrl":  "https://mobilmania.zive.cz/",
+        "ArticleUrl":  "https://mobilmania.zive.cz/clanky/nejlepsi-telefony-ktere-si-muzete-koupit/sc-3-a-1337463/default.aspx",
+        "ISSN":  "none",
+        "Memberships":  "SPIR",
+        "HSTS":  false,
+        "Nosniff":  false,
+        "XFO":  false,
+        "HTTP3":  false,
+        "OrgSchema":  "NewsMediaOrganization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  true,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "Z",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  false,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  true,
+        "ConsentV2":  true,
+        "CMP":  "Didomi_CPEX_TCF",
+        "Comments":  "SuperForum",
+        "H1Count":  1,
+        "DomTags":  2411,
+        "SwG":  false,
+        "TotalScore":  46,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Wired.cz",
+        "HpUrl":  "https://www.wired.cz/",
+        "ArticleUrl":  "https://www.wired.cz/clanky/mohou-neandertalci-za-vase-svaly-tyden-ve-vede-117",
+        "ISSN":  "none",
+        "Memberships":  "SPIR,IAB_TCF",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  false,
+        "HTTP3":  true,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "Article",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+00:00",
+        "OgType":  "article",
+        "OgImageFormat":  "WebP",
+        "DiscoverLarge":  false,
+        "FetchPriority":  true,
+        "Speculation":  false,
+        "Manifest":  false,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Cookiebot_TCF",
+        "Comments":  "Disabled",
+        "H1Count":  1,
+        "DomTags":  858,
+        "SwG":  false,
+        "TotalScore":  45,
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: HTTP/3 QUIC podpora, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Appliště.cz",
+        "HpUrl":  "https://www.appliste.cz/",
+        "ArticleUrl":  "https://www.appliste.cz/powerbanka-s-20-000-mah-za-383-kc-vention-ted-stoji-az-neuveritelne-malo/",
+        "ISSN":  "none",
+        "Memberships":  "SPIR,IAB_TCF",
+        "HSTS":  false,
+        "Nosniff":  false,
+        "XFO":  false,
+        "HTTP3":  true,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "BlogPosting",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  true,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+02:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  true,
+        "Manifest":  false,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Complianz_CoMoV2",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  1180,
+        "SwG":  false,
+        "TotalScore":  42,
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Mobilenet.cz",
+        "HpUrl":  "https://mobilenet.cz/",
+        "ArticleUrl":  "https://mobilenet.cz/clanky/nekolik-desitek-motorol-obdrzi-android-17-obsahly-seznam-nemusi-byt-konecny-54979",
+        "ISSN":  "3029-9349",
+        "Memberships":  "IAB_TCF",
+        "HSTS":  false,
+        "Nosniff":  false,
+        "XFO":  false,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  true,
+        "Timezone":  "+02:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  false,
+        "Speculation":  false,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  false,
+        "CMP":  "Custom_CMP",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  587,
+        "SwG":  false,
+        "TotalScore":  42,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (3029-9349), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: Google Assistant speakable, +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Chip.cz",
+        "HpUrl":  "https://www.chip.cz/",
+        "ArticleUrl":  "https://www.chip.cz/tipy-triky/jak-sledovat-zatmeni-slunce-disketa-bryle-aplikace",
+        "ISSN":  "none",
+        "Memberships":  "SPIR,IAB_TCF",
+        "HSTS":  false,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  true,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "Naive",
+        "OgType":  "article",
+        "OgImageFormat":  "WebP",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Speculation":  false,
+        "Manifest":  false,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Didomi_CPEX_TCF",
+        "Comments":  "Disabled",
+        "H1Count":  1,
+        "DomTags":  1253,
+        "SwG":  false,
+        "TotalScore":  40,
+        "ScoreReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +4b: og:type=article, +3b: max-image-preview:large, +2b: fetchpriority=high u LCP fotky, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Cnews.cz",
+        "HpUrl":  "https://cnews.cz/",
+        "ArticleUrl":  "https://www.cnews.cz/clanky/cesi-vyvijeji-lidsky-kloub-budoucnosti-3d-tiskarna-za-29-milionu-vyrobi-implantat-ktery-uvolni-leky-primo-v-tele/",
+        "ISSN":  "none",
+        "Memberships":  "none",
+        "HSTS":  true,
+        "Nosniff":  false,
+        "XFO":  true,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "Article",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+02:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  false,
+        "Speculation":  false,
+        "Manifest":  false,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Didomi_CPEX_TCF",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  579,
+        "SwG":  false,
+        "TotalScore":  34,
+        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +3b: max-image-preview:large, +5b: HSTS aktivnĂ­, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "CzechCrunch (CC.cz)",
+        "HpUrl":  "https://cc.cz/",
+        "ArticleUrl":  "https://cc.cz/prehled-zatmeni-slunce-2026-jak-a-kdy-pozorovat-v-cesku/",
+        "ISSN":  "none",
+        "Memberships":  "SPIR",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  false,
+        "OrgSchema":  "None",
+        "ArtSchema":  "None",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "none",
+        "OgType":  "none",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  false,
+        "FetchPriority":  false,
+        "Speculation":  true,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Google_ConsentModeV2",
+        "Comments":  "Disabled",
+        "H1Count":  2,
+        "DomTags":  650,
+        "SwG":  false,
+        "TotalScore":  20,
+        "ScoreReasons":  "+2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: Web Manifest \u0026 PWA, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana"
+    },
+    {
+        "Name":  "Techarena.cz",
+        "HpUrl":  "https://www.techarena.cz/",
+        "ArticleUrl":  "https://www.techarena.cz/clanky/realme-15-pro-je-oficialni-lakadlem-je-obri-baterie-a-rychle-nabijeni/",
+        "ISSN":  "none",
+        "Memberships":  "none",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  false,
+        "OrgSchema":  "None",
+        "ArtSchema":  "None",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "none",
+        "OgType":  "none",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  false,
+        "FetchPriority":  false,
+        "Speculation":  false,
+        "Manifest":  true,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  false,
+        "CMP":  "Consent_v1",
+        "Comments":  "Custom",
+        "H1Count":  0,
+        "DomTags":  1426,
+        "SwG":  false,
+        "TotalScore":  19,
+        "ScoreReasons":  "+2b: Web Manifest \u0026 PWA, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: Referrer-Policy nastavena"
+    },
+    {
+        "Name":  "ITMix.cz",
+        "HpUrl":  "https://www.itmix.cz/",
+        "ArticleUrl":  "https://www.itmix.cz/apple-airtag-2-bude-mit-vylepseny-cip-ultra-wideband-a-lepsi-dosah/",
+        "ISSN":  "none",
+        "Memberships":  "none",
+        "HSTS":  true,
+        "Nosniff":  false,
+        "XFO":  false,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "None",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "ProsCons":  false,
+        "Speakable":  false,
+        "Timezone":  "+00:00",
+        "OgType":  "none",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  false,
+        "FetchPriority":  false,
+        "Speculation":  true,
+        "Manifest":  false,
+        "WebSub":  false,
+        "BlocksAi":  false,
+        "ConsentV2":  false,
+        "CMP":  "Basic_Bar",
+        "Comments":  "Disabled",
+        "H1Count":  2,
+        "DomTags":  463,
+        "SwG":  false,
+        "TotalScore":  14,
+        "ScoreReasons":  "+4b: Organization, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­"
+    }
+];
+
+        function getScoreClass(score) {
+            if (score >= 90) return 'score-100';
+            if (score >= 65) return 'score-good';
+            if (score >= 40) return 'score-mid';
+            return 'score-low';
+        }
+
+        function formatIssn(issn) {
+            if (!issn || issn === 'none' || issn === 'Neuvádí' || issn.includes('Neuv')) {
+                return '<span class="badge-err">Neuvádí</span>';
+            }
+            return '<span class="badge-ok mono">' + issn + '</span>';
+        }
+
+        function formatMemberships(m) {
+            if (!m || m === 'none' || m.includes('none')) return '<span class="mono">Individuální</span>';
+            const list = m.split(',').map(x => {
+                if (x === 'SPIR') return 'SPIR / NetMonitor';
+                if (x === 'UnieVydavatelu') return 'Unie vydavatelů';
+                if (x === 'SyndikatNovinaru') return 'Syndikát novinářů';
+                if (x === 'IAB_TCF') return 'IAB Europe / TCF';
+                if (x === 'MKCR') return 'Evidence MK ČR';
+                return x;
+            });
+            return '<span class="mono">' + list.join(', ') + '</span>';
+        }
+
+        function formatCmp(cmp, v2) {
+            if (!cmp || cmp === 'Basic_Bar') return '<span class="badge-warn mono">Základní lišta</span>';
+            if (cmp === 'Complianz_CoMoV2') return '<span class="badge-ok mono">Complianz (CoMo v2)</span>';
+            if (cmp === 'Didomi_CPEX_TCF') return '<span class="badge-ok mono">Didomi CPEX (TCF v2.2)</span>';
+            if (cmp === 'Cookiebot_TCF') return '<span class="badge-ok mono">Cookiebot (TCF v2.2)</span>';
+            if (cmp === 'Google_FundingChoices') return '<span class="badge-ok mono">Google Funding Choices</span>';
+            if (cmp === 'Google_ConsentModeV2') return '<span class="badge-ok mono">Google Consent Mode v2</span>';
+            if (cmp === 'AdvancedAds_TCF') return '<span class="badge-ok mono">Advanced Ads (IAB TCF)</span>';
+            if (cmp === '24net_IAB_CMP') return '<span class="badge-ok mono">24net IAB CMP</span>';
+            if (cmp === 'TextFactory_CMP' || cmp === 'Custom_CMP') return '<span class="badge-warn mono">Vlastní CMP</span>';
+            if (cmp === 'Consent_v1') return '<span class="badge-warn mono">Consent v1 (Bez v2)</span>';
+            return '<span class="mono">' + cmp + '</span>';
+        }
+
+        function formatOrgSchema(s) {
+            if (s === 'NewsMediaOrganization') return '<span class="badge-ok">NewsMediaOrganization</span>';
+            if (s === 'Organization') return '<span class="badge-warn">Organization</span>';
+            return '<span class="badge-err">Žádná</span>';
+        }
+
+        function formatArtSchema(s) {
+            if (s === 'NewsArticle') return '<span class="badge-ok">NewsArticle</span>';
+            if (s === 'Article') return '<span class="badge-warn">Article</span>';
+            if (s === 'BlogPosting') return '<span class="badge-warn">BlogPosting</span>';
+            return '<span class="badge-err">Žádný</span>';
+        }
+
+        function formatTimezone(tz) {
+            if (!tz || tz === 'none' || tz === 'Chybí') return '<span class="badge-err">Chybí</span>';
+            if (tz === '+02:00') return '<span class="badge-ok">+02:00 (ČR Lokální)</span>';
+            if (tz === '+01:00') return '<span class="badge-ok">+01:00 (ČR Zimní)</span>';
+            if (tz === 'Z' || tz.includes('Z')) return '<span class="badge-warn">Z (UTC posun 2 h)</span>';
+            if (tz === '+00:00') return '<span class="badge-warn">+00:00 (UTC posun 2 h)</span>';
+            if (tz === 'Naive') return '<span class="badge-err">Naive (Bez zóny)</span>';
+            return '<span class="badge-warn">' + tz + '</span>';
+        }
+
+        function formatComments(c) {
+            if (!c || c === 'Custom') return '<span class="mono">Nativní / Vlastní</span>';
+            if (c === 'WordPress') return '<span class="mono">Nativní WordPress</span>';
+            if (c === 'Disqus') return '<span class="mono">Disqus (Externí)</span>';
+            if (c === 'Facebook') return '<span class="mono">Facebook Comments</span>';
+            if (c === 'SuperForum') return '<span class="mono">CNC SuperFórum</span>';
+            if (c === 'Disabled') return '<span class="mono">Vypnuto / Bez diskuze</span>';
+            return '<span class="mono">' + c + '</span>';
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            auditData.forEach((item, index) => {
+                const rank = index + 1;
+                let rankClass = '';
+                if (rank === 1) rankClass = 'rank-1';
+                else if (rank === 2) rankClass = 'rank-2';
+                else if (rank === 3) rankClass = 'rank-3';
+
+                const row = document.createElement('tr');
+                row.className = 'main-row';
+                row.id = 'row-' + index;
+                row.onclick = () => toggleDrawer(index);
+
+                row.innerHTML = `
+                    <td class="sticky-col">
+                        <div style="display: flex; align-items: center;">
+                            <div class="rank-badge ` + rankClass + `">` + rank + `</div>
+                            <div>
+                                <strong style="color: #fff; font-size: 0.95rem;">` + item.Name + `</strong>
+                                <div class="mono" style="color: var(--text-muted); font-size: 0.75rem;">` + item.HpUrl + `</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="score-pill ` + getScoreClass(item.TotalScore) + `">` + item.TotalScore + ` / 100</span></td>
+                    <td>` + formatIssn(item.ISSN) + `</td>
+                    <td>` + formatMemberships(item.Memberships) + `</td>
+                    <td>` + (item.HSTS ? '<span class="badge-ok">ANO (Aktivní)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.Nosniff && item.XFO ? '<span class="badge-ok">Plná ochrana</span>' : (item.Nosniff || item.XFO ? '<span class="badge-warn">Částečná</span>' : '<span class="badge-err">NE</span>')) + `</td>
+                    <td>` + (item.HTTP3 ? '<span class="badge-ok">ANO (QUIC)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + formatOrgSchema(item.OrgSchema) + ` / ` + formatArtSchema(item.ArtSchema) + `</td>
+                    <td>` + (item.Ethics && item.Masthead ? '<span class="badge-ok">Plné (Kodex + Tiráž)</span>' : (item.Ethics || item.Masthead ? '<span class="badge-warn">Částečné</span>' : '<span class="badge-err">Chybí</span>')) + `</td>
+                    <td>` + (item.AuthorSameAs ? '<span class="badge-ok">ANO (Sociální profily)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.Editor ? '<span class="badge-ok">ANO (' + (item.EditorName || 'Šéfredaktor') + ')</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.PostalAddress ? '<span class="badge-ok">ANO (PostalAddress)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.Mentions ? '<span class="badge-ok">ANO (' + (item.MentionsCount || 'Štítky') + 'x Thing)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.ProsCons ? '<span class="badge-ok">ANO (Pros & Cons)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.Speakable ? '<span class="badge-ok">ANO (Google Assistant)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + formatTimezone(item.Timezone) + `</td>
+                    <td><span class="badge-ok">` + item.OgImageFormat + `</span></td>
+                    <td>` + (item.DiscoverLarge ? '<span class="badge-ok">large (Discover Ready)</span>' : '<span class="badge-err">none</span>') + `</td>
+                    <td>` + (item.FetchPriority ? '<span class="badge-ok">ANO (LCP High)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.Speculation ? '<span class="badge-ok">ANO (Instant)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.Manifest ? '<span class="badge-ok">ANO (PWA Ready)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.WebSub ? '<span class="badge-ok">ANO (2 Huby)</span>' : '<span class="badge-err">NE (Pull only)</span>') + `</td>
+                    <td>` + (item.BlocksAi ? '<span class="badge-warn">Blokuje (Ochrana)</span>' : '<span class="badge-ok">Povoleno (AI indexace)</span>') + `</td>
+                    <td>` + formatCmp(item.CMP, item.ConsentV2) + `</td>
+                    <td>` + formatComments(item.Comments) + `</td>
+                    <td><span class="badge-ok">` + item.H1Count + `x H1</span> / <span class="mono">` + item.DomTags + ` tagů</span></td>
+                    <td>` + (item.SwG ? '<span class="badge-ok">ANO (Reader Revenue)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                `;
+
+                // Drawer row
+                const drawer = document.createElement('tr');
+                drawer.className = 'drawer-row';
+                drawer.id = 'drawer-' + index;
+                drawer.innerHTML = `
+                    <td colspan="27" style="padding: 0;">
+                        <div class="drawer-content">
+                            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">🔎 Podrobný technický rozbor a bodové zdůvodnění: ` + item.Name + `</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Odkaz na auditovaný článek: <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">` + item.ArticleUrl + `</a></p>
+                            <div class="reasons-box">
+                                <strong>Rozpis bodů a zdůvodnění:</strong><br>
+                                ` + item.ScoreReasons + `
+                            </div>
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+                tbody.appendChild(drawer);
+            });
+        }
+
+        function toggleDrawer(index) {
+            const drawer = document.getElementById('drawer-' + index);
+            const row = document.getElementById('row-' + index);
+            const isVisible = drawer.style.display === 'table-row';
+            
+            document.querySelectorAll('.drawer-row').forEach(d => d.style.display = 'none');
+            document.querySelectorAll('.main-row').forEach(r => r.classList.remove('active-row'));
+
+            if (!isVisible) {
+                drawer.style.display = 'table-row';
+                row.classList.add('active-row');
+            }
+        }
+
+        function filterTable() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            auditData.forEach((item, index) => {
+                const row = document.getElementById('row-' + index);
+                const drawer = document.getElementById('drawer-' + index);
+                const match = item.Name.toLowerCase().includes(q) || item.HpUrl.toLowerCase().includes(q);
+                row.style.display = match ? 'table-row' : 'none';
+                if (!match) drawer.style.display = 'none';
+            });
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>

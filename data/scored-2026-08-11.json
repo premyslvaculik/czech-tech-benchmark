@@ -1,0 +1,82 @@
+[
+    {
+        "Name":  "Dotekomanie.cz",
+        "TotalScore":  98,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: RedakÄŤnĂ­ garant (editor: Přemysl Vaculík), +3b: SĂ©mantickĂ© entity (mentions: Thing), +2b: Google Assistant speakable, +4b: og:type=article, +4b: OG publikovĂˇno v +02:00, +4b: Twitter Large Card, +3b: max-image-preview:large, +6b: W3C WebSub Realtime Push Huby, +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Svět Androida",
+        "TotalScore":  68,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v +02:00, +4b: Twitter Large Card, +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "SmartMania.cz",
+        "TotalScore":  56,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Letem světem Applem",
+        "TotalScore":  55,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +3b: Referrer-Policy nastavena"
+    },
+    {
+        "Name":  "Živě.cz",
+        "TotalScore":  52,
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,SyndikatNovinaru), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "PCTuning.cz",
+        "TotalScore":  50,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Mobilizujeme.cz",
+        "TotalScore":  46,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "MobilMania.cz",
+        "TotalScore":  46,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Wired.cz",
+        "TotalScore":  45,
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: HTTP/3 QUIC podpora, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Appliště.cz",
+        "TotalScore":  42,
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +3b: HTTP/3 QUIC podpora, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Mobilenet.cz",
+        "TotalScore":  42,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (3029-9349), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: Google Assistant speakable, +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Chip.cz",
+        "TotalScore":  40,
+        "ScoreReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +4b: og:type=article, +3b: max-image-preview:large, +2b: fetchpriority=high u LCP fotky, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Cnews.cz",
+        "TotalScore":  34,
+        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +3b: max-image-preview:large, +5b: HSTS aktivnĂ­, +4b: X-Frame-Options ochrana, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "CzechCrunch (CC.cz)",
+        "TotalScore":  20,
+        "ScoreReasons":  "+2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: Web Manifest \u0026 PWA, +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana"
+    },
+    {
+        "Name":  "Techarena.cz",
+        "TotalScore":  19,
+        "ScoreReasons":  "+2b: Web Manifest \u0026 PWA, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +3b: Referrer-Policy nastavena"
+    },
+    {
+        "Name":  "ITMix.cz",
+        "TotalScore":  14,
+        "ScoreReasons":  "+4b: Organization, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +2b: Speculation Rules instant prerender, +5b: HSTS aktivnĂ­"
+    }
+]
