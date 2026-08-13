@@ -32,7 +32,7 @@
     {
         "Name":  "Živě.cz",
         "TotalScore":  52,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +5b: HSTS aktivnĂ­, +5b: X-Content-Type-Options nosniff, +3b: Referrer-Policy nastavena, +3b: ÄŚistĂˇ H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Mobilizujeme.cz",
