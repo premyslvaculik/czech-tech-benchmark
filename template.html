@@ -251,7 +251,8 @@
             if (!m || m === 'none' || m.includes('none')) return '<span class="mono">Individuální</span>';
             const list = m.split(',').map(x => {
                 if (x === 'SPIR') return 'SPIR / NetMonitor';
-                if (x === 'UnieVydavatelu') return 'Unie vydavatelů';
+                if (x === 'UnieVydavatelu') return 'Česká unie vydavatelů (ČUV)';
+                if (x === 'AOV') return 'Asociace online vydavatelů (AOV)';
                 if (x === 'SyndikatNovinaru') return 'Syndikát novinářů';
                 if (x === 'IAB_TCF') return 'IAB Europe / TCF';
                 if (x === 'MKCR') return 'Evidence MK ČR';
