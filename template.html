@@ -208,7 +208,6 @@
                         <th>Redakční garant (editor)</th>
                         <th>GEO Postal Address</th>
                         <th>Sémantické entity (mentions)</th>
-                        <th>Klady/Zápory v JSON-LD</th>
                         <th>Google speakable</th>
                         <th>Časové pásmo (Discover)</th>
                         <th>Formát og:image</th>
@@ -346,7 +345,6 @@
                     <td>` + (item.Editor ? '<span class="badge-ok">ANO (' + (item.EditorName || 'Šéfredaktor') + ')</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.PostalAddress ? '<span class="badge-ok">ANO (PostalAddress)</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.Mentions ? '<span class="badge-ok">ANO (' + (item.MentionsCount || 'Štítky') + 'x Thing)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.ProsCons ? '<span class="badge-ok">ANO (Pros & Cons)</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.Speakable ? '<span class="badge-ok">ANO (Google Assistant)</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + formatTimezone(item.Timezone) + `</td>
                     <td><span class="badge-ok">` + item.OgImageFormat + `</span></td>
@@ -367,7 +365,7 @@
                 drawer.className = 'drawer-row';
                 drawer.id = 'drawer-' + index;
                 drawer.innerHTML = `
-                    <td colspan="27" style="padding: 0;">
+                    <td colspan="26" style="padding: 0;">
                         <div class="drawer-content">
                             <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">🔎 Podrobný technický rozbor a bodové zdůvodnění: ` + item.Name + `</h3>
                             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Odkaz na auditovaný článek: <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">` + item.ArticleUrl + `</a></p>
