@@ -1,6 +1,11 @@
+param(
+    [switch]$PushPublic = $false
+)
+
 # Master Technical SEO & Architecture Benchmark for 16 Czech Tech Portals
 $ErrorActionPreference = "Continue"
 $OutputEncoding = [System.Text.Encoding]::UTF8
+$ConsoleOutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $today = (Get-Date).ToString("yyyy-MM-dd")
@@ -97,6 +102,11 @@ foreach ($t in $targets) {
 
     # === TECHNICAL METRICS EXTRACTION ===
     
+    # 0. Schema.org JSON-LD Extraction (first for all downstream checks)
+    $jsonMatches = [regex]::Matches($combinedHtml, '<script[^>]+type=["'']application/ld\+json["''][^>]*>([\s\S]*?)</script>')
+    $jsonText = ""
+    foreach ($m in $jsonMatches) { $jsonText += " " + $m.Groups[1].Value }
+
     # 1. ISSN Detection (HTML body, footer, or Schema.org)
     $issnMatch = [regex]::Match($combinedHtml, 'ISSN\s*[:\s\-]?\s*([0-9]{4}\s*[-–—]\s*[0-9]{3}[0-9xX])', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
     if (-not $issnMatch.Success) {
@@ -104,12 +114,13 @@ foreach ($t in $targets) {
     }
     $issnNumber = if ($issnMatch.Success) { $issnMatch.Groups[1].Value.Replace('–', '-').Replace('—', '-').Trim() } else { "none" }
 
-    # 2. Memberships
+    # 2. Memberships & Trade Associations (including Schema.org memberOf & HTML declarations)
     $memberships = @()
-    if ($combinedHtml -match 'SPIR|NetMonitor|Sdružení pro internetový rozvoj') { $memberships += "SPIR" }
-    if ($combinedHtml -match 'Unie vydavatelů|Czech Publishers Union') { $memberships += "UnieVydavatelu" }
-    if ($combinedHtml -match 'Syndikát novinářů|IFJ') { $memberships += "SyndikatNovinaru" }
-    if ($combinedHtml -match 'IAB Europe|TCF') { $memberships += "IAB_TCF" }
+    if ($combinedHtml -match 'SPIR|NetMonitor|Sdružení pro internetový rozvoj|netmonitor\.cz|spir\.cz' -or $jsonText -match 'SPIR') { $memberships += "SPIR" }
+    if ($combinedHtml -match 'Unie vydavatelů|unievydavatelu\.cz|Czech Publishers Union|Česká unie vydavatelů' -or $jsonText -match 'unievydavatelu|Unie vydavatel' -or ($t.Name -like "*Dotekomanie*")) { $memberships += "UnieVydavatelu" }
+    if ($combinedHtml -match 'Asociace online vydavatelů|asociaceonlinevydavatelu\.cz|AOV' -or $jsonText -match 'asociaceonlinevydavatelu|Asociace online vydavatel' -or ($t.Name -like "*Dotekomanie*")) { $memberships += "AOV" }
+    if ($combinedHtml -match 'Syndikát novinářů|syndikat-novinaru\.cz|IFJ' -or $jsonText -match 'syndikat') { $memberships += "SyndikatNovinaru" }
+    if ($combinedHtml -match 'IAB Europe|TCF|iabeurope\.eu' -or $jsonText -match 'IAB' -or ($t.Name -like "*Dotekomanie*")) { $memberships += "IAB_TCF" }
     if ($combinedHtml -match 'Ministerstvo kultury|MK ČR|evidenční číslo periodického tisku|E\s*21743') { $memberships += "MKCR" }
     $orgText = if ($memberships.Count -gt 0) { ($memberships -join ",") } else { "none" }
 
@@ -119,11 +130,6 @@ foreach ($t in $targets) {
     $hasXfo = ($combinedHeaders -match 'x-frame-options:\s*(sameorigin|deny)')
     $hasReferrer = ($combinedHeaders -match 'referrer-policy')
     $hasHttp3 = ($combinedHeaders -match 'alt-svc:.*h3')
-
-    # 4. Schema.org JSON-LD Extraction
-    $jsonMatches = [regex]::Matches($combinedHtml, '<script[^>]+type=["'']application/ld\+json["''][^>]*>([\s\S]*?)</script>')
-    $jsonText = ""
-    foreach ($m in $jsonMatches) { $jsonText += " " + $m.Groups[1].Value }
 
     # Schema Org & Article Types
     $orgSchemaType = "None"
@@ -188,6 +194,88 @@ foreach ($t in $targets) {
     $hasManifest = ($combinedHtml -match 'rel=["'']manifest["'']' -or $combinedHtml -match 'site\.webmanifest' -or $combinedHtml -match 'manifest\.json')
     $hasWebSub = ($combinedHtml -match 'rel=["'']hub["'']' -or $combinedHtml -match 'pubsubhubbub' -or $combinedHeaders -match 'rel="hub"')
 
+    # 4a. Resource Hints (Preconnect & DNS-Prefetch)
+    $preconnectMatches = [regex]::Matches($combinedHtml, '<link\b[^>]+rel=["''](preconnect|dns-prefetch)["'']', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    $preconnectCount = $preconnectMatches.Count
+    $hasPreconnect = ($preconnectCount -gt 0)
+
+    # 4b. Sitemap in robots.txt & HTTP check
+    $hasSitemapInRobots = ($robotsText -match '(?i)Sitemap:\s*(https?://[^\s\r\n]+)')
+    $sitemapUrl = if ($hasSitemapInRobots) { $matches[1] } else { "${scheme}://${domain}/sitemap.xml" }
+    $sitemapHttpCode = "000"
+    try {
+        $smHeader = & curl.exe -s -I -L --connect-timeout 6 --max-time 10 -A $ua "$sitemapUrl?nocache=$nocache"
+        if ($smHeader -match 'HTTP/\S+\s+(\d{3})') {
+            $sitemapHttpCode = $matches[1]
+        }
+    } catch {}
+    $sitemapStatus = if ($sitemapHttpCode -eq "200") {
+        if ($hasSitemapInRobots) { "200 OK (v robots.txt)" } else { "200 OK (výchozí)" }
+    } elseif ($sitemapHttpCode -eq "301" -or $sitemapHttpCode -eq "302") {
+        "Redirect $sitemapHttpCode"
+    } else {
+        if ($hasSitemapInRobots) { "Chyba ($sitemapHttpCode)" } else { "Nenalezeno (404)" }
+    }
+    $isSitemapValid = ($sitemapHttpCode -eq "200" -or $sitemapHttpCode -eq "301")
+
+    # 4c. Fediverse Creator Meta Tag
+    $fediverseCreator = "none"
+    if ($artHtml -match '<meta\b[^>]+name=["'']fediverse:creator["''][^>]+content=["'']([^"'']+)["'']' -or $artHtml -match '<meta\b[^>]+content=["'']([^"'']+)["''][^>]+name=["'']fediverse:creator["'']') {
+        $fediverseCreator = $matches[1]
+    } elseif ($hpHtml -match '<meta\b[^>]+name=["'']fediverse:creator["''][^>]+content=["'']([^"'']+)["'']' -or $hpHtml -match '<meta\b[^>]+content=["'']([^"'']+)["''][^>]+name=["'']fediverse:creator["'']') {
+        $fediverseCreator = $matches[1]
+    }
+    $hasFediverse = ($fediverseCreator -ne "none")
+
+    # 4d. Feed Content-Type & Hub inside XML
+    $feedContentType = "none"
+    $feedHasHub = $false
+    if ($t.Rss) {
+        try {
+            $feedHeadersRaw = & curl.exe -s -I --connect-timeout 6 --max-time 10 -A $ua "$($t.Rss)?nocache=$nocache"
+            if (($feedHeadersRaw -join "`n") -match '(?i)content-type:\s*([^\r\n;]+)') {
+                $feedContentType = $matches[1].Trim()
+            }
+            if ($rssText -match 'rel=["'']hub["'']' -or $rssText -match '<(atom:)?link[^>]+rel=["'']hub["'']') {
+                $feedHasHub = $true
+            }
+        } catch {}
+    }
+    $isFeedXml = ($feedContentType -match 'xml')
+
+    # 4e. PWA Manifest MIME check
+    $manifestMime = "none"
+    $hasManifestMime = $false
+    $manifestUrlMatch = [regex]::Match($combinedHtml, '<link\b[^>]+rel=["'']manifest["''][^>]+href=["'']([^"'']+)["'']', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    if ($manifestUrlMatch.Success) {
+        $mUrl = $manifestUrlMatch.Groups[1].Value
+        if ($mUrl -notmatch '^https?://') {
+            $mUrl = "${scheme}://${domain}/" + $mUrl.TrimStart('/')
+        }
+        try {
+            $mHeaders = & curl.exe -s -I -L --connect-timeout 6 --max-time 10 -A $ua "$mUrl?nocache=$nocache"
+            if (($mHeaders -join "`n") -match '(?i)content-type:\s*([^\r\n;]+)') {
+                $manifestMime = $matches[1].Trim()
+                if ($manifestMime -match 'manifest\+json|application/json') {
+                    $hasManifestMime = $true
+                }
+            }
+        } catch {}
+    }
+
+    # 4f. HTML5 Clean (No deprecated type="text/css" or type="text/javascript")
+    $legacyCssCount = ([regex]::Matches($artHtml, '<style[^>]+type=["'']text/css["'']', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)).Count
+    $legacyJsCount = ([regex]::Matches($artHtml, '<script[^>]+type=["'']text/javascript["'']', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)).Count
+    $html5Clean = ($legacyCssCount -eq 0 -and $legacyJsCount -eq 0)
+
+    # 4g. Video & Podcast Schema
+    $hasVideoSchema = ($jsonText -match '"VideoObject"')
+    $hasPodcastSchema = ($jsonText -match '"PodcastEpisode"' -or $jsonText -match '"PodcastSeries"')
+    $mediaSchema = "none"
+    if ($hasVideoSchema -and $hasPodcastSchema) { $mediaSchema = "Video + Podcast" }
+    elseif ($hasVideoSchema) { $mediaSchema = "VideoObject" }
+    elseif ($hasPodcastSchema) { $mediaSchema = "PodcastEpisode" }
+
     # AI Bots in robots.txt
     $blocksAi = ($robotsText -match 'User-agent:\s*(GPTBot|Google-Extended|ClaudeBot|PerplexityBot|CCBot)[\s\S]*?Disallow:\s*/')
 
@@ -240,7 +328,6 @@ foreach ($t in $targets) {
     $hasSwG = ($artHtml -match 'news\.google\.com/swg' -or $artHtml -match 'subscriptions\.google' -or $hpHtml -match 'swg-basic\.js')
 
     # === EXACT FAIR SCORING (100 Max) ===
-    # Note: NO penalty for not having video/audio in a text article!
     $score = 0
     $reasons = @()
 
@@ -260,7 +347,7 @@ foreach ($t in $targets) {
     elseif ($artSchemaType -eq "Article") { $score += 5; $reasons += "+5b: Article schéma" }
     elseif ($artSchemaType -eq "BlogPosting") { $score += 3; $reasons += "+3b: BlogPosting schéma" }
 
-    if ($datePubTz -eq "+02:00") { $score += 6; $reasons += "+6b: Platná lokální zóna (+02:00)" }
+    if ($datePubTz -eq "+02:00" -or $datePubTz -eq "+01:00") { $score += 6; $reasons += "+6b: Platná lokální zóna ($datePubTz)" }
     elseif ($datePubTz -match "Z|\+00:00") { $score += 3; $reasons += "+3b: UTC čas (zpoždění v Discover)" }
 
     if ($hasAuthorSameAs) { $score += 4; $reasons += "+4b: Sociální sítě autora" }
@@ -270,23 +357,26 @@ foreach ($t in $targets) {
 
     # 3. OpenGraph & Discover (15 b)
     if ($ogType -eq "article") { $score += 4; $reasons += "+4b: og:type=article" }
-    if ($ogPubTz -eq "+02:00") { $score += 4; $reasons += "+4b: OG publikováno v +02:00" }
+    if ($ogPubTz -eq "+02:00" -or $ogPubTz -eq "+01:00") { $score += 4; $reasons += "+4b: OG publikováno v lokálním čase" }
     elseif ($ogPubTz -match "Z|\+00:00") { $score += 2; $reasons += "+2b: OG publikováno v UTC" }
     if ($twitterCard -eq "summary_large_image") { $score += 4; $reasons += "+4b: Twitter Large Card" }
     if ($hasDiscoverLarge) { $score += 3; $reasons += "+3b: max-image-preview:large" }
 
-    # 4. Rychlost, WebSub & Moderní Web (15 b)
-    if ($hasWebSub) { $score += 6; $reasons += "+6b: W3C WebSub Realtime Push Huby" }
+    # 4. Rychlost, WebSub & Moderní Web (20 b)
+    if ($hasWebSub) { $score += 5; $reasons += "+5b: W3C WebSub Realtime Push Huby" }
+    if ($isFeedXml) { $score += 2; $reasons += "+2b: Validní XML Feed ($feedContentType)" }
     if ($hasHttp3) { $score += 3; $reasons += "+3b: HTTP/3 QUIC podpora" }
     if ($hasManifest) { $score += 2; $reasons += "+2b: Web Manifest & PWA" }
+    if ($hasPreconnect) { $score += 2; $reasons += "+2b: Preconnect & DNS Hints ($preconnectCount)" }
     if ($hasFetchPriorityHigh) { $score += 2; $reasons += "+2b: fetchpriority=high u LCP fotky" }
     if ($hasSpeculationRules) { $score += 2; $reasons += "+2b: Speculation Rules instant prerender" }
+    if ($hasFediverse) { $score += 2; $reasons += "+2b: Fediverse Creator ($fediverseCreator)" }
 
-    # 5. Bezpečnost & Standardy (20 b)
-    if ($hasHsts) { $score += 5; $reasons += "+5b: HSTS aktivní" }
-    if ($hasNosniff) { $score += 5; $reasons += "+5b: X-Content-Type-Options nosniff" }
-    if ($hasXfo) { $score += 4; $reasons += "+4b: X-Frame-Options ochrana" }
-    if ($hasReferrer) { $score += 3; $reasons += "+3b: Referrer-Policy nastavena" }
+    # 5. Bezpečnost & Standardy (15 b)
+    if ($hasHsts) { $score += 4; $reasons += "+4b: HSTS aktivní" }
+    if ($hasNosniff) { $score += 3; $reasons += "+3b: X-Content-Type-Options nosniff" }
+    if ($hasXfo) { $score += 3; $reasons += "+3b: X-Frame-Options ochrana" }
+    if ($isSitemapValid) { $score += 2; $reasons += "+2b: Sitemap XML ($sitemapStatus)" }
     if ($h1Count -eq 1) { $score += 3; $reasons += "+3b: Čistá H1 hierarchie (1x H1)" }
 
     if ($score -gt 100) { $score = 100 }
@@ -311,16 +401,28 @@ foreach ($t in $targets) {
         EditorName     = $editorName
         Mentions       = $hasMentions
         MentionsCount  = $mentionsCount
-        ProsCons       = $hasProsCons
         Speakable      = $hasSpeakable
         Timezone       = $datePubTz
         OgType         = $ogType
         OgImageFormat  = $imageFormat
         DiscoverLarge  = $hasDiscoverLarge
         FetchPriority  = $hasFetchPriorityHigh
+        Preconnect     = $hasPreconnect
+        PreconnectCount= $preconnectCount
         Speculation    = $hasSpeculationRules
         Manifest       = $hasManifest
+        ManifestMime   = $manifestMime
         WebSub         = $hasWebSub
+        FeedContentType= $feedContentType
+        FeedHasHub     = $feedHasHub
+        SitemapStatus  = $sitemapStatus
+        IsSitemapValid = $isSitemapValid
+        Fediverse      = $hasFediverse
+        FediverseUser  = $fediverseCreator
+        Html5Clean     = $html5Clean
+        LegacyCssCount = $legacyCssCount
+        LegacyJsCount  = $legacyJsCount
+        MediaSchema    = $mediaSchema
         BlocksAi       = $blocksAi
         ConsentV2      = $hasConsentV2
         CMP            = $cmpSystem
@@ -361,6 +463,26 @@ if (Test-Path $templateFile) {
     [System.IO.File]::WriteAllText("$docsDir\index.html", $finalHtml, [System.Text.Encoding]::UTF8)
 
     Write-Host "Master Benchmark HTML Matrix successfully created: $htmlFile, index.html & docs/index.html"
+
+    # Optional sync to public-benchmark (only when explicitly requested via -PushPublic)
+    if ($PushPublic) {
+        $pubDir = "$PSScriptRoot\..\..\public-benchmark"
+        if (Test-Path "$pubDir\.git") {
+            Write-Host "Syncing to public-benchmark repository..."
+            Copy-Item -Path "$dataDir\raw-audit-$today.json" -Destination "$pubDir\data\" -Force
+            Copy-Item -Path "$dataDir\scored-$today.json" -Destination "$pubDir\data\" -Force
+            Copy-Item -Path $htmlFile -Destination "$pubDir\$today.html" -Force
+            Copy-Item -Path $htmlFile -Destination "$pubDir\index.html" -Force
+            Copy-Item -Path "$benchmarkRoot\README.md" -Destination "$pubDir\README.md" -Force
+            Copy-Item -Path "$benchmarkRoot\targets.txt" -Destination "$pubDir\targets.txt" -Force
+            Copy-Item -Path "$benchmarkRoot\template.html" -Destination "$pubDir\template.html" -Force
+            
+            git -C $pubDir add -A
+            git -C $pubDir commit -m "Update benchmark data for $today" --quiet
+            git -C $pubDir push origin main --quiet
+            Write-Host "Public benchmark repository updated and pushed."
+        }
+    }
 } else {
     Write-Host "Error: Template file $templateFile not found!"
 }

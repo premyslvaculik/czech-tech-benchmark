@@ -49,32 +49,40 @@ Skript automaticky:
 
 ## ⚖️ Metodika bodování (Max 100 bodů)
 
-### 1. 🏛️ Vydavatel & E-E-A-T (Max 25 bodů)
-- `NewsMediaOrganization` = **10 b** (`Organization` = 5 b, Žádná = 0 b)
-- Redakční zásady a tiráž (`ethicsPolicy` + `masthead`) = **6 b** (částečné = 3 b)
-- Poštovní adresa (`PostalAddress`) = **3 b**
-- Registrace ISSN (`issn`) = **2 b**
-- 5+ sociálních profilů (`sameAs`) = **4 b** (1–4 = 2 b)
+### 1. 🏛️ Vydavatel & E-E-A-T (Max 20 bodů)
+- Schéma vydavatele: `NewsMediaOrganization` = **8 b** (`Organization` = 4 b, Žádná = 0 b)
+- Redakční zásady a tiráž (`ethicsPolicy` + `masthead`) = **5 b** (částečné = 2 b)
+- Poštovní adresa sídla (`PostalAddress`) = **3 b**
+- Registrace periodického tisku ISSN = **2 b**
+- Oborové členství (ČUV, AOV, SPIR, Syndikát novinářů) = **2 b**
 
 ### 2. 📰 Článek & Autoři (Max 30 bodů)
-- Schéma článku `NewsArticle` = **10 b** (`Article` = 5 b, `BlogPosting` = 3 b)
-- Lokální časové pásmo `+02:00` = **6 b** (`Z` / `+00:00` = 3 b)
+- Schéma článku: `NewsArticle` = **10 b** (`Article` = 5 b, `BlogPosting` = 3 b)
+- Lokální časové pásmo `+02:00` / `+01:00` = **6 b** (`Z` / `+00:00` UTC = 3 b)
 - Sociální sítě autora (`sameAs`) = **4 b**
 - Redakční garant (`editor`) = **4 b**
 - Sémantické entity štítků (`mentions: Thing`) = **4 b**
 - Hlasoví asistenti (`speakable`) = **2 b**
 
-### 3. 🌐 OpenGraph & Metadata (Max 15 bodů)
-- `og:type: article` = **5 b** (`website` = 2 b)
-- `article:published_time` s lokálním offsetem `+02:00` = **5 b** (GMT = 2 b)
-- `twitter:card: summary_large_image` = **5 b** (`summary` = 2 b)
+### 3. 🌐 OpenGraph & Discover (Max 15 bodů)
+- `og:type: article` = **4 b**
+- `article:published_time` v lokálním čase = **4 b** (UTC = 2 b)
+- `twitter:card: summary_large_image` = **4 b**
+- `max-image-preview:large` (Google Discover) = **3 b**
 
-### 4. ⚡ Indexace & Rychlost (Max 15 bodů)
-- W3C WebSub Realtime Push Huby (`rel="hub"`) = **10 b**
-- Velikost HTML článku do 250 kB = **5 b** (do 500 kB = 3 b, nad 500 kB = 1 b)
+### 4. ⚡ Rychlost, WebSub & Moderní Web (Max 20 bodů)
+- W3C WebSub Realtime Push Huby (`rel="hub"`) = **5 b**
+- HTTP/3 (QUIC) podpora serveru = **3 b**
+- Validní XML feed (`Content-Type: application/rss+xml` / `atom+xml`) = **2 b**
+- Preconnect & DNS-Prefetch optimalizace pro kritické domény = **2 b**
+- PWA Web Manifest (`site.webmanifest` / `manifest.json`) = **2 b**
+- LCP priorita obrázku (`fetchpriority="high"`) = **2 b**
+- Okamžitý prerender (`Speculation Rules API`) = **2 b**
+- Fediverse Creator podpora (`<meta name="fediverse:creator">`) = **2 b**
 
-### 5. 🛡️ Bezpečnostní HTTP hlavičky (Max 15 bodů)
+### 5. 🛡️ Bezpečnost & Standardy (Max 15 bodů)
 - `Strict-Transport-Security` (HSTS) = **4 b**
-- `X-Content-Type-Options: nosniff` = **4 b**
-- `X-Frame-Options` = **4 b**
-- `Referrer-Policy` = **3 b**
+- `X-Content-Type-Options: nosniff` = **3 b**
+- `X-Frame-Options` (Sameorigin / Deny) = **3 b**
+- Sitemap XML dostupná a deklarovaná v `robots.txt` = **2 b**
+- Čistá H1 nadpisová struktura (přesně 1× H1) = **3 b**

@@ -213,9 +213,15 @@
                         <th>Formát og:image</th>
                         <th>Robots Discover large</th>
                         <th>fetchpriority: high</th>
+                        <th>Preconnect & DNS Hints</th>
                         <th>Speculation Rules API</th>
                         <th>Web Manifest & PWA</th>
                         <th>WebSub Push Hub</th>
+                        <th>Sitemap XML (robots.txt)</th>
+                        <th>Fediverse Creator</th>
+                        <th>Validita RSS/Atom Feedu</th>
+                        <th>W3C HTML5 Clean Code</th>
+                        <th>Video & Podcast Schema</th>
                         <th>AI Boti (robots.txt)</th>
                         <th>Consent Mode v2 & CMP</th>
                         <th>Komentářový systém</th>
@@ -351,9 +357,15 @@
                     <td><span class="badge-ok">` + item.OgImageFormat + `</span></td>
                     <td>` + (item.DiscoverLarge ? '<span class="badge-ok">large (Discover Ready)</span>' : '<span class="badge-err">none</span>') + `</td>
                     <td>` + (item.FetchPriority ? '<span class="badge-ok">ANO (LCP High)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.Preconnect ? '<span class="badge-ok">ANO (' + item.PreconnectCount + ' hints)</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.Speculation ? '<span class="badge-ok">ANO (Instant)</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.Manifest ? '<span class="badge-ok">ANO (PWA Ready)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.WebSub ? '<span class="badge-ok">ANO (2 Huby)</span>' : '<span class="badge-err">NE (Pull only)</span>') + `</td>
+                    <td>` + (item.WebSub ? '<span class="badge-ok">ANO (Push Hub)</span>' : '<span class="badge-err">NE (Pull only)</span>') + `</td>
+                    <td>` + (item.IsSitemapValid ? '<span class="badge-ok">' + item.SitemapStatus + '</span>' : '<span class="badge-err">' + item.SitemapStatus + '</span>') + `</td>
+                    <td>` + (item.Fediverse ? '<span class="badge-ok">' + item.FediverseUser + '</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + (item.FeedContentType && item.FeedContentType.includes('xml') ? '<span class="badge-ok">' + item.FeedContentType + '</span>' : '<span class="badge-warn">' + (item.FeedContentType || 'none') + '</span>') + `</td>
+                    <td>` + (item.Html5Clean ? '<span class="badge-ok">100% Čisté HTML5</span>' : '<span class="badge-warn">' + item.LegacyCssCount + 'x text/css</span>') + `</td>
+                    <td>` + (item.MediaSchema && item.MediaSchema !== 'none' ? '<span class="badge-ok">' + item.MediaSchema + '</span>' : '<span class="mono">Není video/audio</span>') + `</td>
                     <td>` + (item.BlocksAi ? '<span class="badge-warn">Blokuje (Ochrana)</span>' : '<span class="badge-ok">Povoleno (AI indexace)</span>') + `</td>
                     <td>` + formatCmp(item.CMP, item.ConsentV2) + `</td>
                     <td>` + formatComments(item.Comments) + `</td>
@@ -366,7 +378,7 @@
                 drawer.className = 'drawer-row';
                 drawer.id = 'drawer-' + index;
                 drawer.innerHTML = `
-                    <td colspan="26" style="padding: 0;">
+                    <td colspan="32" style="padding: 0;">
                         <div class="drawer-content">
                             <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">🔎 Podrobný technický rozbor a bodové zdůvodnění: ` + item.Name + `</h3>
                             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Odkaz na auditovaný článek: <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">` + item.ArticleUrl + `</a></p>
