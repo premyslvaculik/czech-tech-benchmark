@@ -1147,6 +1147,16 @@
             return '<span class="mono">' + c + '</span>';
         }
 
+        function formatHtml5Clean(item) {
+            if (item.Html5Clean || ((!item.LegacyCssCount || item.LegacyCssCount === 0) && (!item.LegacyJsCount || item.LegacyJsCount === 0))) {
+                return '<span class="badge-ok">100% Čisté HTML5</span>';
+            }
+            const issues = [];
+            if (item.LegacyCssCount > 0) issues.push(item.LegacyCssCount + 'x text/css');
+            if (item.LegacyJsCount > 0) issues.push(item.LegacyJsCount + 'x text/javascript');
+            return '<span class="badge-warn">' + issues.join(', ') + '</span>';
+        }
+
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
@@ -1197,7 +1207,7 @@
                     <td>` + (item.IsSitemapValid ? '<span class="badge-ok">' + item.SitemapStatus + '</span>' : '<span class="badge-err">' + item.SitemapStatus + '</span>') + `</td>
                     <td>` + (item.Fediverse ? '<span class="badge-ok">' + item.FediverseUser + '</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.FeedContentType && item.FeedContentType.includes('xml') ? '<span class="badge-ok">' + item.FeedContentType + '</span>' : '<span class="badge-warn">' + (item.FeedContentType || 'none') + '</span>') + `</td>
-                    <td>` + (item.Html5Clean ? '<span class="badge-ok">100% Čisté HTML5</span>' : '<span class="badge-warn">' + item.LegacyCssCount + 'x text/css</span>') + `</td>
+                    <td>` + formatHtml5Clean(item) + `</td>
                     <td>` + (item.MediaSchema && item.MediaSchema !== 'none' ? '<span class="badge-ok">' + item.MediaSchema + '</span>' : '<span class="mono">Není video/audio</span>') + `</td>
                     <td>` + (item.BlocksAi ? '<span class="badge-warn">Blokuje (Ochrana)</span>' : '<span class="badge-ok">Povoleno (AI indexace)</span>') + `</td>
                     <td>` + formatCmp(item.CMP, item.ConsentV2) + `</td>
