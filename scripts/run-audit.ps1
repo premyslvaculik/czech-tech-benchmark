@@ -201,12 +201,14 @@ foreach ($t in $targets) {
 
     # 4b. Sitemap in robots.txt & HTTP check
     $hasSitemapInRobots = ($robotsText -match '(?i)Sitemap:\s*(https?://[^\s\r\n]+)')
-    $sitemapUrl = if ($hasSitemapInRobots) { $matches[1] } else { "${scheme}://${domain}/sitemap.xml" }
+    $sitemapUrl = if ($hasSitemapInRobots) { $matches[1].Trim() } else { "${scheme}://${domain}/sitemap.xml" }
     $sitemapHttpCode = "000"
     try {
-        $smHeader = & curl.exe -s -I -L --connect-timeout 6 --max-time 10 -A $ua "$sitemapUrl?nocache=$nocache"
-        if ($smHeader -match 'HTTP/\S+\s+(\d{3})') {
-            $sitemapHttpCode = $matches[1]
+        $smHeaderRaw = & curl.exe -s -I -L --connect-timeout 6 --max-time 10 -A $ua "$sitemapUrl"
+        $smHeader = ($smHeaderRaw -join "`n")
+        $codeMatches = [regex]::Matches($smHeader, 'HTTP/\S+\s+(\d{3})')
+        if ($codeMatches.Count -gt 0) {
+            $sitemapHttpCode = $codeMatches[$codeMatches.Count - 1].Groups[1].Value
         }
     } catch {}
     $sitemapStatus = if ($sitemapHttpCode -eq "200") {
@@ -232,8 +234,9 @@ foreach ($t in $targets) {
     $feedHasHub = $false
     if ($t.Rss) {
         try {
-            $feedHeadersRaw = & curl.exe -s -I --connect-timeout 6 --max-time 10 -A $ua "$($t.Rss)?nocache=$nocache"
-            if (($feedHeadersRaw -join "`n") -match '(?i)content-type:\s*([^\r\n;]+)') {
+            $feedHeadersRaw = & curl.exe -s -I --connect-timeout 6 --max-time 10 -A $ua "$($t.Rss)"
+            $feedHeaderText = ($feedHeadersRaw -join "`n")
+            if ($feedHeaderText -match '(?i)content-type:\s*([^\r\n;]+)') {
                 $feedContentType = $matches[1].Trim()
             }
             if ($rssText -match 'rel=["'']hub["'']' -or $rssText -match '<(atom:)?link[^>]+rel=["'']hub["'']') {
@@ -253,8 +256,9 @@ foreach ($t in $targets) {
             $mUrl = "${scheme}://${domain}/" + $mUrl.TrimStart('/')
         }
         try {
-            $mHeaders = & curl.exe -s -I -L --connect-timeout 6 --max-time 10 -A $ua "$mUrl?nocache=$nocache"
-            if (($mHeaders -join "`n") -match '(?i)content-type:\s*([^\r\n;]+)') {
+            $mHeadersRaw = & curl.exe -s -I -L --connect-timeout 6 --max-time 10 -A $ua "$mUrl"
+            $mHeaders = ($mHeadersRaw -join "`n")
+            if ($mHeaders -match '(?i)content-type:\s*([^\r\n;]+)') {
                 $manifestMime = $matches[1].Trim()
                 if ($manifestMime -match 'manifest\+json|application/json') {
                     $hasManifestMime = $true
