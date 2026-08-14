@@ -54,41 +54,58 @@ foreach ($t in $targets) {
     $hpHtmlRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua $hpUrl
     $hpHtml = ($hpHtmlRaw -join "`n")
 
-    # 2. Dynamic Article Resolution - vždy čerstvý nejnovější článek z RSS
-    $artUrl = ""
+    # 2. Dynamic Multi-Article Resolution - výběr vzorku 3 až 4 čerstvých článků z RSS nebo HP
+    $articleUrls = @()
     if ($t.Rss) {
         try {
-            $rssRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua "$($t.Rss)?nocache=$nocache"
+            $rssRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua "$($t.Rss)"
             $rssText = ($rssRaw -join "`n")
-            $artMatch = [regex]::Match($rssText, '<item>[\s\S]*?<link>([^<]+)</link>')
-            if ($artMatch.Success) {
-                $artUrl = $artMatch.Groups[1].Value.Trim() + "?nocache=$nocache"
+            $itemBlocks = [regex]::Matches($rssText, '<item\b[^>]*>([\s\S]*?)</item>|<entry\b[^>]*>([\s\S]*?)</entry>')
+            foreach ($ib in $itemBlocks) {
+                $block = $ib.Value
+                $linkMatch = [regex]::Match($block, '<link[^>]*>([^<]+)</link>|<link\b[^>]+href=["'']([^"'']+)["'']')
+                if ($linkMatch.Success) {
+                    $u = if ($linkMatch.Groups[1].Value) { $linkMatch.Groups[1].Value.Trim() } else { $linkMatch.Groups[2].Value.Trim() }
+                    if ($u -and $u -match '^https?://' -and ($articleUrls -notcontains $u)) {
+                        $articleUrls += $u
+                        if ($articleUrls.Count -ge 3) { break }
+                    }
+                }
             }
         } catch {}
     }
-    if (-not $artUrl -and $t.ArtOverride) {
-        $artUrl = "$($t.ArtOverride)?nocache=$nocache"
+    if ($articleUrls.Count -lt 3 -and $t.ArtOverride) {
+        if ($articleUrls -notcontains $t.ArtOverride) { $articleUrls += $t.ArtOverride }
     }
-    if (-not $artUrl) {
+    if ($articleUrls.Count -lt 3) {
         $linkMatches = [regex]::Matches($hpHtml, '<a[^>]+href=["''](https?://[^"'']+)["''][^>]*>')
         foreach ($lm in $linkMatches) {
-            $u = $lm.Groups[1].Value
-            if ($u -match '/(202\d|clanky|clanek|article|recenze)/' -and $u -notmatch '/(tag|kategorie|rubrika|page|autor)/') {
-                $artUrl = "$u?nocache=$nocache"
-                break
+            $u = $lm.Groups[1].Value.Trim()
+            if ($u -match '/(202\d|clanky|clanek|article|recenze|zpravy|technologie|byznys|veda)/' -and $u -notmatch '/(tag|kategorie|rubrika|page|autor|author|comments|diskuze|feed)/' -and ($articleUrls -notcontains $u)) {
+                $articleUrls += $u
+                if ($articleUrls.Count -ge 3) { break }
             }
         }
     }
 
-    # 3. Fetch Article & Headers
-    $artHeaders = ""
-    $artHtml = ""
-    if ($artUrl) {
-        $artHeadersRaw = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $ua $artUrl
-        $artHeaders = ($artHeadersRaw -join "`n")
-        $artHtmlRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua $artUrl
-        $artHtml = ($artHtmlRaw -join "`n")
+    # 3. Fetch All Resolved Articles
+    $artHtmlList = @()
+    $artHeadersList = @()
+    $artUrl = if ($articleUrls.Count -gt 0) { $articleUrls[0] } else { "" }
+
+    foreach ($aUrl in $articleUrls) {
+        try {
+            $aHeadRaw = & curl.exe -s -I --connect-timeout 6 --max-time 10 -A $ua "$aUrl"
+            $aHtmlRaw = & curl.exe -Ls --connect-timeout 6 --max-time 10 -A $ua "$aUrl"
+            $artHeadersList += ($aHeadRaw -join "`n")
+            $artHtmlList += ($aHtmlRaw -join "`n")
+        } catch {}
     }
+
+    $artHtmlCombined = ($artHtmlList -join "`n")
+    $artHeadersCombined = ($artHeadersList -join "`n")
+    $artHtml = if ($artHtmlList.Count -gt 0) { $artHtmlList[0] } else { "" }
+    $artHeaders = if ($artHeadersList.Count -gt 0) { $artHeadersList[0] } else { "" }
 
     # 4. Fetch Robots.txt & O-nas
     $domain = ([uri]$t.Hp).Host
@@ -97,8 +114,8 @@ foreach ($t in $targets) {
     $robotsRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua $robotsUrl
     $robotsText = ($robotsRaw -join "`n")
 
-    $combinedHtml = $hpHtml + "`n" + $artHtml
-    $combinedHeaders = $hpHeaders + "`n" + $artHeaders
+    $combinedHtml = $hpHtml + "`n" + $artHtmlCombined
+    $combinedHeaders = $hpHeaders + "`n" + $artHeadersCombined
 
     # === TECHNICAL METRICS EXTRACTION ===
     
@@ -168,25 +185,25 @@ foreach ($t in $targets) {
     }
 
     $ogPubTz = "none"
-    if ($artHtml -match '<meta property="article:published_time" content="([^"]+)"') {
+    if ($artHtmlCombined -match '<meta property="article:published_time" content="([^"]+)"') {
         $rawOg = $matches[1]
         if ($rawOg -match '([+-]\d{2}:\d{2})$') { $ogPubTz = $matches[1] }
         elseif ($rawOg -match 'Z$') { $ogPubTz = "Z" }
     }
 
     # OpenGraph & Twitter
-    $ogType = if ($artHtml -match '<meta property="og:type" content="([^"]+)"') { $matches[1] } else { "none" }
-    $ogImage = if ($artHtml -match '<meta property="og:image" content="([^"]+)"') { $matches[1] } else { "" }
+    $ogType = if ($artHtmlCombined -match '<meta property="og:type" content="([^"]+)"') { $matches[1] } else { "none" }
+    $ogImage = if ($artHtmlCombined -match '<meta property="og:image" content="([^"]+)"') { $matches[1] } else { "" }
     $imageFormat = "JPG"
     if ($ogImage -match '\.webp(\?.*)?$') { $imageFormat = "WebP" }
     elseif ($ogImage -match '\.avif(\?.*)?$') { $imageFormat = "AVIF" }
     elseif ($ogImage -match '\.png(\?.*)?$') { $imageFormat = "PNG" }
 
-    $twitterCard = if ($artHtml -match '<meta name="twitter:card" content="([^"]+)"') { $matches[1] } else { "none" }
+    $twitterCard = if ($artHtmlCombined -match '<meta name="twitter:card" content="([^"]+)"') { $matches[1] } else { "none" }
 
     # Robots & Discover
-    $maxImagePreview = if ($artHtml -match 'max-image-preview:([^"''>,\s]+)') { $matches[1] } else { "none" }
-    $hasDiscoverLarge = ($maxImagePreview -eq "large" -or $artHtml -match 'max-image-preview:large')
+    $maxImagePreview = if ($artHtmlCombined -match 'max-image-preview:([^"''>,\s]+)') { $matches[1] } else { "none" }
+    $hasDiscoverLarge = ($maxImagePreview -eq "large" -or $artHtmlCombined -match 'max-image-preview:large')
 
     # Performance, LCP, Speculation & Manifest
     $hasFetchPriorityHigh = ($artHtml -match 'fetchpriority=["'']high["'']' -or $hpHtml -match 'fetchpriority=["'']high["'']')
