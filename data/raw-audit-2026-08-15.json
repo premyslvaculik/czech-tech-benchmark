@@ -42,7 +42,7 @@
         "LegacyJsCount":  0,
         "W3CErrors":  0,
         "W3CWarnings":  0,
-        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "W3CStatus":  "0 chyb (100% Validní)",
         "IsW3cClean":  true,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -53,12 +53,12 @@
         "DomTags":  728,
         "SwG":  true,
         "TotalScore":  100,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +2b: OborovĂ© ÄŤlenstvĂ­ (UnieVydavatelu,AOV,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: RedakÄŤnĂ­ garant (editor: Přemysl Vaculík), +4b: SĂ©mantickĂ© entity (mentions: Thing), +2b: Google Assistant speakable, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +5b: W3C WebSub Realtime Push Huby, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (10), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Fediverse Creator (@dotekomanie@mastodonczech.cz), +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i Tiráž, +3b: Poštovní adresa sídla, +2b: ISSN registrace (3029-9349), +2b: Oborové členství (UnieVydavatelu,AOV,IAB_TCF), +10b: NewsArticle schéma, +6b: Platná lokální zóna (+02:00), +4b: Sociální sítě autora, +4b: Redakční garant (editor: Přemysl Vaculík), +4b: Sémantické entity (mentions: Thing), +2b: Google Assistant speakable, +4b: og:type=article, +4b: OG publikováno v lokálním čase, +4b: Twitter Large Card, +3b: max-image-preview:large, +5b: W3C WebSub Realtime Push Huby, +2b: Validní XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (10), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Fediverse Creator (@dotekomanie@mastodonczech.cz), +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
     },
     {
         "Name":  "Svět Androida",
         "HpUrl":  "https://www.svetandroida.cz/",
-        "ArticleUrl":  "https://www.svetandroida.cz/xiaomi-tv-s-mini-led-2026-75-prvni-sleva/",
+        "ArticleUrl":  "https://www.svetandroida.cz/xiaomi-poco-f9-pro-ultra-unik-specifikace-ceny/",
         "ISSN":  "none",
         "Memberships":  "SyndikatNovinaru,IAB_TCF",
         "HSTS":  true,
@@ -98,7 +98,7 @@
         "LegacyJsCount":  5,
         "W3CErrors":  21,
         "W3CWarnings":  5,
-        "W3CStatus":  "21 chyb, 5 varovĂˇnĂ­",
+        "W3CStatus":  "21 chyb, 5 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -106,15 +106,15 @@
         "CMP":  "Basic_Bar",
         "Comments":  "Custom",
         "H1Count":  1,
-        "DomTags":  903,
+        "DomTags":  826,
         "SwG":  false,
         "TotalScore":  73,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+01:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: Poštovní adresa sídla, +2b: Oborové členství (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schéma, +6b: Platná lokální zóna (+01:00), +4b: Sociální sítě autora, +4b: og:type=article, +4b: OG publikováno v lokálním čase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Letem světem Applem",
         "HpUrl":  "https://www.letemsvetemapplem.eu/",
-        "ArticleUrl":  "https://www.letemsvetemapplem.eu/2026/08/15/darujte-vasim-pratelum-spotify-premium-na-3-mesice-zdarma-o-teto-skryte-moznosti-v-aplikaci-vi-malokdo/",
+        "ArticleUrl":  "https://www.letemsvetemapplem.eu/2026/08/15/od-obriho-plastoveho-x-az-po-elegantni-vez-kompletni-evoluce-konzoli-xbox/",
         "ISSN":  "none",
         "Memberships":  "none",
         "HSTS":  true,
@@ -134,7 +134,7 @@
         "Speakable":  false,
         "Timezone":  "+02:00",
         "OgType":  "article",
-        "OgImageFormat":  "JPG",
+        "OgImageFormat":  "PNG",
         "DiscoverLarge":  true,
         "FetchPriority":  false,
         "Preconnect":  true,
@@ -154,7 +154,7 @@
         "LegacyJsCount":  0,
         "W3CErrors":  0,
         "W3CWarnings":  9,
-        "W3CStatus":  "0 chyb (9 varovĂˇnĂ­)",
+        "W3CStatus":  "0 chyb (9 varování)",
         "IsW3cClean":  true,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -162,10 +162,10 @@
         "CMP":  "Custom_CMP",
         "Comments":  "WordPress",
         "H1Count":  1,
-        "DomTags":  562,
+        "DomTags":  711,
         "SwG":  false,
         "TotalScore":  68,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (9 varovĂˇnĂ­))"
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i Tiráž, +3b: Poštovní adresa sídla, +10b: NewsArticle schéma, +6b: Platná lokální zóna (+02:00), +4b: Sociální sítě autora, +4b: og:type=article, +4b: OG publikováno v lokálním čase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: Speculation Rules instant prerender, +4b: HSTS aktivní, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (9 varování))"
     },
     {
         "Name":  "SmartMania.cz",
@@ -210,7 +210,7 @@
         "LegacyJsCount":  4,
         "W3CErrors":  21,
         "W3CWarnings":  6,
-        "W3CStatus":  "21 chyb, 6 varovĂˇnĂ­",
+        "W3CStatus":  "21 chyb, 6 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -221,7 +221,7 @@
         "DomTags":  1110,
         "SwG":  false,
         "TotalScore":  58,
-        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: Oborové členství (SPIR,IAB_TCF), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: Sociální sítě autora, +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "MobilMania.cz",
@@ -266,7 +266,7 @@
         "LegacyJsCount":  5,
         "W3CErrors":  0,
         "W3CWarnings":  0,
-        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "W3CStatus":  "0 chyb (100% Validní)",
         "IsW3cClean":  true,
         "MediaSchema":  "none",
         "BlocksAi":  true,
@@ -277,7 +277,7 @@
         "DomTags":  2415,
         "SwG":  false,
         "TotalScore":  57,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (10), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: Poštovní adresa sídla, +2b: Oborové členství (SPIR), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (10), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
     },
     {
         "Name":  "CzechCrunch (CC.cz)",
@@ -313,8 +313,8 @@
         "WebSub":  false,
         "FeedContentType":  "application/rss+xml",
         "FeedHasHub":  false,
-        "SitemapStatus":  "Chyba (000)",
-        "IsSitemapValid":  false,
+        "SitemapStatus":  "200 OK (v robots.txt)",
+        "IsSitemapValid":  true,
         "Fediverse":  false,
         "FediverseUser":  "none",
         "Html5Clean":  false,
@@ -322,7 +322,7 @@
         "LegacyJsCount":  4,
         "W3CErrors":  80,
         "W3CWarnings":  16,
-        "W3CStatus":  "80 chyb, 16 varovĂˇnĂ­",
+        "W3CStatus":  "80 chyb, 16 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -332,8 +332,8 @@
         "H1Count":  2,
         "DomTags":  970,
         "SwG":  false,
-        "TotalScore":  53,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (16), +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana"
+        "TotalScore":  55,
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR), +10b: NewsArticle schéma, +6b: Platná lokální zóna (+02:00), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (16), +2b: Speculation Rules instant prerender, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt))"
     },
     {
         "Name":  "PCTuning.cz",
@@ -378,7 +378,7 @@
         "LegacyJsCount":  1,
         "W3CErrors":  41,
         "W3CWarnings":  28,
-        "W3CStatus":  "41 chyb, 28 varovĂˇnĂ­",
+        "W3CStatus":  "41 chyb, 28 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  true,
@@ -389,7 +389,7 @@
         "DomTags":  1501,
         "SwG":  false,
         "TotalScore":  53,
-        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +2b: Oborové členství (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schéma, +6b: Platná lokální zóna (+02:00), +4b: Sociální sítě autora, +3b: max-image-preview:large, +2b: Validní XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Živě.cz",
@@ -434,18 +434,18 @@
         "LegacyJsCount":  5,
         "W3CErrors":  0,
         "W3CWarnings":  0,
-        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "W3CStatus":  "0 chyb (100% Validní)",
         "IsW3cClean":  true,
         "MediaSchema":  "none",
         "BlocksAi":  true,
         "ConsentV2":  true,
         "CMP":  "Didomi_CPEX_TCF",
-        "Comments":  "Custom",
+        "Comments":  "SuperForum",
         "H1Count":  1,
         "DomTags":  853,
         "SwG":  false,
         "TotalScore":  52,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (14), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (14), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
     },
     {
         "Name":  "Mobilizujeme.cz",
@@ -490,7 +490,7 @@
         "LegacyJsCount":  0,
         "W3CErrors":  8,
         "W3CWarnings":  7,
-        "W3CStatus":  "8 chyb, 7 varovĂˇnĂ­",
+        "W3CStatus":  "8 chyb, 7 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -501,7 +501,7 @@
         "DomTags":  495,
         "SwG":  false,
         "TotalScore":  49,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i Tiráž, +10b: NewsArticle schéma, +6b: Platná lokální zóna (+02:00), +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Appliště.cz",
@@ -537,8 +537,8 @@
         "WebSub":  false,
         "FeedContentType":  "application/rss+xml",
         "FeedHasHub":  false,
-        "SitemapStatus":  "200 OK (v robots.txt)",
-        "IsSitemapValid":  true,
+        "SitemapStatus":  "Chyba (000)",
+        "IsSitemapValid":  false,
         "Fediverse":  false,
         "FediverseUser":  "none",
         "Html5Clean":  false,
@@ -546,7 +546,7 @@
         "LegacyJsCount":  56,
         "W3CErrors":  138,
         "W3CWarnings":  36,
-        "W3CStatus":  "138 chyb, 36 varovĂˇnĂ­",
+        "W3CStatus":  "138 chyb, 36 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -556,8 +556,8 @@
         "H1Count":  1,
         "DomTags":  1258,
         "SwG":  false,
-        "TotalScore":  47,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (44), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "TotalScore":  45,
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR,IAB_TCF), +3b: BlogPosting schéma, +6b: Platná lokální zóna (+02:00), +4b: Sociální sítě autora, +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (44), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Chip.cz",
@@ -602,7 +602,7 @@
         "LegacyJsCount":  1,
         "W3CErrors":  52,
         "W3CWarnings":  10,
-        "W3CStatus":  "52 chyb, 10 varovĂˇnĂ­",
+        "W3CStatus":  "52 chyb, 10 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -613,7 +613,7 @@
         "DomTags":  961,
         "SwG":  false,
         "TotalScore":  44,
-        "ScoreReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +4b: og:type=article, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (8), +2b: fetchpriority=high u LCP fotky, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +3b: Poštovní adresa sídla, +2b: Oborové členství (SPIR,IAB_TCF), +10b: NewsArticle schéma, +4b: og:type=article, +3b: max-image-preview:large, +2b: Validní XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (8), +2b: fetchpriority=high u LCP fotky, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Mobilenet.cz",
@@ -658,7 +658,7 @@
         "LegacyJsCount":  13,
         "W3CErrors":  26,
         "W3CWarnings":  16,
-        "W3CStatus":  "26 chyb, 16 varovĂˇnĂ­",
+        "W3CStatus":  "26 chyb, 16 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -669,7 +669,7 @@
         "DomTags":  418,
         "SwG":  false,
         "TotalScore":  43,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: Google Assistant speakable, +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (24), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (IAB_TCF), +10b: NewsArticle schéma, +6b: Platná lokální zóna (+02:00), +2b: Google Assistant speakable, +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (text/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (24), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Wired.cz",
@@ -714,7 +714,7 @@
         "LegacyJsCount":  2,
         "W3CErrors":  3,
         "W3CWarnings":  4,
-        "W3CStatus":  "3 chyb, 4 varovĂˇnĂ­",
+        "W3CStatus":  "3 chyb, 4 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -725,7 +725,7 @@
         "DomTags":  839,
         "SwG":  false,
         "TotalScore":  42,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (2), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR,IAB_TCF), +5b: Article schéma, +3b: UTC čas (zpoždění v Discover), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (2), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "ITMix.cz",
@@ -770,7 +770,7 @@
         "LegacyJsCount":  6,
         "W3CErrors":  0,
         "W3CWarnings":  0,
-        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "W3CStatus":  "0 chyb (100% Validní)",
         "IsW3cClean":  true,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -781,7 +781,7 @@
         "DomTags":  471,
         "SwG":  false,
         "TotalScore":  38,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Preconnect \u0026 DNS Hints (16), +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR), +5b: Article schéma, +3b: UTC čas (zpoždění v Discover), +4b: Sociální sítě autora, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Preconnect \u0026 DNS Hints (16), +2b: Speculation Rules instant prerender, +4b: HSTS aktivní, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
     },
     {
         "Name":  "Cnews.cz",
@@ -826,7 +826,7 @@
         "LegacyJsCount":  23,
         "W3CErrors":  11,
         "W3CWarnings":  26,
-        "W3CStatus":  "11 chyb, 26 varovĂˇnĂ­",
+        "W3CStatus":  "11 chyb, 26 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -837,7 +837,7 @@
         "DomTags":  520,
         "SwG":  false,
         "TotalScore":  37,
-        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Preconnect \u0026 DNS Hints (8), +4b: HSTS aktivnĂ­, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +5b: Article schéma, +6b: Platná lokální zóna (+02:00), +4b: og:type=article, +3b: max-image-preview:large, +2b: Validní XML Feed (text/xml), +2b: Preconnect \u0026 DNS Hints (8), +4b: HSTS aktivní, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Techarena.cz",
@@ -882,7 +882,7 @@
         "LegacyJsCount":  5,
         "W3CErrors":  97,
         "W3CWarnings":  15,
-        "W3CStatus":  "97 chyb, 15 varovĂˇnĂ­",
+        "W3CStatus":  "97 chyb, 15 varování",
         "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
@@ -893,6 +893,6 @@
         "DomTags":  1038,
         "SwG":  false,
         "TotalScore":  31,
-        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +4b: Twitter Large Card, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Web Manifest \u0026 PWA, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +5b: Article schéma, +4b: Twitter Large Card, +2b: Validní XML Feed (text/xml), +2b: Web Manifest \u0026 PWA, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     }
 ]
