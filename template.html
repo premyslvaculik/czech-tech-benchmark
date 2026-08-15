@@ -221,6 +221,7 @@
                         <th>Fediverse Creator</th>
                         <th>Validita RSS/Atom Feedu</th>
                         <th>W3C HTML5 Clean Code</th>
+                        <th>W3C Validita (validator.w3.org)</th>
                         <th>Video & Podcast Schema</th>
                         <th>AI Boti (robots.txt)</th>
                         <th>Consent Mode v2 & CMP</th>
@@ -375,6 +376,7 @@
                     <td>` + (item.Fediverse ? '<span class="badge-ok">' + item.FediverseUser + '</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.FeedContentType && item.FeedContentType.includes('xml') ? '<span class="badge-ok">' + item.FeedContentType + '</span>' : '<span class="badge-warn">' + (item.FeedContentType || 'none') + '</span>') + `</td>
                     <td>` + formatHtml5Clean(item) + `</td>
+                    <td>` + (item.IsW3cClean ? '<span class="badge-ok">' + (item.W3CStatus || '100% Validní') + '</span>' : (item.W3CErrors > 0 ? '<span class="badge-err">' + item.W3CStatus + '</span>' : '<span class="badge-warn">' + (item.W3CStatus || 'Neověřeno') + '</span>')) + `</td>
                     <td>` + (item.MediaSchema && item.MediaSchema !== 'none' ? '<span class="badge-ok">' + item.MediaSchema + '</span>' : '<span class="mono">Není video/audio</span>') + `</td>
                     <td>` + (item.BlocksAi ? '<span class="badge-warn">Blokuje (Ochrana)</span>' : '<span class="badge-ok">Povoleno (AI indexace)</span>') + `</td>
                     <td>` + formatCmp(item.CMP, item.ConsentV2) + `</td>
@@ -388,10 +390,14 @@
                 drawer.className = 'drawer-row';
                 drawer.id = 'drawer-' + index;
                 drawer.innerHTML = `
-                    <td colspan="32" style="padding: 0;">
+                    <td colspan="33" style="padding: 0;">
                         <div class="drawer-content">
                             <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">🔎 Podrobný technický rozbor a bodové zdůvodnění: ` + item.Name + `</h3>
-                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Odkaz na auditovaný článek: <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">` + item.ArticleUrl + `</a></p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                                Odkaz na auditovaný článek: <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">` + item.ArticleUrl + `</a>
+                                &nbsp;|&nbsp;
+                                <a href="https://validator.w3.org/nu/?doc=` + encodeURIComponent(item.ArticleUrl) + `" target="_blank" style="color: #38bdf8; text-decoration: underline;">🌐 Otevřít živý W3C validátor ↗</a>
+                            </p>
                             <div class="reasons-box">
                                 <strong>Rozpis bodů a zdůvodnění:</strong><br>
                                 ` + item.ScoreReasons + `

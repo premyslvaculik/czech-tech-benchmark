@@ -85,4 +85,4 @@ Skript automaticky:
 - `X-Content-Type-Options: nosniff` = **3 b**
 - `X-Frame-Options` (Sameorigin / Deny) = **3 b**
 - Sitemap XML dostupná a deklarovaná v `robots.txt` = **2 b**
-- Čistá H1 nadpisová struktura (přesně 1× H1) = **3 b**
+- Oficiální W3C HTML5 Validita (0 chyb na `validator.w3.org`) = **3 b** (či 1× H1 = 2 b)

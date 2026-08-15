@@ -297,6 +297,31 @@ foreach ($t in $targets) {
     elseif ($hasVideoSchema) { $mediaSchema = "VideoObject" }
     elseif ($hasPodcastSchema) { $mediaSchema = "PodcastEpisode" }
 
+    # 4h. Official W3C Nu HTML Validator API Check
+    $w3cErrors = 0
+    $w3cWarnings = 0
+    $w3cChecked = $false
+    if ($artUrl) {
+        try {
+            $cleanArtUrl = $artUrl -replace '\?nocache=\d+', ''
+            $encodedArtUrl = [System.Uri]::EscapeDataString($cleanArtUrl)
+            $w3cRaw = & curl.exe -s --connect-timeout 8 --max-time 15 -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) W3C_Validator_Audit/1.0" "https://validator.w3.org/nu/?doc=$encodedArtUrl&out=json"
+            $w3cText = ($w3cRaw -join "`n")
+            if ($w3cText -match '"messages"') {
+                $w3cJson = $w3cText | ConvertFrom-Json
+                $w3cErrors = ($w3cJson.messages | Where-Object { $_.type -eq 'error' }).Count
+                $w3cWarnings = ($w3cJson.messages | Where-Object { $_.type -eq 'info' -and $_.subType -eq 'warning' }).Count
+                $w3cChecked = $true
+            }
+        } catch {}
+    }
+    $w3cStatus = if ($w3cChecked) {
+        if ($w3cErrors -eq 0 -and $w3cWarnings -eq 0) { "0 chyb (100% Validní)" }
+        elseif ($w3cErrors -eq 0) { "0 chyb ($w3cWarnings varování)" }
+        else { "$w3cErrors chyb, $w3cWarnings varování" }
+    } else { "Neověřeno" }
+    $isW3cClean = ($w3cChecked -and $w3cErrors -eq 0)
+
     # AI Bots in robots.txt
     $blocksAi = ($robotsText -match 'User-agent:\s*(GPTBot|Google-Extended|ClaudeBot|PerplexityBot|CCBot)[\s\S]*?Disallow:\s*/')
 
@@ -398,7 +423,8 @@ foreach ($t in $targets) {
     if ($hasNosniff) { $score += 3; $reasons += "+3b: X-Content-Type-Options nosniff" }
     if ($hasXfo) { $score += 3; $reasons += "+3b: X-Frame-Options ochrana" }
     if ($isSitemapValid) { $score += 2; $reasons += "+2b: Sitemap XML ($sitemapStatus)" }
-    if ($h1Count -eq 1) { $score += 3; $reasons += "+3b: Čistá H1 hierarchie (1x H1)" }
+    if ($isW3cClean) { $score += 3; $reasons += "+3b: W3C Validní HTML5 ($w3cStatus)" }
+    elseif ($h1Count -eq 1) { $score += 2; $reasons += "+2b: Čistá H1 hierarchie (1x H1)" }
 
     if ($score -gt 100) { $score = 100 }
 
@@ -443,6 +469,10 @@ foreach ($t in $targets) {
         Html5Clean     = $html5Clean
         LegacyCssCount = $legacyCssCount
         LegacyJsCount  = $legacyJsCount
+        W3CErrors      = $w3cErrors
+        W3CWarnings    = $w3cWarnings
+        W3CStatus      = $w3cStatus
+        IsW3cClean     = $isW3cClean
         MediaSchema    = $mediaSchema
         BlocksAi       = $blocksAi
         ConsentV2      = $hasConsentV2
