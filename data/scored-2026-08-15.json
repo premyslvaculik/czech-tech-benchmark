@@ -20,11 +20,6 @@
         "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: Oborové členství (SPIR,IAB_TCF), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: Sociální sítě autora, +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
-        "Name":  "MobilMania.cz",
-        "TotalScore":  57,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: Poštovní adresa sídla, +2b: Oborové členství (SPIR), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (10), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
-    },
-    {
         "Name":  "CzechCrunch (CC.cz)",
         "TotalScore":  55,
         "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR), +10b: NewsArticle schéma, +6b: Platná lokální zóna (+02:00), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (16), +2b: Speculation Rules instant prerender, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt))"
@@ -37,7 +32,12 @@
     {
         "Name":  "Živě.cz",
         "TotalScore":  52,
-        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (14), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR,AOV,SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (14), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivní, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
+    },
+    {
+        "Name":  "MobilMania.cz",
+        "TotalScore":  52,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: Poštovní adresa sídla, +2b: Oborové členství (SPIR), +10b: NewsArticle schéma, +3b: UTC čas (zpoždění v Discover), +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (8), +2b: fetchpriority=high u LCP fotky, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C Validní HTML5 (0 chyb (100% Validní))"
     },
     {
         "Name":  "Mobilizujeme.cz",
@@ -46,8 +46,8 @@
     },
     {
         "Name":  "Appliště.cz",
-        "TotalScore":  45,
-        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR,IAB_TCF), +3b: BlogPosting schéma, +6b: Platná lokální zóna (+02:00), +4b: Sociální sítě autora, +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (44), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Čistá H1 hierarchie (1x H1)"
+        "TotalScore":  47,
+        "ScoreReasons":  "+4b: Organization, +2b: Oborové členství (SPIR,IAB_TCF), +3b: BlogPosting schéma, +6b: Platná lokální zóna (+02:00), +4b: Sociální sítě autora, +4b: og:type=article, +2b: OG publikováno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Validní XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (44), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Čistá H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Chip.cz",

@@ -12,8 +12,8 @@ SmartMania.cz | https://smartmania.cz/ | https://smartmania.cz/feed/ | https://s
 Chip.cz | https://www.chip.cz/ | https://www.chip.cz/rss | https://www.chip.cz/tipy-triky/jak-sledovat-zatmeni-slunce-disketa-bryle-aplikace
 Svět Androida | https://www.svetandroida.cz/ | https://www.svetandroida.cz/feed/ | https://www.svetandroida.cz/apple-naramek-bez-displeje-uvahy-gurman/
 Mobilizujeme.cz | https://mobilizujeme.cz/ | https://mobilizujeme.cz/feed | https://mobilizujeme.cz/clanky/iphone-17-pro-jen-za-16-776-kc-trik-spociva-v-unikatni-sluzbe
-MobilMania.cz | https://mobilmania.zive.cz/ | https://mobilmania.zive.cz/rss | https://mobilmania.zive.cz/clanky/nejlepsi-telefony-ktere-si-muzete-koupit/sc-3-a-1337463/default.aspx
-Živě.cz | https://www.zive.cz/ | https://www.zive.cz/rss | https://vtm.zive.cz/clanky/kdy-bude-zatmeni-slunce-a-kolik-z-nej-uvidite/sc-870-a-242684/default.aspx
+MobilMania.cz | https://mobilmania.zive.cz/ | https://mobilmania.zive.cz/rss/sc-47/default.aspx | https://mobilmania.zive.cz/clanky/nejlepsi-telefony-ktere-si-muzete-koupit/sc-3-a-1337463/default.aspx
+Živě.cz | https://www.zive.cz/ | https://www.zive.cz/rss/sc-47/default.aspx | https://vtm.zive.cz/clanky/kdy-bude-zatmeni-slunce-a-kolik-z-nej-uvidite/sc-870-a-242684/default.aspx
 Cnews.cz | https://cnews.cz/ | https://www.cnews.cz/rss/clanky/ | https://www.cnews.cz/clanky/cesi-vyvijeji-lidsky-kloub-budoucnosti-3d-tiskarna-za-29-milionu-vyrobi-implantat-ktery-uvolni-leky-primo-v-tele/
 PCTuning.cz | https://pctuning.cz/ | https://pctuning.cz/rss/all | https://pctuning.cz/article/ai-agent-naboural-rezervacni-system-a-smazal-jineho-klienta
 Letem světem Applem | https://www.letemsvetemapplem.eu/ | https://www.letemsvetemapplem.eu/feed/ | https://www.letemsvetemapplem.eu/2026/08/11/proc-apple-stale-pouziva-60hz-displej-u-zakladnich-iphonu-je-to-prostsi-nez-si-myslite/

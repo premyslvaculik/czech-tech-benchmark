@@ -217,17 +217,23 @@ foreach ($t in $targets) {
     $hasPreconnect = ($preconnectCount -gt 0)
 
     # 4b. Sitemap in robots.txt & HTTP check
-    $hasSitemapInRobots = ($robotsText -match '(?i)Sitemap:\s*(https?://[^\s\r\n]+)')
-    $sitemapUrl = if ($hasSitemapInRobots) { $matches[1].Trim() } else { "${scheme}://${domain}/sitemap.xml" }
+    $sitemapMatches = [regex]::Matches($robotsText, '(?i)Sitemap:\s*(https?://[^\s\r\n]+)')
+    $hasSitemapInRobots = ($sitemapMatches.Count -gt 0)
+    $sitemapUrls = @()
+    foreach ($sm in $sitemapMatches) { $sitemapUrls += $sm.Groups[1].Value.Trim() }
+    if ($sitemapUrls.Count -eq 0) { $sitemapUrls += "${scheme}://${domain}/sitemap.xml" }
+
     $sitemapHttpCode = "000"
-    try {
-        $smHeaderRaw = & curl.exe -s -I -L --connect-timeout 6 --max-time 10 -A $ua "$sitemapUrl"
-        $smHeader = ($smHeaderRaw -join "`n")
-        $codeMatches = [regex]::Matches($smHeader, 'HTTP/\S+\s+(\d{3})')
-        if ($codeMatches.Count -gt 0) {
-            $sitemapHttpCode = $codeMatches[$codeMatches.Count - 1].Groups[1].Value
-        }
-    } catch {}
+    foreach ($smUrl in $sitemapUrls) {
+        try {
+            $code = (& curl.exe -s -L -o NUL -w "%{http_code}" --connect-timeout 8 --max-time 12 -A $ua "$smUrl")
+            if ($code -match '^(200|301|302)$') {
+                $sitemapHttpCode = $code
+                break
+            }
+        } catch {}
+    }
+
     $sitemapStatus = if ($sitemapHttpCode -eq "200") {
         if ($hasSitemapInRobots) { "200 OK (v robots.txt)" } else { "200 OK (výchozí)" }
     } elseif ($sitemapHttpCode -eq "301" -or $sitemapHttpCode -eq "302") {
@@ -251,7 +257,7 @@ foreach ($t in $targets) {
     $feedHasHub = $false
     if ($t.Rss) {
         try {
-            $feedHeadersRaw = & curl.exe -s -I --connect-timeout 6 --max-time 10 -A $ua "$($t.Rss)"
+            $feedHeadersRaw = & curl.exe -s -I -L --connect-timeout 8 --max-time 12 -A $ua "$($t.Rss)"
             $feedHeaderText = ($feedHeadersRaw -join "`n")
             if ($feedHeaderText -match '(?i)content-type:\s*([^\r\n;]+)') {
                 $feedContentType = $matches[1].Trim()
