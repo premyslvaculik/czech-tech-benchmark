@@ -329,7 +329,10 @@ foreach ($t in $targets) {
     $cmpSystem = "Basic_Bar"
     $hasConsentV2 = $false
 
-    if ($combinedHtml -match 'cmplz|complianz') {
+    if ($combinedHtml -match 'complianz-gdpr-premium|cmplz-tcf|tcf_active') {
+        $cmpSystem = "Complianz_TCF_CoMoV2"
+        $hasConsentV2 = $true
+    } elseif ($combinedHtml -match 'cmplz|complianz') {
         $cmpSystem = "Complianz_CoMoV2"
         $hasConsentV2 = $true
     } elseif ($combinedHtml -match 'didomi|privacy\.cpex\.cz|cpex-cmp') {

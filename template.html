@@ -437,6 +437,7 @@
 
         function formatCmp(cmp, v2) {
             if (!cmp || cmp === 'Basic_Bar') return '<span class="badge-warn mono">Základní lišta</span>';
+            if (cmp === 'Complianz_TCF_CoMoV2') return '<span class="badge-ok mono">Complianz Pro (TCF v2.2 + CoMo v2)</span>';
             if (cmp === 'Complianz_CoMoV2') return '<span class="badge-ok mono">Complianz (CoMo v2)</span>';
             if (cmp === 'Didomi_CPEX_TCF') return '<span class="badge-ok mono">Didomi CPEX (TCF v2.2)</span>';
             if (cmp === 'Cookiebot_TCF') return '<span class="badge-ok mono">Cookiebot (TCF v2.2)</span>';
