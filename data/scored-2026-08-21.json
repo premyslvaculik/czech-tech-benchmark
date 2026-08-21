@@ -11,8 +11,8 @@
     },
     {
         "Name":  "Letem světem Applem",
-        "TotalScore":  70,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (9 varovĂˇnĂ­))"
+        "TotalScore":  67,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Živě.cz",
@@ -20,9 +20,14 @@
         "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (14), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
     },
     {
+        "Name":  "MobilMania.cz",
+        "TotalScore":  59,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (10), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+    },
+    {
         "Name":  "SmartMania.cz",
         "TotalScore":  58,
-        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (5), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
     },
     {
         "Name":  "CzechCrunch (CC.cz)",
@@ -35,11 +40,6 @@
         "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
     },
     {
-        "Name":  "MobilMania.cz",
-        "TotalScore":  52,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (8), +2b: fetchpriority=high u LCP fotky, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
-    },
-    {
         "Name":  "Mobilizujeme.cz",
         "TotalScore":  51,
         "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
@@ -47,7 +47,7 @@
     {
         "Name":  "Appliště.cz",
         "TotalScore":  47,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (23), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (16), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
     },
     {
         "Name":  "Mobilenet.cz",
