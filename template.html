@@ -335,6 +335,7 @@
                         <th>HSTS (HTTPS)</th>
                         <th>Nosniff & XFO</th>
                         <th>HTTP/3 (QUIC)</th>
+                        <th>TTFB Odezva (HP / Článek)</th>
                         <th>Schema.org Typ</th>
                         <th>E-E-A-T Kodex & Tiráž</th>
                         <th>E-E-A-T Autor sameAs</th>
@@ -499,6 +500,17 @@
             return '<span class="badge-warn">' + (item.W3CStatus || 'Neověřeno') + '</span>';
         }
 
+        function formatTtfb(hp, art) {
+            if (!hp && !art) return '<span class="mono">Neověřeno</span>';
+            const renderPill = (val) => {
+                if (!val || val === 0) return '-';
+                if (val < 200) return '<span class="badge-ok mono">' + val + ' ms</span>';
+                if (val < 400) return '<span class="badge-warn mono">' + val + ' ms</span>';
+                return '<span class="badge-err mono">' + val + ' ms</span>';
+            };
+            return renderPill(hp) + ' / ' + renderPill(art);
+        }
+
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
@@ -531,6 +543,7 @@
                     <td>` + (item.HSTS ? '<span class="badge-ok">ANO (Aktivní)</span>' : '<span class="badge-err">NE</span>') + `</td>
                     <td>` + (item.Nosniff && item.XFO ? '<span class="badge-ok">Plná ochrana</span>' : (item.Nosniff || item.XFO ? '<span class="badge-warn">Částečná</span>' : '<span class="badge-err">NE</span>')) + `</td>
                     <td>` + (item.HTTP3 ? '<span class="badge-ok">ANO (QUIC)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td>` + formatTtfb(item.HpTtfbMs, item.ArtTtfbMs) + `</td>
                     <td>` + formatOrgSchema(item.OrgSchema) + ` / ` + formatArtSchema(item.ArtSchema) + `</td>
                     <td>` + (item.Ethics && item.Masthead ? '<span class="badge-ok">Plné (Kodex + Tiráž)</span>' : (item.Ethics || item.Masthead ? '<span class="badge-warn">Částečné</span>' : '<span class="badge-err">Chybí</span>')) + `</td>
                     <td>` + (item.AuthorSameAs ? '<span class="badge-ok">ANO (Sociální profily)</span>' : '<span class="badge-err">NE</span>') + `</td>
@@ -564,7 +577,7 @@
                 drawer.className = 'drawer-row';
                 drawer.id = 'drawer-' + index;
                 drawer.innerHTML = `
-                    <td colspan="33" style="padding: 0;">
+                    <td colspan="34" style="padding: 0;">
                         <div class="drawer-content">
                             <h3 style="color: #fff; font-size: 1.05rem; margin-bottom: 0.4rem;">🔎 Podrobný technický rozbor a bodové zdůvodnění: ` + item.Name + `</h3>
                             <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">
@@ -613,6 +626,10 @@
                     </div>
 
                     <div class="card-metrics">
+                        <div class="card-metric-item">
+                            <span class="card-metric-label">TTFB Odezva (HP/Článek)</span>
+                            <span>` + formatTtfb(item.HpTtfbMs, item.ArtTtfbMs) + `</span>
+                        </div>
                         <div class="card-metric-item">
                             <span class="card-metric-label">W3C Validita</span>
                             <span>` + formatW3CStatus(item) + `</span>
