@@ -157,6 +157,35 @@
             top: 0;
             z-index: 10;
         }
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s, color 0.15s;
+        }
+        th.sortable:hover {
+            background: #1c273c;
+            color: var(--primary);
+        }
+        th.sortable .sort-icon {
+            display: inline-block;
+            margin-left: 0.35rem;
+            font-size: 0.72rem;
+            opacity: 0.45;
+            transition: opacity 0.15s, color 0.15s;
+        }
+        th.sortable:hover .sort-icon {
+            opacity: 0.9;
+        }
+        th.sortable.active-sort {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background: #182337;
+        }
+        th.sortable.active-sort .sort-icon {
+            opacity: 1;
+            color: var(--primary);
+            font-weight: 800;
+        }
         th.sticky-col, td.sticky-col {
             position: sticky;
             left: 0;
@@ -328,41 +357,41 @@
             <table id="masterTable">
                 <thead>
                     <tr>
-                        <th class="sticky-col">Portál</th>
-                        <th>Celkem</th>
-                        <th>ISSN (Národní knihovna)</th>
-                        <th>Členství & Organizace</th>
-                        <th>HSTS (HTTPS)</th>
-                        <th>Nosniff & XFO</th>
-                        <th>HTTP/3 (QUIC)</th>
-                        <th>TTFB Odezva (HP / Článek)</th>
-                        <th>Reálné LCP (Článek)</th>
-                        <th>Schema.org Typ</th>
-                        <th>E-E-A-T Kodex & Tiráž</th>
-                        <th>E-E-A-T Autor sameAs</th>
-                        <th>Redakční garant (editor)</th>
-                        <th>GEO Postal Address</th>
-                        <th>Sémantické entity (mentions)</th>
-                        <th>Google speakable</th>
-                        <th>Časové pásmo (Discover)</th>
-                        <th>Formát og:image</th>
-                        <th>Robots Discover large</th>
-                        <th>fetchpriority: high</th>
-                        <th>Preconnect & DNS Hints</th>
-                        <th>Speculation Rules API</th>
-                        <th>Web Manifest & PWA</th>
-                        <th>WebSub Push Hub</th>
-                        <th>Sitemap XML (robots.txt)</th>
-                        <th>Fediverse Creator</th>
-                        <th>Validita RSS/Atom Feedu</th>
-                        <th>W3C HTML5 Clean Code</th>
-                        <th>W3C Validita (validator.w3.org)</th>
-                        <th>Video & Podcast Schema</th>
-                        <th>AI Boti (robots.txt)</th>
-                        <th>Consent Mode v2 & CMP</th>
-                        <th>Komentářový systém</th>
-                        <th>Nadpisy H1 & DOM uzly</th>
-                        <th>Google SwG Subscriptions</th>
+                        <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
+                        <th class="sortable active-sort" data-sort="TotalScore" onclick="handleHeaderSort('TotalScore')">Celkem <span class="sort-icon">▼</span></th>
+                        <th class="sortable" data-sort="ISSN" onclick="handleHeaderSort('ISSN')">ISSN (Národní knihovna) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Memberships" onclick="handleHeaderSort('Memberships')">Členství & Organizace <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="HSTS" onclick="handleHeaderSort('HSTS')">HSTS (HTTPS) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Nosniff" onclick="handleHeaderSort('Nosniff')">Nosniff & XFO <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="HTTP3" onclick="handleHeaderSort('HTTP3')">HTTP/3 (QUIC) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="HpTtfbMs" onclick="handleHeaderSort('HpTtfbMs')">TTFB Odezva (HP / Článek) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="ArtLcpMs" onclick="handleHeaderSort('ArtLcpMs')">Reálné LCP (Článek) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="OrgSchema" onclick="handleHeaderSort('OrgSchema')">Schema.org Typ <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Ethics" onclick="handleHeaderSort('Ethics')">E-E-A-T Kodex & Tiráž <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="AuthorSameAs" onclick="handleHeaderSort('AuthorSameAs')">E-E-A-T Autor sameAs <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Editor" onclick="handleHeaderSort('Editor')">Redakční garant (editor) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="PostalAddress" onclick="handleHeaderSort('PostalAddress')">GEO Postal Address <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MentionsCount" onclick="handleHeaderSort('MentionsCount')">Sémantické entity (mentions) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Speakable" onclick="handleHeaderSort('Speakable')">Google speakable <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Timezone" onclick="handleHeaderSort('Timezone')">Časové pásmo (Discover) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="OgImageFormat" onclick="handleHeaderSort('OgImageFormat')">Formát og:image <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="DiscoverLarge" onclick="handleHeaderSort('DiscoverLarge')">Robots Discover large <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="FetchPriority" onclick="handleHeaderSort('FetchPriority')">fetchpriority: high <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="PreconnectCount" onclick="handleHeaderSort('PreconnectCount')">Preconnect & DNS Hints <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Speculation" onclick="handleHeaderSort('Speculation')">Speculation Rules API <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Manifest" onclick="handleHeaderSort('Manifest')">Web Manifest & PWA <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="WebSub" onclick="handleHeaderSort('WebSub')">WebSub Push Hub <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="IsSitemapValid" onclick="handleHeaderSort('IsSitemapValid')">Sitemap XML (robots.txt) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Fediverse" onclick="handleHeaderSort('Fediverse')">Fediverse Creator <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="FeedContentType" onclick="handleHeaderSort('FeedContentType')">Validita RSS/Atom Feedu <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="LegacyCssCount" onclick="handleHeaderSort('LegacyCssCount')">W3C HTML5 Clean Code <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="W3CErrors" onclick="handleHeaderSort('W3CErrors')">W3C Validita (validator.w3.org) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MediaSchema" onclick="handleHeaderSort('MediaSchema')">Video & Podcast Schema <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="BlocksAi" onclick="handleHeaderSort('BlocksAi')">AI Boti (robots.txt) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="CMP" onclick="handleHeaderSort('CMP')">Consent Mode v2 & CMP <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Comments" onclick="handleHeaderSort('Comments')">Komentářový systém <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="DomTags" onclick="handleHeaderSort('DomTags')">Nadpisy H1 & DOM uzly <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="SwG" onclick="handleHeaderSort('SwG')">Google SwG Subscriptions <span class="sort-icon">↕</span></th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -1755,6 +1784,67 @@
                     card.style.display = match ? 'block' : 'none';
                 }
             });
+        }
+
+        let currentSortKey = 'TotalScore';
+        let currentSortDirection = 'desc';
+
+        function handleHeaderSort(key) {
+            if (currentSortKey === key) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortKey = key;
+                if (key === 'Name') {
+                    currentSortDirection = 'asc';
+                } else if (key === 'ArtLcpMs' || key === 'HpTtfbMs' || key === 'W3CErrors' || key === 'LegacyCssCount') {
+                    currentSortDirection = 'asc';
+                } else {
+                    currentSortDirection = 'desc';
+                }
+            }
+            sortAndRender();
+        }
+
+        function sortAndRender() {
+            auditData.sort((a, b) => {
+                let valA = a[currentSortKey];
+                let valB = b[currentSortKey];
+
+                if (typeof valA === 'boolean') valA = valA ? 1 : 0;
+                if (typeof valB === 'boolean') valB = valB ? 1 : 0;
+
+                if ((currentSortKey === 'ArtLcpMs' || currentSortKey === 'HpTtfbMs') && currentSortDirection === 'asc') {
+                    if (!valA || valA === 0) valA = 999999;
+                    if (!valB || valB === 0) valB = 999999;
+                }
+
+                if (typeof valA === 'number' && typeof valB === 'number') {
+                    return currentSortDirection === 'asc' ? valA - valB : valB - valA;
+                }
+
+                valA = (valA || '').toString().toLowerCase();
+                valB = (valB || '').toString().toLowerCase();
+
+                if (valA < valB) return currentSortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            document.querySelectorAll('th.sortable').forEach(th => {
+                const key = th.getAttribute('data-sort');
+                const iconSpan = th.querySelector('.sort-icon');
+                if (key === currentSortKey) {
+                    th.classList.add('active-sort');
+                    if (iconSpan) iconSpan.textContent = currentSortDirection === 'asc' ? '▲' : '▼';
+                } else {
+                    th.classList.remove('active-sort');
+                    if (iconSpan) iconSpan.textContent = '↕';
+                }
+            });
+
+            renderTable();
+            renderCards();
+            filterAll();
         }
 
         renderTable();
