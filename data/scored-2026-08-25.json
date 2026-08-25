@@ -22,7 +22,7 @@
     {
         "Name":  "SmartMania.cz",
         "TotalScore":  58,
-        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (16), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (7), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
     },
     {
         "Name":  "CzechCrunch (CC.cz)",
@@ -57,7 +57,7 @@
     {
         "Name":  "Appliště.cz",
         "TotalScore":  47,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (28), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (18), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
     },
     {
         "Name":  "iROZHLAS.cz",
