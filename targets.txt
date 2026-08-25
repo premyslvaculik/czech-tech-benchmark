@@ -24,3 +24,5 @@ CzechCrunch (CC.cz) | https://cc.cz/ | https://cc.cz/feed/ | https://cc.cz/prehl
 Techarena.cz | https://www.techarena.cz/ | https://www.techarena.cz/feed/ | https://www.techarena.cz/clanky/realme-15-pro-je-oficialni-lakadlem-je-obri-baterie-a-rychle-nabijeni/
 iROZHLAS.cz | https://www.irozhlas.cz/ | https://www.irozhlas.cz/rss/irozhlas | https://www.irozhlas.cz/zpravy-svet/proc-se-trump-priklani-vic-k-ukrajine-nez-k-rusku-rad-se-sveze-s-tim-kdo-vyhrava_2608161500_jos
 Hifimanie.cz | https://hifimanie.cz/ | https://hifimanie.cz/feed/ | https://hifimanie.cz/2026/08/recenze-nothing-ear-3a-levnejsi-zabavnejsi-a-basovejsi/
+Hi-Fi Voice | https://www.hifi-voice.com/ | https://www.hifi-voice.com/?format=feed&type=rss | https://www.hifi-voice.com/testy-a-recenze/zesilovace-vykonove/7329-rega-mercury-solis
+AVmania.cz | https://avmania.zive.cz/ | https://avmania.zive.cz/rss/sc-47/default.aspx | https://avmania.zive.cz/esoteric-zlevnil-bezkontaktni-gramofon-uz-stoji-jen-12-milionu-korun
