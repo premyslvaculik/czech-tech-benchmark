@@ -23,4 +23,4 @@ Wired.cz | https://www.wired.cz/ | https://www.wired.cz/rss | https://www.wired.
 CzechCrunch (CC.cz) | https://cc.cz/ | https://cc.cz/feed/ | https://cc.cz/prehled-zatmeni-slunce-2026-jak-a-kdy-pozorovat-v-cesku/
 Techarena.cz | https://www.techarena.cz/ | https://www.techarena.cz/feed/ | https://www.techarena.cz/clanky/realme-15-pro-je-oficialni-lakadlem-je-obri-baterie-a-rychle-nabijeni/
 iROZHLAS.cz | https://www.irozhlas.cz/ | https://www.irozhlas.cz/rss/irozhlas | https://www.irozhlas.cz/zpravy-svet/proc-se-trump-priklani-vic-k-ukrajine-nez-k-rusku-rad-se-sveze-s-tim-kdo-vyhrava_2608161500_jos
-
+Hifimanie.cz | https://hifimanie.cz/ | https://hifimanie.cz/feed/ | https://hifimanie.cz/2026/08/recenze-nothing-ear-3a-levnejsi-zabavnejsi-a-basovejsi/
