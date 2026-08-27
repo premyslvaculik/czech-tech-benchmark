@@ -627,7 +627,7 @@ $jsonEmbedded = $sorted | ConvertTo-Json -Depth 5
 $templateFile = "$benchmarkRoot\template.html"
 if (Test-Path $templateFile) {
     $templateHtml = [System.IO.File]::ReadAllText($templateFile, [System.Text.Encoding]::UTF8)
-    $finalHtml = $templateHtml.Replace('__DATE__', $today).Replace('__JSON_DATA__', $jsonEmbedded)
+    $finalHtml = $templateHtml.Replace('__DATE__', $today).Replace('__COUNT__', "$($targets.Count)").Replace('__JSON_DATA__', $jsonEmbedded)
     [System.IO.File]::WriteAllText($htmlFile, $finalHtml, [System.Text.Encoding]::UTF8)
     [System.IO.File]::WriteAllText("$benchmarkRoot\index.html", $finalHtml, [System.Text.Encoding]::UTF8)
     [System.IO.File]::WriteAllText("$PSScriptRoot\..\..\index.html", $finalHtml, [System.Text.Encoding]::UTF8)
