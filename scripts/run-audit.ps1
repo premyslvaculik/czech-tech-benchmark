@@ -1,4 +1,4 @@
-﻿param(
+param(
     [switch]$PushPublic = $false
 )
 
@@ -11,7 +11,7 @@ $ConsoleOutputEncoding = [System.Text.Encoding]::UTF8
 $today = (Get-Date).ToString("yyyy-MM-dd")
 $ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
 
-$benchmarkRoot = "c:\02 vyvoj\Dotekomanie31\benchmark"
+$benchmarkRoot = if ($PSScriptRoot) { (Get-Item "$PSScriptRoot\..").FullName } else { "d:\github\Dotekomanie31\benchmark" }
 $dataDir = "$benchmarkRoot\data"
 $htmlFile = "$benchmarkRoot\$today.html"
 
@@ -39,19 +39,96 @@ if (Test-Path $targetsFile) {
     }
 }
 
+# Start Headless Chrome for Real-World Chromium LCP measurement
+$chromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+$cdpPort = 9222
+$chromeTempDir = Join-Path $env:TEMP "chrome_bench_$(Get-Random)"
+$chromeProc = $null
+
+if (Test-Path $chromePath) {
+    try {
+        $chromeProc = Start-Process -FilePath $chromePath -ArgumentList "--headless=new", "--remote-debugging-port=$cdpPort", "--user-data-dir=`"$chromeTempDir`"", "--no-first-run", "--no-default-browser-check", "--disable-gpu", "--disable-extensions", "--no-sandbox" -PassThru
+        Start-Sleep -Seconds 2
+    } catch {}
+}
+
+function Eval-ChromePerf($wsUrl) {
+    if (-not $wsUrl) { return $null }
+    try {
+        $ws = New-Object System.Net.WebSockets.ClientWebSocket
+        $cts = New-Object System.Threading.CancellationTokenSource(12000)
+        $uri = New-Object System.Uri($wsUrl)
+        $ws.ConnectAsync($uri, $cts.Token).Wait()
+        
+        $js = @"
+new Promise((resolve) => {
+    let lcpVal = 0;
+    try {
+        const po = new PerformanceObserver((entryList) => {
+            const entries = entryList.getEntries();
+            const last = entries[entries.length - 1];
+            if (last) lcpVal = Math.round(last.renderTime || last.loadTime || last.startTime);
+        });
+        po.observe({ type: 'largest-contentful-paint', buffered: true });
+    } catch(e) {}
+    
+    setTimeout(() => {
+        const nav = performance.getEntriesByType('navigation')[0] || {};
+        const paints = performance.getEntriesByType('paint') || [];
+        const fcp = paints.find(p => p.name === 'first-contentful-paint');
+        
+        resolve({
+            ttfb_ms: Math.round(nav.responseStart || 0),
+            fcp_ms: Math.round(fcp ? fcp.startTime : 0),
+            lcp_ms: lcpVal || Math.round(fcp ? fcp.startTime : 0),
+            dom_ready_ms: Math.round(nav.domContentLoadedEventEnd || 0),
+            load_ms: Math.round(nav.loadEventEnd || 0)
+        });
+    }, 400);
+})
+"@
+        $id = Get-Random -Minimum 1000 -Maximum 9999
+        $msg = @{ id = $id; method = "Runtime.evaluate"; params = @{ expression = $js; returnByValue = $true; awaitPromise = $true } } | ConvertTo-Json -Compress
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($msg)
+        $segment = New-Object System.ArraySegment[byte]($bytes, 0, $bytes.Length)
+        $ws.SendAsync($segment, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, $cts.Token).Wait()
+        
+        $buffer = New-Object byte[] 65536
+        $recvSegment = New-Object System.ArraySegment[byte]($buffer, 0, $buffer.Length)
+        $recvResult = $ws.ReceiveAsync($recvSegment, $cts.Token).Result
+        $resJson = [System.Text.Encoding]::UTF8.GetString($buffer, 0, $recvResult.Count)
+        $ws.CloseAsync([System.Net.WebSockets.WebSocketCloseStatus]::NormalClosure, "Done", $cts.Token).Wait()
+        
+        $parsed = $resJson | ConvertFrom-Json
+        return $parsed.result.result.value
+    } catch {
+        return $null
+    }
+}
+
 Write-Host "Starting Master Technical Audit for $today across $($targets.Count) portals..."
 $auditItems = @()
 
 foreach ($t in $targets) {
-    Write-Host "Auditing: $($t.Name)..."
-    $nocache = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-    $hpUrl = "$($t.Hp)?nocache=$nocache"
-    $artUrl = if ($t.ArtOverride) { "$($t.ArtOverride)?nocache=$nocache" } else { "" }
+    $hpUrl = $t.Hp
+    $artUrl = if ($t.ArtOverride) { $t.ArtOverride } else { "" }
 
-    # 1. Fetch HP & Headers
-    $hpHeadersRaw = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $ua $hpUrl
+    # 1. Fetch HP & Headers + Timing (TTFB on clean canonical URL)
+    $hpTimingRaw = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total}" --connect-timeout 8 --max-time 15 -A $ua -H "Accept-Encoding: gzip, deflate, br" $hpUrl
+    $hpTtfbMs = 0
+    $hpTotalMs = 0
+    if ($hpTimingRaw) {
+        $tp = $hpTimingRaw.Split(";")
+        if ($tp.Count -ge 2) {
+            $hpTtfbMs = [int][Math]::Round([double]$tp[0] * 1000)
+            $hpTotalMs = [int][Math]::Round([double]$tp[1] * 1000)
+        }
+    }
+
+    $nocache = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+    $hpHeadersRaw = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $ua "$($hpUrl)?nocache=$nocache"
     $hpHeaders = ($hpHeadersRaw -join "`n")
-    $hpHtmlRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua $hpUrl
+    $hpHtmlRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua "$($hpUrl)?nocache=$nocache"
     $hpHtml = ($hpHtmlRaw -join "`n")
 
     # 2. Dynamic Multi-Article Resolution - výběr vzorku 3 až 4 čerstvých článků z RSS nebo HP
@@ -88,15 +165,48 @@ foreach ($t in $targets) {
         }
     }
 
-    # 3. Fetch All Resolved Articles
+    # 3. Fetch All Resolved Articles + Timing
     $artHtmlList = @()
     $artHeadersList = @()
     $artUrl = if ($articleUrls.Count -gt 0) { $articleUrls[0] } else { "" }
+    $artTtfbMs = 0
+    $artTotalMs = 0
+
+    if ($artUrl) {
+        $artTimingRaw = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total}" --connect-timeout 8 --max-time 15 -A $ua -H "Accept-Encoding: gzip, deflate, br" $artUrl
+        if ($artTimingRaw) {
+            $atp = $artTimingRaw.Split(";")
+            if ($atp.Count -ge 2) {
+                $artTtfbMs = [int][Math]::Round([double]$atp[0] * 1000)
+                $artTotalMs = [int][Math]::Round([double]$atp[1] * 1000)
+            }
+        }
+    }
+
+    # 3b. Real-World Chromium LCP measurement via CDP
+    $artLcpMs = 0
+    $artFcpMs = 0
+    if ($chromeProc -and $artUrl) {
+        try {
+            $newTab = Invoke-RestMethod -Uri "http://localhost:$cdpPort/json/new?$([System.Uri]::EscapeDataString($artUrl))" -Method Put -TimeoutSec 8
+            if ($newTab -and $newTab.id) {
+                $tabId = $newTab.id
+                $wsUrl = $newTab.webSocketDebuggerUrl
+                Start-Sleep -Milliseconds 2500
+                $perfData = Eval-ChromePerf -wsUrl $wsUrl
+                if ($perfData) {
+                    if ($perfData.lcp_ms) { $artLcpMs = [int]$perfData.lcp_ms }
+                    if ($perfData.fcp_ms) { $artFcpMs = [int]$perfData.fcp_ms }
+                }
+                Invoke-RestMethod -Uri "http://localhost:$cdpPort/json/close/$tabId" -Method Get -TimeoutSec 4 | Out-Null
+            }
+        } catch {}
+    }
 
     foreach ($aUrl in $articleUrls) {
         try {
-            $aHeadRaw = & curl.exe -s -I --connect-timeout 6 --max-time 10 -A $ua "$aUrl"
-            $aHtmlRaw = & curl.exe -Ls --connect-timeout 6 --max-time 10 -A $ua "$aUrl"
+            $aHeadRaw = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $ua "$aUrl"
+            $aHtmlRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua "$aUrl"
             $artHeadersList += ($aHeadRaw -join "`n")
             $artHtmlList += ($aHtmlRaw -join "`n")
         } catch {}
@@ -315,8 +425,8 @@ foreach ($t in $targets) {
             $w3cText = ($w3cRaw -join "`n")
             if ($w3cText -match '"messages"') {
                 $w3cJson = $w3cText | ConvertFrom-Json
-                $w3cErrors = ($w3cJson.messages | Where-Object { $_.type -eq 'error' }).Count
-                $w3cWarnings = ($w3cJson.messages | Where-Object { $_.type -eq 'info' -and $_.subType -eq 'warning' }).Count
+                $w3cErrors = @($w3cJson.messages | Where-Object { $_.type -eq 'error' }).Count
+                $w3cWarnings = @($w3cJson.messages | Where-Object { $_.type -eq 'info' -and $_.subType -eq 'warning' }).Count
                 $w3cChecked = $true
             }
         } catch {}
@@ -447,6 +557,10 @@ foreach ($t in $targets) {
         Nosniff        = $hasNosniff
         XFO            = $hasXfo
         HTTP3          = $hasHttp3
+        HpTtfbMs       = $hpTtfbMs
+        ArtTtfbMs      = $artTtfbMs
+        ArtLcpMs       = $artLcpMs
+        ArtFcpMs       = $artFcpMs
         OrgSchema      = $orgSchemaType
         ArtSchema      = $artSchemaType
         Ethics         = $hasEthics
@@ -545,4 +659,12 @@ if (Test-Path $templateFile) {
     }
 } else {
     Write-Host "Error: Template file $templateFile not found!"
+}
+
+# Cleanup Chrome process
+if ($chromeProc -and -not $chromeProc.HasExited) {
+    Stop-Process -Id $chromeProc.Id -Force -ErrorAction SilentlyContinue
+}
+if (Test-Path $chromeTempDir) {
+    Remove-Item -Path $chromeTempDir -Recurse -Force -ErrorAction SilentlyContinue
 }
