@@ -731,7 +731,7 @@
                         <td>` + (item.Nosniff && item.XFO ? '<span class="badge-ok">Plná ochrana</span>' : '<span class="badge-warn">Částečná</span>') + `</td>
                         <td>` + (item.IsW3cClean ? '<span class="badge-ok">0 chyb (100%)</span>' : '<span class="badge-warn">' + (item.W3CStatus || 'Neověřeno') + '</span>') + `</td>
                         <td>` + (item.WebSub ? '<span class="badge-ok">ANO (Push)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                        <td>` + (item.FeedContentType && item.FeedContentType.includes('xml') ? '<span class="badge-ok">' + item.FeedContentType + '</span>' : '<span class="badge-warn">Feed</span>') + `</td>
+                        <td>` + (item.FeedContentType && item.FeedContentType.includes('xml') ? '<span class="badge-ok">' + item.FeedContentType + '</span>' : '<span class="badge-warn">' + (item.FeedContentType || 'Feed') + '</span>') + `</td>
                         <td>` + (item.IsSitemapValid ? '<span class="badge-ok">' + item.SitemapStatus + '</span>' : '<span class="badge-err">NE</span>') + `</td>
                         <td>` + (item.Preconnect ? '<span class="badge-ok">ANO (' + item.PreconnectCount + ')</span>' : '<span class="badge-err">NE</span>') + `</td>
                         <td>` + (item.Speakable ? '<span class="badge-ok">ANO (Assistant)</span>' : '<span class="badge-err">NE</span>') + `</td>
