@@ -6,7 +6,7 @@
 # Pro přidání nového webu stačí přidat nový řádek (např.: Nazev | https://domena.cz/).
 # ==============================================================================
 
-Dotekomanie.cz | https://dotekomanie.cz/ | https://dotekomanie.cz/feed/ | https://dotekomanie.cz/2026/08/nova-rada-redmi-k100-extremni-vykon-a-obri-baterie-v-cele/
+Dotekomanie.cz | https://dotekomanie.cz/ | https://dotekomanie.cz/feed/ | https://dotekomanie.cz/2026/08/huawei-watch-gt-7-pro/
 Mobilenet.cz | https://mobilenet.cz/ | https://mobilenet.cz/rss | https://mobilenet.cz/clanky/nekolik-desitek-motorol-obdrzi-android-17-obsahly-seznam-nemusi-byt-konecny-54979
 SmartMania.cz | https://smartmania.cz/ | https://smartmania.cz/feed/ | https://smartmania.cz/nejlepsi-iphone-za-nejmin-diky-pronajmu-poridite-iphone-17-pro-za-polovinu/
 Chip.cz | https://www.chip.cz/ | https://www.chip.cz/rss | https://www.chip.cz/tipy-triky/jak-sledovat-zatmeni-slunce-disketa-bryle-aplikace
