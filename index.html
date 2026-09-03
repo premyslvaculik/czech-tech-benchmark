@@ -172,6 +172,36 @@
             font-weight: 600;
         }
 
+        /* Top Synchronized Scrollbar */
+        .top-scrollbar-wrap {
+            overflow-x: auto;
+            overflow-y: hidden;
+            height: 14px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            background: #111827;
+            border: 1px solid var(--border);
+            display: none;
+        }
+        .top-scrollbar-wrap::-webkit-scrollbar {
+            height: 10px;
+        }
+        .top-scrollbar-wrap::-webkit-scrollbar-track {
+            background: #111827;
+            border-radius: 6px;
+        }
+        .top-scrollbar-wrap::-webkit-scrollbar-thumb {
+            background: #2a364f;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .top-scrollbar-wrap::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+        .top-scrollbar-inner {
+            height: 1px;
+        }
+
         /* Master Matrix Table */
         .table-wrap {
             background: var(--surface);
@@ -424,6 +454,11 @@
 
         <div class="scroll-hint" id="scrollHint">
             <span>👈</span> <span>Tažením tabulky vodorovně zobrazíte všechny detailní sloupce</span> <span>👉</span>
+        </div>
+
+        <!-- Top Synchronized Scrollbar -->
+        <div class="top-scrollbar-wrap" id="topScrollbarWrap">
+            <div class="top-scrollbar-inner" id="topScrollbarInner"></div>
         </div>
 
         <!-- Table View -->
@@ -2019,6 +2054,7 @@
         function setViewMode(mode) {
             currentView = mode;
             const tableCont = document.getElementById('tableContainer');
+            const topScroll = document.getElementById('topScrollbarWrap');
             const cardsGrid = document.getElementById('cardsGrid');
             const scrollHint = document.getElementById('scrollHint');
             const btnTable = document.getElementById('btnTableView');
@@ -2026,6 +2062,7 @@
 
             if (mode === 'cards') {
                 tableCont.style.display = 'none';
+                if (topScroll) topScroll.style.display = 'none';
                 cardsGrid.style.display = 'grid';
                 scrollHint.style.display = 'none';
                 btnCards.classList.add('active');
@@ -2036,6 +2073,7 @@
                 if (window.innerWidth <= 900) scrollHint.style.display = 'flex';
                 btnTable.classList.add('active');
                 btnCards.classList.remove('active');
+                syncTopScrollbar();
             }
         }
 
@@ -2498,10 +2536,57 @@
             renderTable();
             renderCards();
             filterAll();
+            syncTopScrollbar();
+        }
+
+        function syncTopScrollbar() {
+            const topScroll = document.getElementById('topScrollbarWrap');
+            const topInner = document.getElementById('topScrollbarInner');
+            const tableWrap = document.getElementById('tableContainer');
+            const table = document.getElementById('masterTable');
+
+            if (!topScroll || !topInner || !tableWrap || !table) return;
+
+            requestAnimationFrame(() => {
+                if (currentView === 'table' && table.scrollWidth > tableWrap.clientWidth) {
+                    topScroll.style.display = 'block';
+                    topInner.style.width = table.scrollWidth + 'px';
+                    topScroll.scrollLeft = tableWrap.scrollLeft;
+                } else {
+                    topScroll.style.display = 'none';
+                }
+            });
+        }
+
+        let isSyncingTop = false;
+        let isSyncingTable = false;
+
+        const topScrollEl = document.getElementById('topScrollbarWrap');
+        const tableWrapEl = document.getElementById('tableContainer');
+
+        if (topScrollEl && tableWrapEl) {
+            topScrollEl.addEventListener('scroll', function() {
+                if (!isSyncingTop) {
+                    isSyncingTable = true;
+                    tableWrapEl.scrollLeft = this.scrollLeft;
+                }
+                isSyncingTop = false;
+            }, { passive: true });
+
+            tableWrapEl.addEventListener('scroll', function() {
+                if (!isSyncingTable) {
+                    isSyncingTop = true;
+                    topScrollEl.scrollLeft = this.scrollLeft;
+                }
+                isSyncingTable = false;
+            }, { passive: true });
+
+            window.addEventListener('resize', syncTopScrollbar);
         }
 
         sortAndRender();
         setViewMode(currentView);
+        syncTopScrollbar();
     </script>
 </body>
 </html>
