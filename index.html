@@ -68,7 +68,7 @@
         }
         .badge-primary { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: var(--primary); }
 
-        /* Controls: Search & View Toggle */
+        /* Controls: Device Switcher & Views */
         .controls-bar {
             margin-bottom: 1.25rem;
             display: flex;
@@ -77,15 +77,56 @@
             align-items: center;
             justify-content: space-between;
         }
-        .search-input {
-            flex: 1;
-            min-width: 260px;
+        .device-switcher {
+            display: inline-flex;
             background: var(--surface);
             border: 1px solid var(--border);
-            padding: 0.65rem 1rem;
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+        }
+        .device-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.5rem 1.05rem;
+            border-radius: 9px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .device-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .device-tab.active {
+            background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+        }
+        
+        .controls-right {
+            display: flex;
+            gap: 0.75rem;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: center;
+            min-width: 300px;
+        }
+        .search-input {
+            flex: 1;
+            max-width: 360px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.6rem 1rem;
             border-radius: 10px;
             color: var(--text);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-family: inherit;
             outline: none;
             transition: all 0.2s;
@@ -138,14 +179,16 @@
             border-radius: 14px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            max-height: 82vh;
-            display: block;
         }
-        table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 0.82rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.83rem;
+        }
         th {
             background: #141d2d;
-            padding: 0.75rem 0.85rem;
+            padding: 0.8rem 0.85rem;
             font-size: 0.72rem;
             text-transform: uppercase;
             font-weight: 700;
@@ -173,9 +216,7 @@
             opacity: 0.45;
             transition: opacity 0.15s, color 0.15s;
         }
-        th.sortable:hover .sort-icon {
-            opacity: 0.9;
-        }
+        th.sortable:hover .sort-icon { opacity: 0.9; }
         th.sortable.active-sort {
             color: var(--primary);
             border-bottom: 2px solid var(--primary);
@@ -243,15 +284,37 @@
         /* Drawer Details in Table */
         .drawer-row { display: none; background: #0c121e; }
         .drawer-content { padding: 1.25rem; border-bottom: 2px solid var(--primary); }
+        .drawer-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+            margin-top: 0.75rem;
+        }
+        .drawer-card {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .drawer-card-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
         .reasons-box {
             background: rgba(0,0,0,0.4);
-            padding: 0.85rem;
+            padding: 0.75rem;
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #cbd5e1;
             font-family: 'JetBrains Mono', monospace;
-            line-height: 1.6;
-            overflow-x: auto;
+            line-height: 1.5;
+            max-height: 240px;
+            overflow-y: auto;
         }
 
         /* Mobile Cards Grid View */
@@ -324,6 +387,10 @@
             .header-title h1 { font-size: 1.45rem; }
             .header-title p { font-size: 0.82rem; }
             .scroll-hint { display: flex; }
+            .controls-bar { flex-direction: column; align-items: stretch; }
+            .device-switcher { width: 100%; justify-content: space-between; }
+            .device-tab { flex: 1; justify-content: center; font-size: 0.78rem; padding: 0.45rem 0.5rem; }
+            .controls-right { justify-content: space-between; }
         }
     </style>
 </head>
@@ -332,7 +399,7 @@
         <header>
             <div class="header-title">
                 <h1>🏆 Master SEO & Architektonický Benchmark českých tech médií</h1>
-                <p>Detailní technická matice 30+ parametrů z živých HTTP přenosů, Schema.org E-E-A-T, W3C HTML5 validity, Google Discover a bezpečnosti.</p>
+                <p>Nezávislé měření 30+ parametrů z živých HTTP přenosů s odděleným testováním Mobilní (Pixel 8 Pro) a Desktopové verze, Schema.org E-E-A-T, W3C validitou a bezpečností.</p>
             </div>
             <div class="meta-badges">
                 <div class="badge badge-primary">📅 Datum auditu: 2026-09-03</div>
@@ -341,58 +408,29 @@
         </header>
 
         <div class="controls-bar">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Hledat portál (např. Dotekomanie, SmartMania, Svět Androida, PCTuning...)" oninput="filterAll()">
-            <div class="view-switcher">
-                <button class="view-btn active" id="btnTableView" onclick="setViewMode('table')">📊 Tabulka</button>
-                <button class="view-btn" id="btnCardView" onclick="setViewMode('cards')">📱 Karty (Mobil)</button>
+            <div class="device-switcher">
+                <button class="device-tab active" id="tabOverall" onclick="setDeviceTab('overall')">🏆 Celkové hodnocení</button>
+                <button class="device-tab" id="tabMobile" onclick="setDeviceTab('mobile')">📱 Mobilní verze</button>
+                <button class="device-tab" id="tabDesktop" onclick="setDeviceTab('desktop')">💻 Desktopová verze</button>
+            </div>
+            <div class="controls-right">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Hledat portál (Dotekomanie, SmartMania...)" oninput="filterAll()">
+                <div class="view-switcher">
+                    <button class="view-btn active" id="btnTableView" onclick="setViewMode('table')">📊 Tabulka</button>
+                    <button class="view-btn" id="btnCardView" onclick="setViewMode('cards')">🃏 Karty</button>
+                </div>
             </div>
         </div>
 
         <div class="scroll-hint" id="scrollHint">
-            <span>👈</span> <span>Tažením tabulky vpravo posouváte všech 33 technických sloupců</span> <span>👉</span>
+            <span>👈</span> <span>Tažením tabulky vodorovně zobrazíte všechny detailní sloupce</span> <span>👉</span>
         </div>
 
         <!-- Table View -->
         <div class="table-wrap" id="tableContainer">
             <table id="masterTable">
-                <thead>
-                    <tr>
-                        <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
-                        <th class="sortable active-sort" data-sort="TotalScore" onclick="handleHeaderSort('TotalScore')">Celkem <span class="sort-icon">▼</span></th>
-                        <th class="sortable" data-sort="ISSN" onclick="handleHeaderSort('ISSN')">ISSN (Národní knihovna) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Memberships" onclick="handleHeaderSort('Memberships')">Členství & Organizace <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="HSTS" onclick="handleHeaderSort('HSTS')">HSTS (HTTPS) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Nosniff" onclick="handleHeaderSort('Nosniff')">Nosniff & XFO <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="HTTP3" onclick="handleHeaderSort('HTTP3')">HTTP/3 (QUIC) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="HpTtfbMs" onclick="handleHeaderSort('HpTtfbMs')">TTFB Odezva (HP / Článek) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="ArtLcpMs" onclick="handleHeaderSort('ArtLcpMs')">Reálné LCP (Článek) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="OrgSchema" onclick="handleHeaderSort('OrgSchema')">Schema.org Typ <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Ethics" onclick="handleHeaderSort('Ethics')">E-E-A-T Kodex & Tiráž <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="AuthorSameAs" onclick="handleHeaderSort('AuthorSameAs')">E-E-A-T Autor sameAs <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Editor" onclick="handleHeaderSort('Editor')">Redakční garant (editor) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="PostalAddress" onclick="handleHeaderSort('PostalAddress')">GEO Postal Address <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="MentionsCount" onclick="handleHeaderSort('MentionsCount')">Sémantické entity (mentions) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Speakable" onclick="handleHeaderSort('Speakable')">Google speakable <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Timezone" onclick="handleHeaderSort('Timezone')">Časové pásmo (Discover) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="OgImageFormat" onclick="handleHeaderSort('OgImageFormat')">Formát og:image <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="DiscoverLarge" onclick="handleHeaderSort('DiscoverLarge')">Robots Discover large <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="FetchPriority" onclick="handleHeaderSort('FetchPriority')">fetchpriority: high <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="PreconnectCount" onclick="handleHeaderSort('PreconnectCount')">Preconnect & DNS Hints <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Speculation" onclick="handleHeaderSort('Speculation')">Speculation Rules API <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Manifest" onclick="handleHeaderSort('Manifest')">Web Manifest & PWA <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="WebSub" onclick="handleHeaderSort('WebSub')">WebSub Push Hub <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="IsSitemapValid" onclick="handleHeaderSort('IsSitemapValid')">Sitemap XML (robots.txt) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Fediverse" onclick="handleHeaderSort('Fediverse')">Fediverse Creator <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="FeedContentType" onclick="handleHeaderSort('FeedContentType')">Validita RSS/Atom Feedu <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="LegacyCssCount" onclick="handleHeaderSort('LegacyCssCount')">W3C HTML5 Clean Code <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="W3CErrors" onclick="handleHeaderSort('W3CErrors')">W3C Validita (validator.w3.org) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="MediaSchema" onclick="handleHeaderSort('MediaSchema')">Video & Podcast Schema <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="BlocksAi" onclick="handleHeaderSort('BlocksAi')">AI Boti (robots.txt) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="CMP" onclick="handleHeaderSort('CMP')">Consent Mode v2 & CMP <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="Comments" onclick="handleHeaderSort('Comments')">Komentářový systém <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="DomTags" onclick="handleHeaderSort('DomTags')">Nadpisy H1 & DOM uzly <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="SwG" onclick="handleHeaderSort('SwG')">Google SwG Subscriptions <span class="sort-icon">↕</span></th>
-                    </tr>
+                <thead id="tableHead">
+                    <!-- Dynamic Header Rendered by JS -->
                 </thead>
                 <tbody id="tableBody">
                     <!-- Rendered by JS -->
@@ -412,16 +450,36 @@
         "Name":  "Dotekomanie.cz",
         "HpUrl":  "https://dotekomanie.cz/",
         "ArticleUrl":  "https://dotekomanie.cz/2026/09/instagram-pritvrzuje-neoznaceny-ai-obsah-ceka-postih-v-dosazich/",
+        "TotalScore":  97,
+        "OverallScore":  97,
+        "DesktopScore":  94,
+        "MobileScore":  100,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: RedakÄŤnĂ­ garant (Přemysl Vaculík), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (188 ms), +3b: Preconnect \u0026 Hints (9), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (UnieVydavatelu,AOV,IAB_TCF), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +4b: W3C WebSub Huby, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Google Assistant speakable",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: RedakÄŤnĂ­ garant (Přemysl Vaculík), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (188 ms), +3b: Preconnect \u0026 Hints (9), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (UnieVydavatelu,AOV,IAB_TCF), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +4b: W3C WebSub Huby, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Google Assistant speakable",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: RedakÄŤnĂ­ garant (Přemysl Vaculík), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (132 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (44 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (50 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1), +3b: SĂ©mantickĂ© entity (mentions: Thing), +2b: Fediverse Creator (@dotekomanie@mastodonczech.cz)",
+        "HpTtfbMs":  113,
+        "ArtTtfbMs":  926,
+        "ArtLcpMs":  188,
+        "ArtFcpMs":  188,
+        "DesktopTtfbMs":  926,
+        "DesktopLcpMs":  188,
+        "DesktopPayloadKb":  50,
+        "MobileTtfbMs":  44,
+        "MobileLcpMs":  132,
+        "MobilePayloadKb":  50,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  false,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "3029-9349",
         "Memberships":  "UnieVydavatelu,AOV,IAB_TCF",
         "HSTS":  true,
         "Nosniff":  true,
         "XFO":  true,
         "HTTP3":  true,
-        "HpTtfbMs":  60,
-        "ArtTtfbMs":  61,
-        "ArtLcpMs":  1212,
-        "ArtFcpMs":  1212,
         "OrgSchema":  "NewsMediaOrganization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  true,
@@ -444,7 +502,7 @@
         "Manifest":  true,
         "ManifestMime":  "application/manifest+json",
         "WebSub":  true,
-        "FeedContentType":  "application/rss+xml",
+        "FeedContentType":  "text/html",
         "FeedHasHub":  true,
         "SitemapStatus":  "200 OK (v robots.txt)",
         "IsSitemapValid":  true,
@@ -463,25 +521,43 @@
         "CMP":  "Complianz_TCF_CoMoV2",
         "Comments":  "WordPress",
         "H1Count":  1,
-        "DomTags":  719,
-        "SwG":  true,
-        "TotalScore":  100,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +2b: OborovĂ© ÄŤlenstvĂ­ (UnieVydavatelu,AOV,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: RedakÄŤnĂ­ garant (editor: Přemysl Vaculík), +4b: SĂ©mantickĂ© entity (mentions: Thing), +2b: Google Assistant speakable, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +5b: W3C WebSub Realtime Push Huby, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (9), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Fediverse Creator (@dotekomanie@mastodonczech.cz), +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "DomTags":  720,
+        "SwG":  true
     },
     {
         "Name":  "Hifimanie.cz",
         "HpUrl":  "https://hifimanie.cz/",
         "ArticleUrl":  "https://hifimanie.cz/2026/09/dve-kompaktni-streamovaci-novinky-od-yamahy-poprve-s-kalibraci-ypao/",
+        "TotalScore":  93,
+        "OverallScore":  93,
+        "DesktopScore":  94,
+        "MobileScore":  92,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: RedakÄŤnĂ­ garant (Jan Frič), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (1132 ms), +3b: Preconnect \u0026 Hints (6), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +4b: W3C WebSub Huby, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Google Assistant speakable",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: RedakÄŤnĂ­ garant (Jan Frič), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (1132 ms), +3b: Preconnect \u0026 Hints (6), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +4b: W3C WebSub Huby, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +2b: Google Assistant speakable",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: RedakÄŤnĂ­ garant (Jan Frič), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (152 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (31 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1), +3b: SĂ©mantickĂ© entity (mentions: Thing)",
+        "HpTtfbMs":  725,
+        "ArtTtfbMs":  939,
+        "ArtLcpMs":  1132,
+        "ArtFcpMs":  1108,
+        "DesktopTtfbMs":  939,
+        "DesktopLcpMs":  1132,
+        "DesktopPayloadKb":  31,
+        "MobileTtfbMs":  713,
+        "MobileLcpMs":  152,
+        "MobilePayloadKb":  31,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  false,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "SPIR,IAB_TCF",
         "HSTS":  true,
         "Nosniff":  true,
         "XFO":  true,
         "HTTP3":  true,
-        "HpTtfbMs":  56,
-        "ArtTtfbMs":  861,
-        "ArtLcpMs":  1356,
-        "ArtFcpMs":  1356,
         "OrgSchema":  "NewsMediaOrganization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  true,
@@ -513,10 +589,10 @@
         "Html5Clean":  true,
         "LegacyCssCount":  0,
         "LegacyJsCount":  0,
-        "W3CErrors":  1,
+        "W3CErrors":  0,
         "W3CWarnings":  0,
-        "W3CStatus":  "1 chyb, 0 varovĂˇnĂ­",
-        "IsW3cClean":  false,
+        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "IsW3cClean":  true,
         "MediaSchema":  "none",
         "BlocksAi":  false,
         "ConsentV2":  true,
@@ -524,24 +600,42 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  585,
-        "SwG":  false,
-        "TotalScore":  95,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: RedakÄŤnĂ­ garant (editor: Jan Frič), +4b: SĂ©mantickĂ© entity (mentions: Thing), +2b: Google Assistant speakable, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +5b: W3C WebSub Realtime Push Huby, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (6), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
     },
     {
         "Name":  "Svět Androida",
         "HpUrl":  "https://www.svetandroida.cz/",
         "ArticleUrl":  "https://www.svetandroida.cz/oneplus-pad-4-vlajkovy-tablet-sleva-alzaplus/",
+        "TotalScore":  82,
+        "OverallScore":  82,
+        "DesktopScore":  77,
+        "MobileScore":  86,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+01:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (156 ms), +4b: Desktop TTFB bleskovĂ© (43 ms), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+01:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (156 ms), +4b: Desktop TTFB bleskovĂ© (43 ms), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+01:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (148 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (62 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (39 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  73,
+        "ArtTtfbMs":  43,
+        "ArtLcpMs":  156,
+        "ArtFcpMs":  156,
+        "DesktopTtfbMs":  43,
+        "DesktopLcpMs":  156,
+        "DesktopPayloadKb":  39,
+        "MobileTtfbMs":  62,
+        "MobileLcpMs":  148,
+        "MobilePayloadKb":  39,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  false,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "SyndikatNovinaru,IAB_TCF",
         "HSTS":  true,
         "Nosniff":  true,
         "XFO":  true,
         "HTTP3":  true,
-        "HpTtfbMs":  96,
-        "ArtTtfbMs":  49,
-        "ArtLcpMs":  192,
-        "ArtFcpMs":  192,
         "OrgSchema":  "NewsMediaOrganization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  false,
@@ -584,24 +678,42 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  905,
-        "SwG":  false,
-        "TotalScore":  73,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+01:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
     },
     {
         "Name":  "Letem světem Applem",
         "HpUrl":  "https://www.letemsvetemapplem.eu/",
         "ArticleUrl":  "https://www.letemsvetemapplem.eu/2026/09/03/pouzivate-dva-iphone-ios-27-prinasi-genialni-funkci-ktera-mezi-nimi-automaticky-prehodi-vase-telefonni-cislo/",
+        "TotalScore":  81,
+        "OverallScore":  81,
+        "DesktopScore":  75,
+        "MobileScore":  87,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: Desktop LCP bleskovĂ© (236 ms), +4b: Desktop TTFB bleskovĂ© (50 ms), +3b: Preconnect \u0026 Hints (4), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +5b: W3C ValidnĂ­ HTML5 (0 chyb (9 varovĂˇnĂ­)), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +5b: Desktop LCP bleskovĂ© (236 ms), +4b: Desktop TTFB bleskovĂ© (50 ms), +3b: Preconnect \u0026 Hints (4), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +5b: W3C ValidnĂ­ HTML5 (0 chyb (9 varovĂˇnĂ­)), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +2b: OG v lokĂˇlnĂ­m ÄŤase, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (120 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (58 ms), +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (24 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  64,
+        "ArtTtfbMs":  50,
+        "ArtLcpMs":  236,
+        "ArtFcpMs":  116,
+        "DesktopTtfbMs":  50,
+        "DesktopLcpMs":  236,
+        "DesktopPayloadKb":  24,
+        "MobileTtfbMs":  58,
+        "MobileLcpMs":  120,
+        "MobilePayloadKb":  24,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "none",
         "HSTS":  true,
         "Nosniff":  false,
         "XFO":  false,
         "HTTP3":  false,
-        "HpTtfbMs":  118,
-        "ArtTtfbMs":  56,
-        "ArtLcpMs":  212,
-        "ArtFcpMs":  104,
         "OrgSchema":  "NewsMediaOrganization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  true,
@@ -644,204 +756,42 @@
         "Comments":  "WordPress",
         "H1Count":  1,
         "DomTags":  661,
-        "SwG":  false,
-        "TotalScore":  68,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +4b: OG publikovĂˇno v lokĂˇlnĂ­m ÄŤase, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (9 varovĂˇnĂ­))"
-    },
-    {
-        "Name":  "AVmania.cz",
-        "HpUrl":  "https://avmania.zive.cz/",
-        "ArticleUrl":  "https://avmania.zive.cz/archiv-clanku/tetelevizor-bravia-6-ma-byt-dostupny-oled-od-sony-prinese-par-kompromisu-ale-i-ctyri-vstupy-hdmi-21",
-        "ISSN":  "none",
-        "Memberships":  "SPIR",
-        "HSTS":  false,
-        "Nosniff":  true,
-        "XFO":  false,
-        "HTTP3":  false,
-        "HpTtfbMs":  76,
-        "ArtTtfbMs":  51,
-        "ArtLcpMs":  144,
-        "ArtFcpMs":  108,
-        "OrgSchema":  "NewsMediaOrganization",
-        "ArtSchema":  "NewsArticle",
-        "Ethics":  false,
-        "Masthead":  false,
-        "PostalAddress":  true,
-        "AuthorSameAs":  false,
-        "Editor":  false,
-        "EditorName":  "",
-        "Mentions":  false,
-        "MentionsCount":  0,
-        "Speakable":  false,
-        "Timezone":  "+02:00",
-        "OgType":  "article",
-        "OgImageFormat":  "JPG",
-        "DiscoverLarge":  true,
-        "FetchPriority":  true,
-        "Preconnect":  true,
-        "PreconnectCount":  16,
-        "Speculation":  false,
-        "Manifest":  true,
-        "ManifestMime":  "application/json",
-        "WebSub":  false,
-        "FeedContentType":  "application/xml",
-        "FeedHasHub":  false,
-        "SitemapStatus":  "200 OK (v robots.txt)",
-        "IsSitemapValid":  true,
-        "Fediverse":  false,
-        "FediverseUser":  "none",
-        "Html5Clean":  false,
-        "LegacyCssCount":  0,
-        "LegacyJsCount":  1,
-        "W3CErrors":  0,
-        "W3CWarnings":  0,
-        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
-        "IsW3cClean":  true,
-        "MediaSchema":  "none",
-        "BlocksAi":  true,
-        "ConsentV2":  true,
-        "CMP":  "Didomi_CPEX_TCF",
-        "Comments":  "Custom",
-        "H1Count":  1,
-        "DomTags":  765,
-        "SwG":  false,
-        "TotalScore":  58,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (16), +2b: fetchpriority=high u LCP fotky, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
-    },
-    {
-        "Name":  "SmartMania.cz",
-        "HpUrl":  "https://smartmania.cz/",
-        "ArticleUrl":  "https://smartmania.cz/apple-vse-taji-my-uz-je-drzeli-v-ruce-iphone-18-pro-a-skladaci-ultra-uz-jsou-skoro-tady/",
-        "ISSN":  "1801-3066",
-        "Memberships":  "IAB_TCF",
-        "HSTS":  false,
-        "Nosniff":  true,
-        "XFO":  true,
-        "HTTP3":  false,
-        "HpTtfbMs":  106,
-        "ArtTtfbMs":  55,
-        "ArtLcpMs":  412,
-        "ArtFcpMs":  180,
-        "OrgSchema":  "Organization",
-        "ArtSchema":  "NewsArticle",
-        "Ethics":  false,
-        "Masthead":  false,
-        "PostalAddress":  false,
-        "AuthorSameAs":  true,
-        "Editor":  false,
-        "EditorName":  "",
-        "Mentions":  false,
-        "MentionsCount":  0,
-        "Speakable":  false,
-        "Timezone":  "+00:00",
-        "OgType":  "article",
-        "OgImageFormat":  "JPG",
-        "DiscoverLarge":  true,
-        "FetchPriority":  true,
-        "Preconnect":  true,
-        "PreconnectCount":  6,
-        "Speculation":  true,
-        "Manifest":  true,
-        "ManifestMime":  "application/octet-stream",
-        "WebSub":  false,
-        "FeedContentType":  "application/rss+xml",
-        "FeedHasHub":  false,
-        "SitemapStatus":  "200 OK (v robots.txt)",
-        "IsSitemapValid":  true,
-        "Fediverse":  false,
-        "FediverseUser":  "none",
-        "Html5Clean":  false,
-        "LegacyCssCount":  5,
-        "LegacyJsCount":  4,
-        "W3CErrors":  21,
-        "W3CWarnings":  6,
-        "W3CStatus":  "21 chyb, 6 varovĂˇnĂ­",
-        "IsW3cClean":  false,
-        "MediaSchema":  "none",
-        "BlocksAi":  false,
-        "ConsentV2":  true,
-        "CMP":  "Google_FundingChoices",
-        "Comments":  "Custom",
-        "H1Count":  1,
-        "DomTags":  1225,
-        "SwG":  false,
-        "TotalScore":  58,
-        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (6), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
-    },
-    {
-        "Name":  "CzechCrunch (CC.cz)",
-        "HpUrl":  "https://cc.cz/",
-        "ArticleUrl":  "https://cc.cz/kouzelnejsi-nez-ve-filmu-podivejte-se-na-spoustu-novych-fotek-a-trailer-ze-serialu-harry-potter-od-hbo/",
-        "ISSN":  "none",
-        "Memberships":  "SPIR",
-        "HSTS":  true,
-        "Nosniff":  true,
-        "XFO":  true,
-        "HTTP3":  false,
-        "HpTtfbMs":  54,
-        "ArtTtfbMs":  43,
-        "ArtLcpMs":  700,
-        "ArtFcpMs":  200,
-        "OrgSchema":  "Organization",
-        "ArtSchema":  "NewsArticle",
-        "Ethics":  false,
-        "Masthead":  false,
-        "PostalAddress":  false,
-        "AuthorSameAs":  false,
-        "Editor":  false,
-        "EditorName":  "",
-        "Mentions":  false,
-        "MentionsCount":  0,
-        "Speakable":  false,
-        "Timezone":  "+02:00",
-        "OgType":  "article",
-        "OgImageFormat":  "JPG",
-        "DiscoverLarge":  true,
-        "FetchPriority":  true,
-        "Preconnect":  true,
-        "PreconnectCount":  69,
-        "Speculation":  true,
-        "Manifest":  true,
-        "ManifestMime":  "application/octet-stream",
-        "WebSub":  false,
-        "FeedContentType":  "application/rss+xml",
-        "FeedHasHub":  false,
-        "SitemapStatus":  "200 OK (v robots.txt)",
-        "IsSitemapValid":  true,
-        "Fediverse":  false,
-        "FediverseUser":  "none",
-        "Html5Clean":  false,
-        "LegacyCssCount":  1,
-        "LegacyJsCount":  4,
-        "W3CErrors":  80,
-        "W3CWarnings":  16,
-        "W3CStatus":  "80 chyb, 16 varovĂˇnĂ­",
-        "IsW3cClean":  false,
-        "MediaSchema":  "none",
-        "BlocksAi":  false,
-        "ConsentV2":  true,
-        "CMP":  "Google_ConsentModeV2",
-        "Comments":  "Disabled",
-        "H1Count":  2,
-        "DomTags":  1122,
-        "SwG":  false,
-        "TotalScore":  57,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (69), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt))"
+        "SwG":  false
     },
     {
         "Name":  "Živě.cz",
         "HpUrl":  "https://www.zive.cz/",
         "ArticleUrl":  "https://vtm.zive.cz/clanky/chlazene-pivo-i-uprostred-lesa-cesi-bouraji-kickstarter-s-pipou-kterou-pohani-akumulator/sc-870-a-243068/default.aspx",
+        "TotalScore":  68,
+        "OverallScore":  68,
+        "DesktopScore":  59,
+        "MobileScore":  77,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (192 ms), +4b: Desktop TTFB bleskovĂ© (76 ms), +3b: Preconnect \u0026 Hints (16), +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (192 ms), +4b: Desktop TTFB bleskovĂ© (76 ms), +3b: Preconnect \u0026 Hints (16), +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (204 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (134 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (28 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  80,
+        "ArtTtfbMs":  76,
+        "ArtLcpMs":  192,
+        "ArtFcpMs":  124,
+        "DesktopTtfbMs":  76,
+        "DesktopLcpMs":  192,
+        "DesktopPayloadKb":  28,
+        "MobileTtfbMs":  134,
+        "MobileLcpMs":  204,
+        "MobilePayloadKb":  28,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "SPIR",
         "HSTS":  false,
         "Nosniff":  true,
         "XFO":  false,
         "HTTP3":  false,
-        "HpTtfbMs":  73,
-        "ArtTtfbMs":  83,
-        "ArtLcpMs":  116,
-        "ArtFcpMs":  88,
         "OrgSchema":  "NewsMediaOrganization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  false,
@@ -884,24 +834,120 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  959,
-        "SwG":  false,
-        "TotalScore":  55,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (16), +2b: fetchpriority=high u LCP fotky, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "SwG":  false
     },
     {
-        "Name":  "MobilMania.cz",
-        "HpUrl":  "https://mobilmania.zive.cz/",
-        "ArticleUrl":  "https://mobilmania.zive.cz/clanky/nejlepsi-fotomobily-202608/sc-3-a-1365260/default.aspx",
+        "Name":  "AVmania.cz",
+        "HpUrl":  "https://avmania.zive.cz/",
+        "ArticleUrl":  "https://avmania.zive.cz/archiv-clanku/tetelevizor-bravia-6-ma-byt-dostupny-oled-od-sony-prinese-par-kompromisu-ale-i-ctyri-vstupy-hdmi-21",
+        "TotalScore":  68,
+        "OverallScore":  68,
+        "DesktopScore":  60,
+        "MobileScore":  76,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (192 ms), +4b: Desktop TTFB bleskovĂ© (115 ms), +3b: Preconnect \u0026 Hints (16), +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (192 ms), +4b: Desktop TTFB bleskovĂ© (115 ms), +3b: Preconnect \u0026 Hints (16), +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (144 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (62 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  85,
+        "ArtTtfbMs":  115,
+        "ArtLcpMs":  192,
+        "ArtFcpMs":  140,
+        "DesktopTtfbMs":  115,
+        "DesktopLcpMs":  192,
+        "DesktopPayloadKb":  0,
+        "MobileTtfbMs":  62,
+        "MobileLcpMs":  144,
+        "MobilePayloadKb":  0,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "SPIR",
         "HSTS":  false,
         "Nosniff":  true,
         "XFO":  false,
         "HTTP3":  false,
-        "HpTtfbMs":  112,
-        "ArtTtfbMs":  60,
-        "ArtLcpMs":  256,
-        "ArtFcpMs":  188,
+        "OrgSchema":  "NewsMediaOrganization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  true,
+        "AuthorSameAs":  false,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "Speakable":  false,
+        "Timezone":  "+02:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Preconnect":  true,
+        "PreconnectCount":  16,
+        "Speculation":  false,
+        "Manifest":  true,
+        "ManifestMime":  "application/json",
+        "WebSub":  false,
+        "FeedContentType":  "none",
+        "FeedHasHub":  false,
+        "SitemapStatus":  "200 OK (v robots.txt)",
+        "IsSitemapValid":  true,
+        "Fediverse":  false,
+        "FediverseUser":  "none",
+        "Html5Clean":  false,
+        "LegacyCssCount":  0,
+        "LegacyJsCount":  1,
+        "W3CErrors":  0,
+        "W3CWarnings":  0,
+        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "IsW3cClean":  true,
+        "MediaSchema":  "none",
+        "BlocksAi":  true,
+        "ConsentV2":  true,
+        "CMP":  "Didomi_CPEX_TCF",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  765,
+        "SwG":  false
+    },
+    {
+        "Name":  "MobilMania.cz",
+        "HpUrl":  "https://mobilmania.zive.cz/",
+        "ArticleUrl":  "https://mobilmania.zive.cz/clanky/nejlepsi-fotomobily-202608/sc-3-a-1365260/default.aspx",
+        "TotalScore":  68,
+        "OverallScore":  68,
+        "DesktopScore":  59,
+        "MobileScore":  77,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (176 ms), +4b: Desktop TTFB bleskovĂ© (78 ms), +3b: Preconnect \u0026 Hints (8), +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (176 ms), +4b: Desktop TTFB bleskovĂ© (78 ms), +3b: Preconnect \u0026 Hints (8), +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (164 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (78 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (41 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  84,
+        "ArtTtfbMs":  78,
+        "ArtLcpMs":  176,
+        "ArtFcpMs":  176,
+        "DesktopTtfbMs":  78,
+        "DesktopLcpMs":  176,
+        "DesktopPayloadKb":  41,
+        "MobileTtfbMs":  78,
+        "MobileLcpMs":  164,
+        "MobilePayloadKb":  41,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
+        "ISSN":  "none",
+        "Memberships":  "SPIR",
+        "HSTS":  false,
+        "Nosniff":  true,
+        "XFO":  false,
+        "HTTP3":  false,
         "OrgSchema":  "NewsMediaOrganization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  false,
@@ -944,24 +990,120 @@
         "Comments":  "SuperForum",
         "H1Count":  1,
         "DomTags":  2081,
-        "SwG":  false,
-        "TotalScore":  55,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (8), +2b: fetchpriority=high u LCP fotky, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "SwG":  false
+    },
+    {
+        "Name":  "SmartMania.cz",
+        "HpUrl":  "https://smartmania.cz/",
+        "ArticleUrl":  "https://smartmania.cz/apple-vse-taji-my-uz-je-drzeli-v-ruce-iphone-18-pro-a-skladaci-ultra-uz-jsou-skoro-tady/",
+        "TotalScore":  68,
+        "OverallScore":  68,
+        "DesktopScore":  60,
+        "MobileScore":  76,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (364 ms), +4b: Desktop TTFB bleskovĂ© (60 ms), +3b: Preconnect \u0026 Hints (6), +3b: Speculation Rules, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (364 ms), +4b: Desktop TTFB bleskovĂ© (60 ms), +3b: Preconnect \u0026 Hints (6), +3b: Speculation Rules, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +10b: NewsArticle schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (268 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (60 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (47 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  80,
+        "ArtTtfbMs":  60,
+        "ArtLcpMs":  364,
+        "ArtFcpMs":  156,
+        "DesktopTtfbMs":  60,
+        "DesktopLcpMs":  364,
+        "DesktopPayloadKb":  47,
+        "MobileTtfbMs":  60,
+        "MobileLcpMs":  268,
+        "MobilePayloadKb":  47,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  false,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
+        "ISSN":  "1801-3066",
+        "Memberships":  "IAB_TCF",
+        "HSTS":  false,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "NewsArticle",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  true,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "Speakable":  false,
+        "Timezone":  "+00:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Preconnect":  true,
+        "PreconnectCount":  6,
+        "Speculation":  true,
+        "Manifest":  true,
+        "ManifestMime":  "application/octet-stream",
+        "WebSub":  false,
+        "FeedContentType":  "application/rss+xml",
+        "FeedHasHub":  false,
+        "SitemapStatus":  "200 OK (v robots.txt)",
+        "IsSitemapValid":  true,
+        "Fediverse":  false,
+        "FediverseUser":  "none",
+        "Html5Clean":  false,
+        "LegacyCssCount":  5,
+        "LegacyJsCount":  4,
+        "W3CErrors":  21,
+        "W3CWarnings":  6,
+        "W3CStatus":  "21 chyb, 6 varovĂˇnĂ­",
+        "IsW3cClean":  false,
+        "MediaSchema":  "none",
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Google_FundingChoices",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  1225,
+        "SwG":  false
     },
     {
         "Name":  "PCTuning.cz",
         "HpUrl":  "https://pctuning.cz/",
         "ArticleUrl":  "https://pctuning.cz/article/claude-code-zrychlil-android-tv-uspesny-debloat-bez-root-access",
+        "TotalScore":  66,
+        "OverallScore":  66,
+        "DesktopScore":  60,
+        "MobileScore":  73,
+        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: max-image-preview:large, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (284 ms), +4b: Desktop TTFB bleskovĂ© (170 ms), +3b: Preconnect \u0026 Hints (4), +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,SyndikatNovinaru,IAB_TCF), +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: max-image-preview:large, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (284 ms), +4b: Desktop TTFB bleskovĂ© (170 ms), +3b: Preconnect \u0026 Hints (4), +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,SyndikatNovinaru,IAB_TCF), +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (268 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (198 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (94 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  420,
+        "ArtTtfbMs":  170,
+        "ArtLcpMs":  284,
+        "ArtFcpMs":  284,
+        "DesktopTtfbMs":  170,
+        "DesktopLcpMs":  284,
+        "DesktopPayloadKb":  94,
+        "MobileTtfbMs":  198,
+        "MobileLcpMs":  268,
+        "MobilePayloadKb":  94,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "1214-0201",
         "Memberships":  "SPIR,SyndikatNovinaru,IAB_TCF",
         "HSTS":  true,
         "Nosniff":  true,
         "XFO":  false,
         "HTTP3":  true,
-        "HpTtfbMs":  481,
-        "ArtTtfbMs":  194,
-        "ArtLcpMs":  436,
-        "ArtFcpMs":  436,
         "OrgSchema":  "Organization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  false,
@@ -1004,24 +1146,42 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  1566,
-        "SwG":  false,
-        "TotalScore":  53,
-        "ScoreReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,SyndikatNovinaru,IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (4), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
     },
     {
         "Name":  "Mobilizujeme.cz",
         "HpUrl":  "https://mobilizujeme.cz/",
         "ArticleUrl":  "https://mobilizujeme.cz/clanky/lidl-ma-skvelou-vec-do-domacnosti-za-99-kc-ted-ji-zlevnil-o-23",
+        "TotalScore":  66,
+        "OverallScore":  66,
+        "DesktopScore":  58,
+        "MobileScore":  74,
+        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (360 ms), +4b: Desktop TTFB bleskovĂ© (172 ms), +3b: ÄŚistĂ© HTML5, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (360 ms), +4b: Desktop TTFB bleskovĂ© (172 ms), +3b: ÄŚistĂ© HTML5, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (220 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (153 ms), +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (42 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  153,
+        "ArtTtfbMs":  172,
+        "ArtLcpMs":  360,
+        "ArtFcpMs":  360,
+        "DesktopTtfbMs":  172,
+        "DesktopLcpMs":  360,
+        "DesktopPayloadKb":  42,
+        "MobileTtfbMs":  153,
+        "MobileLcpMs":  220,
+        "MobilePayloadKb":  42,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  false,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "none",
         "HSTS":  false,
         "Nosniff":  false,
         "XFO":  false,
         "HTTP3":  true,
-        "HpTtfbMs":  122,
-        "ArtTtfbMs":  127,
-        "ArtLcpMs":  240,
-        "ArtFcpMs":  240,
         "OrgSchema":  "NewsMediaOrganization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  true,
@@ -1064,84 +1224,42 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  485,
-        "SwG":  false,
-        "TotalScore":  49,
-        "ScoreReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +3b: HTTP/3 QUIC podpora, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
     },
     {
-        "Name":  "Appliště.cz",
-        "HpUrl":  "https://www.appliste.cz/",
-        "ArticleUrl":  "https://www.appliste.cz/apple-tv-v-zari-prida-velke-premiery-reynolds-slow-horses-i-nova-komedie-s-mcconaugheym/",
-        "ISSN":  "none",
-        "Memberships":  "SPIR,IAB_TCF",
-        "HSTS":  false,
-        "Nosniff":  false,
-        "XFO":  false,
-        "HTTP3":  true,
-        "HpTtfbMs":  152,
-        "ArtTtfbMs":  82,
-        "ArtLcpMs":  1260,
-        "ArtFcpMs":  1260,
-        "OrgSchema":  "Organization",
-        "ArtSchema":  "BlogPosting",
-        "Ethics":  false,
-        "Masthead":  false,
-        "PostalAddress":  false,
-        "AuthorSameAs":  true,
-        "Editor":  false,
-        "EditorName":  "",
-        "Mentions":  false,
-        "MentionsCount":  0,
-        "Speakable":  false,
-        "Timezone":  "+02:00",
-        "OgType":  "article",
-        "OgImageFormat":  "JPG",
-        "DiscoverLarge":  true,
-        "FetchPriority":  true,
-        "Preconnect":  true,
-        "PreconnectCount":  35,
-        "Speculation":  true,
-        "Manifest":  false,
-        "ManifestMime":  "none",
-        "WebSub":  false,
-        "FeedContentType":  "application/rss+xml",
-        "FeedHasHub":  false,
-        "SitemapStatus":  "200 OK (v robots.txt)",
-        "IsSitemapValid":  true,
-        "Fediverse":  false,
-        "FediverseUser":  "none",
-        "Html5Clean":  false,
-        "LegacyCssCount":  11,
-        "LegacyJsCount":  56,
-        "W3CErrors":  135,
-        "W3CWarnings":  35,
-        "W3CStatus":  "135 chyb, 35 varovĂˇnĂ­",
-        "IsW3cClean":  false,
-        "MediaSchema":  "none",
-        "BlocksAi":  false,
-        "ConsentV2":  true,
-        "CMP":  "Complianz_CoMoV2",
-        "Comments":  "Custom",
-        "H1Count":  1,
-        "DomTags":  1242,
-        "SwG":  false,
-        "TotalScore":  47,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (35), +2b: fetchpriority=high u LCP fotky, +2b: Speculation Rules instant prerender, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
-    },
-    {
-        "Name":  "iROZHLAS.cz",
-        "HpUrl":  "https://www.irozhlas.cz/",
-        "ArticleUrl":  "https://www.irozhlas.cz/veda-technologie/veda/drevena-laborator-postavena-za-rok-studentum-czu-lesovna-poslouzi-uz-od-noveho_2609030852_dci",
+        "Name":  "CzechCrunch (CC.cz)",
+        "HpUrl":  "https://cc.cz/",
+        "ArticleUrl":  "https://cc.cz/kouzelnejsi-nez-ve-filmu-podivejte-se-na-spoustu-novych-fotek-a-trailer-ze-serialu-harry-potter-od-hbo/",
+        "TotalScore":  64,
+        "OverallScore":  64,
+        "DesktopScore":  62,
+        "MobileScore":  66,
+        "ScoreReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (712 ms), +4b: Desktop TTFB bleskovĂ© (50 ms), +3b: Preconnect \u0026 Hints (69), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (712 ms), +4b: Desktop TTFB bleskovĂ© (50 ms), +3b: Preconnect \u0026 Hints (69), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (108 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (37 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (36 kB)",
+        "HpTtfbMs":  58,
+        "ArtTtfbMs":  50,
+        "ArtLcpMs":  712,
+        "ArtFcpMs":  260,
+        "DesktopTtfbMs":  50,
+        "DesktopLcpMs":  712,
+        "DesktopPayloadKb":  36,
+        "MobileTtfbMs":  37,
+        "MobileLcpMs":  108,
+        "MobilePayloadKb":  36,
+        "ViewportValid":  true,
+        "ViewportZoomable":  false,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "SPIR",
         "HSTS":  true,
         "Nosniff":  true,
         "XFO":  true,
         "HTTP3":  false,
-        "HpTtfbMs":  52,
-        "ArtTtfbMs":  36,
-        "ArtLcpMs":  202,
-        "ArtFcpMs":  202,
         "OrgSchema":  "Organization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  false,
@@ -1153,16 +1271,16 @@
         "Mentions":  false,
         "MentionsCount":  0,
         "Speakable":  false,
-        "Timezone":  "Naive",
+        "Timezone":  "+02:00",
         "OgType":  "article",
         "OgImageFormat":  "JPG",
-        "DiscoverLarge":  false,
-        "FetchPriority":  false,
-        "Preconnect":  false,
-        "PreconnectCount":  0,
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Preconnect":  true,
+        "PreconnectCount":  69,
         "Speculation":  true,
         "Manifest":  true,
-        "ManifestMime":  "application/json",
+        "ManifestMime":  "application/octet-stream",
         "WebSub":  false,
         "FeedContentType":  "application/rss+xml",
         "FeedHasHub":  false,
@@ -1171,37 +1289,55 @@
         "Fediverse":  false,
         "FediverseUser":  "none",
         "Html5Clean":  false,
-        "LegacyCssCount":  0,
-        "LegacyJsCount":  7,
-        "W3CErrors":  0,
-        "W3CWarnings":  0,
-        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
-        "IsW3cClean":  true,
+        "LegacyCssCount":  1,
+        "LegacyJsCount":  4,
+        "W3CErrors":  80,
+        "W3CWarnings":  16,
+        "W3CStatus":  "80 chyb, 16 varovĂˇnĂ­",
+        "IsW3cClean":  false,
         "MediaSchema":  "none",
-        "BlocksAi":  true,
-        "ConsentV2":  false,
-        "CMP":  "Basic_Bar",
-        "Comments":  "Custom",
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Google_ConsentModeV2",
+        "Comments":  "Disabled",
         "H1Count":  2,
-        "DomTags":  1171,
-        "SwG":  false,
-        "TotalScore":  45,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +10b: NewsArticle schĂ©ma, +4b: og:type=article, +4b: Twitter Large Card, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Web Manifest \u0026 PWA, +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "DomTags":  1122,
+        "SwG":  false
     },
     {
         "Name":  "Mobilenet.cz",
         "HpUrl":  "https://mobilenet.cz/",
         "ArticleUrl":  "https://mobilenet.cz/clanky/mizi-vam-baterie-pred-ocima-google-vam-nove-s-pomoci-ai-vysvetli-proc-55141",
+        "TotalScore":  58,
+        "OverallScore":  58,
+        "DesktopScore":  46,
+        "MobileScore":  69,
+        "ScoreReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (352 ms), +4b: Desktop TTFB bleskovĂ© (87 ms), +3b: Preconnect \u0026 Hints (24), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: ValidnĂ­ XML Feed (text/xml), +2b: Google Assistant speakable",
+        "DesktopReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (352 ms), +4b: Desktop TTFB bleskovĂ© (87 ms), +3b: Preconnect \u0026 Hints (24), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: ValidnĂ­ XML Feed (text/xml), +2b: Google Assistant speakable",
+        "MobileReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (180 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (102 ms), +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (15 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  103,
+        "ArtTtfbMs":  87,
+        "ArtLcpMs":  352,
+        "ArtFcpMs":  252,
+        "DesktopTtfbMs":  87,
+        "DesktopLcpMs":  352,
+        "DesktopPayloadKb":  15,
+        "MobileTtfbMs":  102,
+        "MobileLcpMs":  180,
+        "MobilePayloadKb":  15,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "IAB_TCF",
         "HSTS":  false,
         "Nosniff":  false,
         "XFO":  false,
         "HTTP3":  false,
-        "HpTtfbMs":  150,
-        "ArtTtfbMs":  83,
-        "ArtLcpMs":  0,
-        "ArtFcpMs":  0,
         "OrgSchema":  "Organization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  false,
@@ -1244,26 +1380,122 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  515,
-        "SwG":  false,
-        "TotalScore":  43,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: Google Assistant speakable, +4b: og:type=article, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Web Manifest \u0026 PWA, +2b: Preconnect \u0026 DNS Hints (24), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
     },
     {
-        "Name":  "Wired.cz",
-        "HpUrl":  "https://www.wired.cz/",
-        "ArticleUrl":  "https://www.wired.cz/clanky/mohou-neandertalci-za-vase-svaly-tyden-ve-vede-117",
+        "Name":  "Appliště.cz",
+        "HpUrl":  "https://www.appliste.cz/",
+        "ArticleUrl":  "https://www.appliste.cz/apple-tv-v-zari-prida-velke-premiery-reynolds-slow-horses-i-nova-komedie-s-mcconaugheym/",
+        "TotalScore":  56,
+        "OverallScore":  56,
+        "DesktopScore":  49,
+        "MobileScore":  62,
+        "ScoreReasons":  "+4b: Organization, +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: HTTP/3 QUIC, +3b: Desktop LCP dobrĂ© (1680 ms), +4b: Desktop TTFB bleskovĂ© (86 ms), +3b: Preconnect \u0026 Hints (35), +3b: Speculation Rules, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: HTTP/3 QUIC, +3b: Desktop LCP dobrĂ© (1680 ms), +4b: Desktop TTFB bleskovĂ© (86 ms), +3b: Preconnect \u0026 Hints (35), +3b: Speculation Rules, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: og:type=article, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (1132 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (126 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  135,
+        "ArtTtfbMs":  86,
+        "ArtLcpMs":  1680,
+        "ArtFcpMs":  1680,
+        "DesktopTtfbMs":  86,
+        "DesktopLcpMs":  1680,
+        "DesktopPayloadKb":  131,
+        "MobileTtfbMs":  1817,
+        "MobileLcpMs":  1132,
+        "MobilePayloadKb":  126,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  false,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  false,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
-        "Memberships":  "SPIR,AOV",
-        "HSTS":  true,
-        "Nosniff":  true,
+        "Memberships":  "SPIR,IAB_TCF",
+        "HSTS":  false,
+        "Nosniff":  false,
         "XFO":  false,
         "HTTP3":  true,
-        "HpTtfbMs":  436,
-        "ArtTtfbMs":  266,
-        "ArtLcpMs":  1532,
-        "ArtFcpMs":  384,
         "OrgSchema":  "Organization",
-        "ArtSchema":  "Article",
+        "ArtSchema":  "BlogPosting",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  true,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "Speakable":  false,
+        "Timezone":  "+02:00",
+        "OgType":  "article",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  true,
+        "Preconnect":  true,
+        "PreconnectCount":  35,
+        "Speculation":  true,
+        "Manifest":  false,
+        "ManifestMime":  "none",
+        "WebSub":  false,
+        "FeedContentType":  "application/rss+xml",
+        "FeedHasHub":  false,
+        "SitemapStatus":  "200 OK (v robots.txt)",
+        "IsSitemapValid":  true,
+        "Fediverse":  false,
+        "FediverseUser":  "none",
+        "Html5Clean":  false,
+        "LegacyCssCount":  11,
+        "LegacyJsCount":  56,
+        "W3CErrors":  135,
+        "W3CWarnings":  35,
+        "W3CStatus":  "135 chyb, 35 varovĂˇnĂ­",
+        "IsW3cClean":  false,
+        "MediaSchema":  "none",
+        "BlocksAi":  false,
+        "ConsentV2":  true,
+        "CMP":  "Complianz_CoMoV2",
+        "Comments":  "Custom",
+        "H1Count":  1,
+        "DomTags":  1242,
+        "SwG":  false
+    },
+    {
+        "Name":  "iROZHLAS.cz",
+        "HpUrl":  "https://www.irozhlas.cz/",
+        "ArticleUrl":  "https://www.irozhlas.cz/zpravy-domov/cizkovicka-cementarna-prechazi-na-zelenejsi-suroviny-otevrela-novou-linku-za_2609030925_dci",
+        "TotalScore":  55,
+        "OverallScore":  55,
+        "DesktopScore":  56,
+        "MobileScore":  54,
+        "ScoreReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +3b: og:type=article, +3b: Twitter Large Card, +5b: Desktop LCP bleskovĂ© (288 ms), +4b: Desktop TTFB bleskovĂ© (57 ms), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +3b: og:type=article, +3b: Twitter Large Card, +5b: Desktop LCP bleskovĂ© (288 ms), +4b: Desktop TTFB bleskovĂ© (57 ms), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +3b: og:type=article, +3b: Twitter Large Card, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (96 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (38 ms), +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (30 kB)",
+        "HpTtfbMs":  54,
+        "ArtTtfbMs":  57,
+        "ArtLcpMs":  288,
+        "ArtFcpMs":  156,
+        "DesktopTtfbMs":  57,
+        "DesktopLcpMs":  288,
+        "DesktopPayloadKb":  30,
+        "MobileTtfbMs":  38,
+        "MobileLcpMs":  96,
+        "MobilePayloadKb":  30,
+        "ViewportValid":  true,
+        "ViewportZoomable":  false,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  true,
+        "ISSN":  "none",
+        "Memberships":  "SPIR",
+        "HSTS":  true,
+        "Nosniff":  true,
+        "XFO":  true,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "NewsArticle",
         "Ethics":  false,
         "Masthead":  false,
         "PostalAddress":  false,
@@ -1273,18 +1505,18 @@
         "Mentions":  false,
         "MentionsCount":  0,
         "Speakable":  false,
-        "Timezone":  "+00:00",
+        "Timezone":  "Naive",
         "OgType":  "article",
-        "OgImageFormat":  "WebP",
+        "OgImageFormat":  "JPG",
         "DiscoverLarge":  false,
-        "FetchPriority":  true,
-        "Preconnect":  true,
-        "PreconnectCount":  2,
-        "Speculation":  false,
-        "Manifest":  false,
-        "ManifestMime":  "none",
+        "FetchPriority":  false,
+        "Preconnect":  false,
+        "PreconnectCount":  0,
+        "Speculation":  true,
+        "Manifest":  true,
+        "ManifestMime":  "application/json",
         "WebSub":  false,
-        "FeedContentType":  "text/html",
+        "FeedContentType":  "application/rss+xml",
         "FeedHasHub":  false,
         "SitemapStatus":  "200 OK (v robots.txt)",
         "IsSitemapValid":  true,
@@ -1292,36 +1524,54 @@
         "FediverseUser":  "none",
         "Html5Clean":  false,
         "LegacyCssCount":  0,
-        "LegacyJsCount":  2,
-        "W3CErrors":  3,
-        "W3CWarnings":  4,
-        "W3CStatus":  "3 chyb, 4 varovĂˇnĂ­",
-        "IsW3cClean":  false,
+        "LegacyJsCount":  7,
+        "W3CErrors":  0,
+        "W3CWarnings":  0,
+        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "IsW3cClean":  true,
         "MediaSchema":  "none",
-        "BlocksAi":  false,
-        "ConsentV2":  true,
-        "CMP":  "Cookiebot_TCF",
-        "Comments":  "Disabled",
-        "H1Count":  1,
-        "DomTags":  849,
-        "SwG":  false,
-        "TotalScore":  42,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV), +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: og:type=article, +2b: OG publikovĂˇno v UTC, +4b: Twitter Large Card, +3b: HTTP/3 QUIC podpora, +2b: Preconnect \u0026 DNS Hints (2), +2b: fetchpriority=high u LCP fotky, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "BlocksAi":  true,
+        "ConsentV2":  false,
+        "CMP":  "Basic_Bar",
+        "Comments":  "Custom",
+        "H1Count":  2,
+        "DomTags":  1146,
+        "SwG":  false
     },
     {
         "Name":  "Chip.cz",
         "HpUrl":  "https://www.chip.cz/",
         "ArticleUrl":  "https://www.chip.cz/novinky/blikajici-obrazovka-nvidia",
+        "TotalScore":  52,
+        "OverallScore":  52,
+        "DesktopScore":  48,
+        "MobileScore":  57,
+        "ScoreReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: og:type=article, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (224 ms), +4b: Desktop TTFB bleskovĂ© (58 ms), +3b: Preconnect \u0026 Hints (8), +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: og:type=article, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (224 ms), +4b: Desktop TTFB bleskovĂ© (58 ms), +3b: Preconnect \u0026 Hints (8), +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +3b: og:type=article, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +8b: MobilnĂ­ LCP bleskovĂ© (164 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (50 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: DatovÄ› ĂşspornĂ˝ mobil (29 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  67,
+        "ArtTtfbMs":  58,
+        "ArtLcpMs":  224,
+        "ArtFcpMs":  184,
+        "DesktopTtfbMs":  58,
+        "DesktopLcpMs":  224,
+        "DesktopPayloadKb":  29,
+        "MobileTtfbMs":  50,
+        "MobileLcpMs":  164,
+        "MobilePayloadKb":  29,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  false,
+        "AppleTouchIcon":  false,
+        "ThemeColor":  false,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  false,
         "ISSN":  "none",
         "Memberships":  "SPIR,IAB_TCF",
         "HSTS":  false,
         "Nosniff":  true,
         "XFO":  true,
         "HTTP3":  false,
-        "HpTtfbMs":  42,
-        "ArtTtfbMs":  56,
-        "ArtLcpMs":  220,
-        "ArtFcpMs":  204,
         "OrgSchema":  "Organization",
         "ArtSchema":  "NewsArticle",
         "Ethics":  false,
@@ -1364,43 +1614,61 @@
         "Comments":  "Disabled",
         "H1Count":  1,
         "DomTags":  912,
-        "SwG":  false,
-        "TotalScore":  42,
-        "ScoreReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +10b: NewsArticle schĂ©ma, +4b: og:type=article, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Preconnect \u0026 DNS Hints (8), +2b: fetchpriority=high u LCP fotky, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
     },
     {
-        "Name":  "ITMix.cz",
-        "HpUrl":  "https://www.itmix.cz/",
-        "ArticleUrl":  "https://www.itmix.cz/apple-airtag-2-bude-mit-vylepseny-cip-ultra-wideband-a-lepsi-dosah/",
+        "Name":  "Wired.cz",
+        "HpUrl":  "https://www.wired.cz/",
+        "ArticleUrl":  "https://www.wired.cz/clanky/mohou-neandertalci-za-vase-svaly-tyden-ve-vede-117",
+        "TotalScore":  50,
+        "OverallScore":  50,
+        "DesktopScore":  44,
+        "MobileScore":  55,
+        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +5b: HTTP/3 QUIC, +3b: Desktop LCP dobrĂ© (1600 ms), +2b: Desktop TTFB dobrĂ© (215 ms), +3b: Preconnect \u0026 Hints (2), +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +5b: HTTP/3 QUIC, +3b: Desktop LCP dobrĂ© (1600 ms), +2b: Desktop TTFB dobrĂ© (215 ms), +3b: Preconnect \u0026 Hints (2), +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +3b: og:type=article, +3b: Twitter Large Card, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (492 ms), +2b: MobilnĂ­ TTFB dobrĂ© (251 ms), +4b: fetchpriority=high na mobilnĂ­ fotce, +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +2b: DatovĂˇ zĂˇtÄ›Ĺľ (155 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  379,
+        "ArtTtfbMs":  215,
+        "ArtLcpMs":  1600,
+        "ArtFcpMs":  380,
+        "DesktopTtfbMs":  215,
+        "DesktopLcpMs":  1600,
+        "DesktopPayloadKb":  156,
+        "MobileTtfbMs":  251,
+        "MobileLcpMs":  492,
+        "MobilePayloadKb":  155,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  false,
+        "AppleTouchIcon":  false,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  true,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
-        "Memberships":  "SPIR",
+        "Memberships":  "SPIR,AOV",
         "HSTS":  true,
-        "Nosniff":  false,
+        "Nosniff":  true,
         "XFO":  false,
-        "HTTP3":  false,
-        "HpTtfbMs":  87,
-        "ArtTtfbMs":  739,
-        "ArtLcpMs":  1312,
-        "ArtFcpMs":  768,
+        "HTTP3":  true,
         "OrgSchema":  "Organization",
         "ArtSchema":  "Article",
         "Ethics":  false,
         "Masthead":  false,
         "PostalAddress":  false,
-        "AuthorSameAs":  true,
+        "AuthorSameAs":  false,
         "Editor":  false,
         "EditorName":  "",
         "Mentions":  false,
         "MentionsCount":  0,
         "Speakable":  false,
         "Timezone":  "+00:00",
-        "OgType":  "website",
-        "OgImageFormat":  "JPG",
-        "DiscoverLarge":  true,
-        "FetchPriority":  false,
+        "OgType":  "article",
+        "OgImageFormat":  "WebP",
+        "DiscoverLarge":  false,
+        "FetchPriority":  true,
         "Preconnect":  true,
-        "PreconnectCount":  16,
-        "Speculation":  true,
+        "PreconnectCount":  2,
+        "Speculation":  false,
         "Manifest":  false,
         "ManifestMime":  "none",
         "WebSub":  false,
@@ -1411,37 +1679,55 @@
         "Fediverse":  false,
         "FediverseUser":  "none",
         "Html5Clean":  false,
-        "LegacyCssCount":  2,
-        "LegacyJsCount":  6,
-        "W3CErrors":  0,
-        "W3CWarnings":  0,
-        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
-        "IsW3cClean":  true,
+        "LegacyCssCount":  0,
+        "LegacyJsCount":  2,
+        "W3CErrors":  3,
+        "W3CWarnings":  4,
+        "W3CStatus":  "3 chyb, 4 varovĂˇnĂ­",
+        "IsW3cClean":  false,
         "MediaSchema":  "none",
         "BlocksAi":  false,
-        "ConsentV2":  false,
-        "CMP":  "Basic_Bar",
+        "ConsentV2":  true,
+        "CMP":  "Cookiebot_TCF",
         "Comments":  "Disabled",
-        "H1Count":  2,
-        "DomTags":  467,
-        "SwG":  false,
-        "TotalScore":  38,
-        "ScoreReasons":  "+4b: Organization, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: Twitter Large Card, +3b: max-image-preview:large, +2b: Preconnect \u0026 DNS Hints (16), +2b: Speculation Rules instant prerender, +4b: HSTS aktivnĂ­, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­))"
+        "H1Count":  1,
+        "DomTags":  849,
+        "SwG":  false
     },
     {
         "Name":  "Cnews.cz",
         "HpUrl":  "https://cnews.cz/",
         "ArticleUrl":  "https://www.cnews.cz/clanky/pozor-na-macbook-neo-oslavovany-levny-notebook-muze-kvuli-male-pameti-rychle-znicit-sve-ssd/?utm_source=rss\u0026amp;utm_medium=text\u0026amp;utm_campaign=rss",
+        "TotalScore":  48,
+        "OverallScore":  48,
+        "DesktopScore":  45,
+        "MobileScore":  51,
+        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (284 ms), +4b: Desktop TTFB bleskovĂ© (53 ms), +3b: Preconnect \u0026 Hints (8), +5b: HSTS aktivnĂ­, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (284 ms), +4b: Desktop TTFB bleskovĂ© (53 ms), +3b: Preconnect \u0026 Hints (8), +5b: HSTS aktivnĂ­, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +3b: og:type=article, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +8b: MobilnĂ­ LCP bleskovĂ© (176 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (52 ms), +4b: DatovÄ› ĂşspornĂ˝ mobil (62 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  51,
+        "ArtTtfbMs":  53,
+        "ArtLcpMs":  284,
+        "ArtFcpMs":  284,
+        "DesktopTtfbMs":  53,
+        "DesktopLcpMs":  284,
+        "DesktopPayloadKb":  62,
+        "MobileTtfbMs":  52,
+        "MobileLcpMs":  176,
+        "MobilePayloadKb":  62,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  false,
+        "AppleTouchIcon":  false,
+        "ThemeColor":  false,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  false,
         "ISSN":  "none",
         "Memberships":  "none",
         "HSTS":  true,
         "Nosniff":  false,
         "XFO":  true,
         "HTTP3":  false,
-        "HpTtfbMs":  82,
-        "ArtTtfbMs":  39,
-        "ArtLcpMs":  236,
-        "ArtFcpMs":  136,
         "OrgSchema":  "Organization",
         "ArtSchema":  "Article",
         "Ethics":  false,
@@ -1484,24 +1770,120 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  535,
-        "SwG":  false,
-        "TotalScore":  37,
-        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: og:type=article, +3b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Preconnect \u0026 DNS Hints (8), +4b: HSTS aktivnĂ­, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
+    },
+    {
+        "Name":  "ITMix.cz",
+        "HpUrl":  "https://www.itmix.cz/",
+        "ArticleUrl":  "https://www.itmix.cz/apple-airtag-2-bude-mit-vylepseny-cip-ultra-wideband-a-lepsi-dosah/",
+        "TotalScore":  46,
+        "OverallScore":  46,
+        "DesktopScore":  46,
+        "MobileScore":  47,
+        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (1276 ms), +3b: Preconnect \u0026 Hints (16), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: Twitter Large Card, +2b: max-image-preview:large, +5b: Desktop LCP bleskovĂ© (1276 ms), +3b: Preconnect \u0026 Hints (16), +3b: Speculation Rules, +5b: HSTS aktivnĂ­, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +3b: Twitter Large Card, +2b: max-image-preview:large, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (1200 ms), +4b: DatovÄ› ĂşspornĂ˝ mobil (20 kB)",
+        "HpTtfbMs":  59,
+        "ArtTtfbMs":  744,
+        "ArtLcpMs":  1276,
+        "ArtFcpMs":  824,
+        "DesktopTtfbMs":  744,
+        "DesktopLcpMs":  1276,
+        "DesktopPayloadKb":  20,
+        "MobileTtfbMs":  752,
+        "MobileLcpMs":  1200,
+        "MobilePayloadKb":  20,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  false,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  false,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  false,
+        "ISSN":  "none",
+        "Memberships":  "SPIR",
+        "HSTS":  true,
+        "Nosniff":  false,
+        "XFO":  false,
+        "HTTP3":  false,
+        "OrgSchema":  "Organization",
+        "ArtSchema":  "Article",
+        "Ethics":  false,
+        "Masthead":  false,
+        "PostalAddress":  false,
+        "AuthorSameAs":  true,
+        "Editor":  false,
+        "EditorName":  "",
+        "Mentions":  false,
+        "MentionsCount":  0,
+        "Speakable":  false,
+        "Timezone":  "+00:00",
+        "OgType":  "website",
+        "OgImageFormat":  "JPG",
+        "DiscoverLarge":  true,
+        "FetchPriority":  false,
+        "Preconnect":  true,
+        "PreconnectCount":  16,
+        "Speculation":  true,
+        "Manifest":  false,
+        "ManifestMime":  "none",
+        "WebSub":  false,
+        "FeedContentType":  "text/html",
+        "FeedHasHub":  false,
+        "SitemapStatus":  "200 OK (v robots.txt)",
+        "IsSitemapValid":  true,
+        "Fediverse":  false,
+        "FediverseUser":  "none",
+        "Html5Clean":  false,
+        "LegacyCssCount":  2,
+        "LegacyJsCount":  6,
+        "W3CErrors":  0,
+        "W3CWarnings":  0,
+        "W3CStatus":  "0 chyb (100% ValidnĂ­)",
+        "IsW3cClean":  true,
+        "MediaSchema":  "none",
+        "BlocksAi":  false,
+        "ConsentV2":  false,
+        "CMP":  "Basic_Bar",
+        "Comments":  "Disabled",
+        "H1Count":  2,
+        "DomTags":  467,
+        "SwG":  false
     },
     {
         "Name":  "Techarena.cz",
         "HpUrl":  "https://www.techarena.cz/",
         "ArticleUrl":  "https://www.techarena.cz/exynos-2700-ma-byt-tak-skvely-ze-jej-najdeme-po-letech-i-v-galaxy-s27-ultra/n-11611/",
+        "TotalScore":  42,
+        "OverallScore":  42,
+        "DesktopScore":  34,
+        "MobileScore":  51,
+        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: Twitter Large Card, +5b: Desktop LCP bleskovĂ© (544 ms), +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: Twitter Large Card, +5b: Desktop LCP bleskovĂ© (544 ms), +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt))",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +3b: Twitter Large Card, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +4b: PĹ™Ă­stupnĂ˝ Viewport (bez blokace zoomu), +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +8b: MobilnĂ­ LCP bleskovĂ© (452 ms), +2b: MobilnĂ­ TTFB dobrĂ© (353 ms), +4b: ResponzivnĂ­ obrĂˇzky (srcset/sizes), +4b: DatovÄ› ĂşspornĂ˝ mobil (26 kB), +3b: ÄŚistĂˇ H1 hierarchie (1x H1)",
+        "HpTtfbMs":  1941,
+        "ArtTtfbMs":  400,
+        "ArtLcpMs":  544,
+        "ArtFcpMs":  516,
+        "DesktopTtfbMs":  400,
+        "DesktopLcpMs":  544,
+        "DesktopPayloadKb":  26,
+        "MobileTtfbMs":  353,
+        "MobileLcpMs":  452,
+        "MobilePayloadKb":  26,
+        "ViewportValid":  true,
+        "ViewportZoomable":  true,
+        "PwaManifest":  true,
+        "AppleTouchIcon":  true,
+        "ThemeColor":  true,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  true,
         "ISSN":  "none",
         "Memberships":  "none",
         "HSTS":  true,
         "Nosniff":  true,
         "XFO":  true,
         "HTTP3":  false,
-        "HpTtfbMs":  2010,
-        "ArtTtfbMs":  293,
-        "ArtLcpMs":  488,
-        "ArtFcpMs":  488,
         "OrgSchema":  "Organization",
         "ArtSchema":  "Article",
         "Ethics":  false,
@@ -1544,24 +1926,42 @@
         "Comments":  "Custom",
         "H1Count":  1,
         "DomTags":  1038,
-        "SwG":  false,
-        "TotalScore":  31,
-        "ScoreReasons":  "+4b: Organization, +5b: Article schĂ©ma, +4b: Twitter Large Card, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Web Manifest \u0026 PWA, +4b: HSTS aktivnĂ­, +3b: X-Content-Type-Options nosniff, +3b: X-Frame-Options ochrana, +2b: Sitemap XML (200 OK (v robots.txt)), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+        "SwG":  false
     },
     {
         "Name":  "Hi-Fi Voice",
         "HpUrl":  "https://www.hifi-voice.com/",
         "ArticleUrl":  "https://www.hifi-voice.com/testy-a-recenze/prislusenstvi-a-doplnky/7354-volter-ica-10",
+        "TotalScore":  25,
+        "OverallScore":  25,
+        "DesktopScore":  23,
+        "MobileScore":  27,
+        "ScoreReasons":  "+3b: og:type=article, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (352 ms), +4b: Desktop TTFB bleskovĂ© (169 ms), +4b: X-Content-Type-Options nosniff, +2b: ValidnĂ­ XML Feed (application/rss+xml)",
+        "DesktopReasons":  "+3b: og:type=article, +5b: HTTP/3 QUIC, +5b: Desktop LCP bleskovĂ© (352 ms), +4b: Desktop TTFB bleskovĂ© (169 ms), +4b: X-Content-Type-Options nosniff, +2b: ValidnĂ­ XML Feed (application/rss+xml)",
+        "MobileReasons":  "+3b: og:type=article, +8b: ValidnĂ­ mobilnĂ­ Viewport (width=device-width), +8b: MobilnĂ­ LCP bleskovĂ© (160 ms), +4b: MobilnĂ­ TTFB bleskovĂ© (164 ms), +4b: DatovÄ› ĂşspornĂ˝ mobil (29 kB)",
+        "HpTtfbMs":  178,
+        "ArtTtfbMs":  169,
+        "ArtLcpMs":  352,
+        "ArtFcpMs":  352,
+        "DesktopTtfbMs":  169,
+        "DesktopLcpMs":  352,
+        "DesktopPayloadKb":  29,
+        "MobileTtfbMs":  164,
+        "MobileLcpMs":  160,
+        "MobilePayloadKb":  29,
+        "ViewportValid":  true,
+        "ViewportZoomable":  false,
+        "PwaManifest":  false,
+        "AppleTouchIcon":  false,
+        "ThemeColor":  false,
+        "FetchPriorityHighM":  false,
+        "ResponsiveImagesM":  false,
         "ISSN":  "none",
         "Memberships":  "none",
         "HSTS":  false,
         "Nosniff":  true,
         "XFO":  false,
         "HTTP3":  true,
-        "HpTtfbMs":  209,
-        "ArtTtfbMs":  167,
-        "ArtLcpMs":  380,
-        "ArtFcpMs":  380,
         "OrgSchema":  "None",
         "ArtSchema":  "None",
         "Ethics":  false,
@@ -1604,14 +2004,14 @@
         "Comments":  "Disqus",
         "H1Count":  0,
         "DomTags":  1267,
-        "SwG":  false,
-        "TotalScore":  12,
-        "ScoreReasons":  "+4b: og:type=article, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: HTTP/3 QUIC podpora, +3b: X-Content-Type-Options nosniff"
+        "SwG":  false
     }
 ];
         let currentView = 'table';
+        let currentDeviceTab = 'overall'; // 'overall' | 'mobile' | 'desktop'
+        let currentSortKey = 'TotalScore';
+        let currentSortDirection = 'desc';
 
-        // Detect mobile screen on load and switch to cards on small screens
         if (window.innerWidth <= 768) {
             currentView = 'cards';
         }
@@ -1639,6 +2039,21 @@
             }
         }
 
+        function setDeviceTab(tab) {
+            currentDeviceTab = tab;
+            document.querySelectorAll('.device-tab').forEach(b => b.classList.remove('active'));
+            if (tab === 'overall') document.getElementById('tabOverall').classList.add('active');
+            else if (tab === 'mobile') document.getElementById('tabMobile').classList.add('active');
+            else if (tab === 'desktop') document.getElementById('tabDesktop').classList.add('active');
+
+            if (tab === 'overall') currentSortKey = 'TotalScore';
+            else if (tab === 'mobile') currentSortKey = 'MobileScore';
+            else if (tab === 'desktop') currentSortKey = 'DesktopScore';
+            currentSortDirection = 'desc';
+
+            sortAndRender();
+        }
+
         function getScoreClass(score) {
             if (score >= 90) return 'score-100';
             if (score >= 65) return 'score-good';
@@ -1647,110 +2062,126 @@
         }
 
         function formatIssn(issn) {
-            if (!issn || issn === 'none' || issn === 'Neuvádí' || issn.includes('Neuv')) {
-                return '<span class="badge-err">Neuvádí</span>';
-            }
+            if (!issn || issn === 'none' || issn.includes('Neuv')) return '<span class="badge-err">Neuvádí</span>';
             return '<span class="badge-ok mono">' + issn + '</span>';
         }
 
         function formatMemberships(m) {
             if (!m || m === 'none' || m.includes('none')) return '<span class="mono">Individuální</span>';
             const list = m.split(',').map(x => {
-                if (x === 'SPIR') return 'SPIR / NetMonitor';
-                if (x === 'UnieVydavatelu') return 'Česká unie vydavatelů (ČUV)';
-                if (x === 'AOV') return 'Asociace online vydavatelů (AOV)';
-                if (x === 'SyndikatNovinaru') return 'Syndikát novinářů';
-                if (x === 'IAB_TCF') return 'IAB Europe / TCF';
-                if (x === 'MKCR') return 'Evidence MK ČR';
+                if (x === 'SPIR') return 'SPIR';
+                if (x === 'UnieVydavatelu') return 'ČUV';
+                if (x === 'AOV') return 'AOV';
+                if (x === 'SyndikatNovinaru') return 'Syndikát';
+                if (x === 'IAB_TCF') return 'IAB TCF';
                 return x;
             });
-            return '<span class="mono">' + list.join(', ') + '</span>';
+            return '<span class="badge-ok">' + list.join(', ') + '</span>';
         }
 
-        function formatCmp(cmp, v2) {
-            if (!cmp || cmp === 'Basic_Bar') return '<span class="badge-warn mono">Základní lišta</span>';
-            if (cmp === 'Complianz_TCF_CoMoV2') return '<span class="badge-ok mono">Complianz Pro (TCF v2.2 + CoMo v2)</span>';
-            if (cmp === 'Complianz_CoMoV2') return '<span class="badge-ok mono">Complianz (CoMo v2)</span>';
-            if (cmp === 'Didomi_CPEX_TCF') return '<span class="badge-ok mono">Didomi CPEX (TCF v2.2)</span>';
-            if (cmp === 'Cookiebot_TCF') return '<span class="badge-ok mono">Cookiebot (TCF v2.2)</span>';
-            if (cmp === 'Google_FundingChoices') return '<span class="badge-ok mono">Google Funding Choices</span>';
-            if (cmp === 'Google_ConsentModeV2') return '<span class="badge-ok mono">Google Consent Mode v2</span>';
-            if (cmp === 'AdvancedAds_TCF') return '<span class="badge-ok mono">Advanced Ads (IAB TCF)</span>';
-            if (cmp === '24net_IAB_CMP') return '<span class="badge-ok mono">24net IAB CMP</span>';
-            if (cmp === 'TextFactory_CMP' || cmp === 'Custom_CMP') return '<span class="badge-warn mono">Vlastní CMP</span>';
-            if (cmp === 'Consent_v1') return '<span class="badge-warn mono">Consent v1 (Bez v2)</span>';
-            return '<span class="mono">' + cmp + '</span>';
+        function formatArtSchema(t) {
+            if (t === 'NewsArticle') return '<span class="badge-ok">NewsArticle (Novinářské)</span>';
+            if (t === 'Article') return '<span class="badge-warn">Article (Obecné)</span>';
+            if (t === 'BlogPosting') return '<span class="badge-err">BlogPosting (Blog)</span>';
+            return '<span class="badge-err">Chybí schéma</span>';
         }
 
-        function formatOrgSchema(s) {
-            if (s === 'NewsMediaOrganization') return '<span class="badge-ok">NewsMediaOrganization</span>';
-            if (s === 'Organization') return '<span class="badge-warn">Organization</span>';
-            return '<span class="badge-err">Žádná</span>';
-        }
-
-        function formatArtSchema(s) {
-            if (s === 'NewsArticle') return '<span class="badge-ok">NewsArticle</span>';
-            if (s === 'Article') return '<span class="badge-warn">Article</span>';
-            if (s === 'BlogPosting') return '<span class="badge-warn">BlogPosting</span>';
-            return '<span class="badge-err">Žádný</span>';
+        function formatOrgSchema(t) {
+            if (t === 'NewsMediaOrganization') return '<span class="badge-ok">NewsMediaOrg</span>';
+            if (t === 'Organization') return '<span class="badge-warn">Organization</span>';
+            return '<span class="badge-err">Chybí</span>';
         }
 
         function formatTimezone(tz) {
-            if (!tz || tz === 'none' || tz === 'Chybí') return '<span class="badge-err">Chybí</span>';
-            if (tz === '+02:00') return '<span class="badge-ok">+02:00 (ČR Lokální)</span>';
+            if (tz === '+02:00') return '<span class="badge-ok">+02:00 (ČR Letní)</span>';
             if (tz === '+01:00') return '<span class="badge-ok">+01:00 (ČR Zimní)</span>';
-            if (tz === 'Z' || tz.includes('Z')) return '<span class="badge-warn">Z (UTC posun 2 h)</span>';
-            if (tz === '+00:00') return '<span class="badge-warn">+00:00 (UTC posun 2 h)</span>';
-            if (tz === 'Naive') return '<span class="badge-err">Naive (Bez zóny)</span>';
-            return '<span class="badge-warn">' + tz + '</span>';
+            if (tz === 'Z' || tz.includes('Z') || tz === '+00:00') return '<span class="badge-warn">UTC (+0)</span>';
+            return '<span class="badge-err">Naive</span>';
         }
 
-        function formatComments(c) {
-            if (!c || c === 'Custom') return '<span class="mono">Nativní / Vlastní</span>';
-            if (c === 'WordPress') return '<span class="mono">Nativní WordPress</span>';
-            if (c === 'Disqus') return '<span class="mono">Disqus (Externí)</span>';
-            if (c === 'Facebook') return '<span class="mono">Facebook Comments</span>';
-            if (c === 'SuperForum') return '<span class="mono">CNC SuperFórum</span>';
-            if (c === 'Disabled') return '<span class="mono">Vypnuto / Bez diskuze</span>';
-            return '<span class="mono">' + c + '</span>';
+        function formatTtfbVal(val) {
+            if (!val || val === 0) return '-';
+            if (val < 200) return '<span class="badge-ok mono">' + val + ' ms</span>';
+            if (val < 400) return '<span class="badge-warn mono">' + val + ' ms</span>';
+            return '<span class="badge-err mono">' + val + ' ms</span>';
         }
 
-        function formatHtml5Clean(item) {
-            if (item.Html5Clean || ((!item.LegacyCssCount || item.LegacyCssCount === 0) && (!item.LegacyJsCount || item.LegacyJsCount === 0))) {
-                return '<span class="badge-ok">100% Čisté HTML5</span>';
-            }
-            const issues = [];
-            if (item.LegacyCssCount > 0) issues.push(item.LegacyCssCount + 'x text/css');
-            if (item.LegacyJsCount > 0) issues.push(item.LegacyJsCount + 'x text/javascript');
-            return '<span class="badge-warn">' + issues.join(', ') + '</span>';
-        }
-
-        function formatW3CStatus(item) {
-            if (item.IsW3cClean) return '<span class="badge-ok">' + (item.W3CStatus || '0 chyb (100% Validní)') + '</span>';
-            if (item.W3CErrors > 0) return '<span class="badge-err">' + item.W3CStatus + '</span>';
-            return '<span class="badge-warn">' + (item.W3CStatus || 'Neověřeno') + '</span>';
-        }
-
-        function formatTtfb(hp, art) {
-            if (!hp && !art) return '<span class="mono">Neověřeno</span>';
-            const renderPill = (val) => {
-                if (!val || val === 0) return '-';
-                if (val < 200) return '<span class="badge-ok mono">' + val + ' ms</span>';
-                if (val < 400) return '<span class="badge-warn mono">' + val + ' ms</span>';
-                return '<span class="badge-err mono">' + val + ' ms</span>';
-            };
-            return renderPill(hp) + ' / ' + renderPill(art);
-        }
-
-        function formatLcp(lcp) {
+        function formatLcpVal(lcp) {
             if (!lcp || lcp === 0) return '<span class="mono">Neověřeno</span>';
-            if (lcp < 800) return '<span class="badge-ok mono">' + lcp + ' ms (Bleskové)</span>';
-            if (lcp < 1800) return '<span class="badge-ok mono">' + lcp + ' ms</span>';
-            if (lcp < 3000) return '<span class="badge-warn mono">' + lcp + ' ms</span>';
+            if (lcp < 1200) return '<span class="badge-ok mono">' + lcp + ' ms (Blesk)</span>';
+            if (lcp < 2200) return '<span class="badge-ok mono">' + lcp + ' ms</span>';
+            if (lcp < 3500) return '<span class="badge-warn mono">' + lcp + ' ms</span>';
             return '<span class="badge-err mono">' + lcp + ' ms</span>';
         }
 
+        function renderTableHeader() {
+            const thead = document.getElementById('tableHead');
+            let cols = '';
+
+            if (currentDeviceTab === 'overall') {
+                cols = `
+                    <tr>
+                        <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
+                        <th class="sortable active-sort" data-sort="TotalScore" onclick="handleHeaderSort('TotalScore')">Celkem <span class="sort-icon">▼</span></th>
+                        <th class="sortable" data-sort="MobileScore" onclick="handleHeaderSort('MobileScore')">📱 Mobil / 💻 Desk <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobileLcpMs" onclick="handleHeaderSort('MobileLcpMs')">LCP (Mobil / Desk) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobileTtfbMs" onclick="handleHeaderSort('MobileTtfbMs')">TTFB (Mobil / Desk) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobilePayloadKb" onclick="handleHeaderSort('MobilePayloadKb')">HTML Payload <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="OrgSchema" onclick="handleHeaderSort('OrgSchema')">Schema.org <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Ethics" onclick="handleHeaderSort('Ethics')">E-E-A-T Kodex & Tiráž <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="AuthorSameAs" onclick="handleHeaderSort('AuthorSameAs')">Autor sameAs <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Timezone" onclick="handleHeaderSort('Timezone')">Časová zóna <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="HSTS" onclick="handleHeaderSort('HSTS')">HTTPS (HSTS) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="HTTP3" onclick="handleHeaderSort('HTTP3')">HTTP/3 QUIC <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="PwaManifest" onclick="handleHeaderSort('PwaManifest')">PWA Manifest <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="WebSub" onclick="handleHeaderSort('WebSub')">WebSub Push <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="IsW3cClean" onclick="handleHeaderSort('IsW3cClean')">W3C HTML5 Validita <span class="sort-icon">↕</span></th>
+                    </tr>
+                `;
+            } else if (currentDeviceTab === 'mobile') {
+                cols = `
+                    <tr>
+                        <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
+                        <th class="sortable active-sort" data-sort="MobileScore" onclick="handleHeaderSort('MobileScore')">📱 Mobil Skóre <span class="sort-icon">▼</span></th>
+                        <th class="sortable" data-sort="MobileLcpMs" onclick="handleHeaderSort('MobileLcpMs')">LCP (390px Pixel) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobileTtfbMs" onclick="handleHeaderSort('MobileTtfbMs')">Mobilní TTFB <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="ViewportValid" onclick="handleHeaderSort('ViewportValid')">Viewport (width=device) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="ViewportZoomable" onclick="handleHeaderSort('ViewportZoomable')">Zoom přístupnost <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="PwaManifest" onclick="handleHeaderSort('PwaManifest')">PWA Web Manifest <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="AppleTouchIcon" onclick="handleHeaderSort('AppleTouchIcon')">Touch Icon & Theme <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="FetchPriorityHighM" onclick="handleHeaderSort('FetchPriorityHighM')">fetchpriority=high fotka <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="ResponsiveImagesM" onclick="handleHeaderSort('ResponsiveImagesM')">Responzivní fotky <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobilePayloadKb" onclick="handleHeaderSort('MobilePayloadKb')">Mobilní Payload (kB) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="H1Count" onclick="handleHeaderSort('H1Count')">Mobilní H1 <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="ArtSchema" onclick="handleHeaderSort('ArtSchema')">Schema.org článek <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Ethics" onclick="handleHeaderSort('Ethics')">E-E-A-T Kodex & Tiráž <span class="sort-icon">↕</span></th>
+                    </tr>
+                `;
+            } else if (currentDeviceTab === 'desktop') {
+                cols = `
+                    <tr>
+                        <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
+                        <th class="sortable active-sort" data-sort="DesktopScore" onclick="handleHeaderSort('DesktopScore')">💻 Desktop Skóre <span class="sort-icon">▼</span></th>
+                        <th class="sortable" data-sort="DesktopLcpMs" onclick="handleHeaderSort('DesktopLcpMs')">LCP (1920x1080) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="DesktopTtfbMs" onclick="handleHeaderSort('DesktopTtfbMs')">Desktop TTFB <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="HTTP3" onclick="handleHeaderSort('HTTP3')">HTTP/3 QUIC <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="HSTS" onclick="handleHeaderSort('HSTS')">HSTS (HTTPS) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Nosniff" onclick="handleHeaderSort('Nosniff')">Nosniff & XFO <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="IsW3cClean" onclick="handleHeaderSort('IsW3cClean')">W3C Validní HTML5 <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="WebSub" onclick="handleHeaderSort('WebSub')">W3C WebSub Huby <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="FeedContentType" onclick="handleHeaderSort('FeedContentType')">Validní XML Feed <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="IsSitemapValid" onclick="handleHeaderSort('IsSitemapValid')">Sitemap XML <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Preconnect" onclick="handleHeaderSort('Preconnect')">Preconnect & Hints <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="Speakable" onclick="handleHeaderSort('Speakable')">Google speakable <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="ArtSchema" onclick="handleHeaderSort('ArtSchema')">Schema.org článek <span class="sort-icon">↕</span></th>
+                    </tr>
+                `;
+            }
+            thead.innerHTML = cols;
+        }
+
         function renderTable() {
+            renderTableHeader();
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
 
@@ -1766,7 +2197,11 @@
                 row.id = 'row-' + index;
                 row.onclick = () => toggleDrawer(index);
 
-                row.innerHTML = `
+                let primaryScore = item.TotalScore;
+                if (currentDeviceTab === 'mobile') primaryScore = item.MobileScore !== undefined ? item.MobileScore : item.TotalScore;
+                if (currentDeviceTab === 'desktop') primaryScore = item.DesktopScore !== undefined ? item.DesktopScore : item.TotalScore;
+
+                let rowHtml = `
                     <td class="sticky-col">
                         <div style="display: flex; align-items: center;">
                             <div class="rank-badge ` + rankClass + `">` + rank + `</div>
@@ -1776,58 +2211,100 @@
                             </div>
                         </div>
                     </td>
-                    <td><span class="score-pill ` + getScoreClass(item.TotalScore) + `">` + item.TotalScore + ` / 100</span></td>
-                    <td>` + formatIssn(item.ISSN) + `</td>
-                    <td>` + formatMemberships(item.Memberships) + `</td>
-                    <td>` + (item.HSTS ? '<span class="badge-ok">ANO (Aktivní)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.Nosniff && item.XFO ? '<span class="badge-ok">Plná ochrana</span>' : (item.Nosniff || item.XFO ? '<span class="badge-warn">Částečná</span>' : '<span class="badge-err">NE</span>')) + `</td>
-                    <td>` + (item.HTTP3 ? '<span class="badge-ok">ANO (QUIC)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + formatTtfb(item.HpTtfbMs, item.ArtTtfbMs) + `</td>
-                    <td>` + formatLcp(item.ArtLcpMs) + `</td>
-                    <td>` + formatOrgSchema(item.OrgSchema) + ` / ` + formatArtSchema(item.ArtSchema) + `</td>
-                    <td>` + (item.Ethics && item.Masthead ? '<span class="badge-ok">Plné (Kodex + Tiráž)</span>' : (item.Ethics || item.Masthead ? '<span class="badge-warn">Částečné</span>' : '<span class="badge-err">Chybí</span>')) + `</td>
-                    <td>` + (item.AuthorSameAs ? '<span class="badge-ok">ANO (Sociální profily)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.Editor ? '<span class="badge-ok">ANO (' + (item.EditorName || 'Šéfredaktor') + ')</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.PostalAddress ? '<span class="badge-ok">ANO (PostalAddress)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.Mentions ? '<span class="badge-ok">ANO (' + (item.MentionsCount || 'Štítky') + 'x Thing)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.Speakable ? '<span class="badge-ok">ANO (Google Assistant)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + formatTimezone(item.Timezone) + `</td>
-                    <td><span class="badge-ok">` + item.OgImageFormat + `</span></td>
-                    <td>` + (item.DiscoverLarge ? '<span class="badge-ok">large (Discover Ready)</span>' : '<span class="badge-err">none</span>') + `</td>
-                    <td>` + (item.FetchPriority ? '<span class="badge-ok">ANO (LCP High)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.Preconnect ? '<span class="badge-ok">ANO (' + item.PreconnectCount + ' hints)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.Speculation ? '<span class="badge-ok">ANO (Instant)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.Manifest ? '<span class="badge-ok">ANO (PWA Ready)</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.WebSub ? '<span class="badge-ok">ANO (Push Hub)</span>' : '<span class="badge-err">NE (Pull only)</span>') + `</td>
-                    <td>` + (item.IsSitemapValid ? '<span class="badge-ok">' + item.SitemapStatus + '</span>' : '<span class="badge-err">' + item.SitemapStatus + '</span>') + `</td>
-                    <td>` + (item.Fediverse ? '<span class="badge-ok">' + item.FediverseUser + '</span>' : '<span class="badge-err">NE</span>') + `</td>
-                    <td>` + (item.FeedContentType && item.FeedContentType.includes('xml') ? '<span class="badge-ok">' + item.FeedContentType + '</span>' : '<span class="badge-warn">' + (item.FeedContentType || 'none') + '</span>') + `</td>
-                    <td>` + formatHtml5Clean(item) + `</td>
-                    <td>` + formatW3CStatus(item) + `</td>
-                    <td>` + (item.MediaSchema && item.MediaSchema !== 'none' ? '<span class="badge-ok">' + item.MediaSchema + '</span>' : '<span class="mono">Není video/audio</span>') + `</td>
-                    <td>` + (item.BlocksAi ? '<span class="badge-warn">Blokuje (Ochrana)</span>' : '<span class="badge-ok">Povoleno (AI indexace)</span>') + `</td>
-                    <td>` + formatCmp(item.CMP, item.ConsentV2) + `</td>
-                    <td>` + formatComments(item.Comments) + `</td>
-                    <td><span class="badge-ok">` + item.H1Count + `x H1</span> / <span class="mono">` + item.DomTags + ` tagů</span></td>
-                    <td>` + (item.SwG ? '<span class="badge-ok">ANO (Reader Revenue)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                    <td><span class="score-pill ` + getScoreClass(primaryScore) + `">` + primaryScore + ` / 100</span></td>
                 `;
 
-                // Drawer row
+                if (currentDeviceTab === 'overall') {
+                    rowHtml += `
+                        <td><span class="mono">📱 ` + (item.MobileScore || item.TotalScore) + `</span> / <span class="mono">💻 ` + (item.DesktopScore || item.TotalScore) + `</span></td>
+                        <td>` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + ` / ` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + `</td>
+                        <td>` + formatTtfbVal(item.MobileTtfbMs || item.ArtTtfbMs) + ` / ` + formatTtfbVal(item.DesktopTtfbMs || item.ArtTtfbMs) + `</td>
+                        <td><span class="mono">📱 ` + (item.MobilePayloadKb || '-') + ` kB</span> / <span class="mono">💻 ` + (item.DesktopPayloadKb || '-') + ` kB</span></td>
+                        <td>` + formatOrgSchema(item.OrgSchema) + ` / ` + formatArtSchema(item.ArtSchema) + `</td>
+                        <td>` + (item.Ethics && item.Masthead ? '<span class="badge-ok">Plné (Kodex+Tiráž)</span>' : (item.Ethics || item.Masthead ? '<span class="badge-warn">Částečné</span>' : '<span class="badge-err">Chybí</span>')) + `</td>
+                        <td>` + (item.AuthorSameAs ? '<span class="badge-ok">ANO (Sítě)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + formatTimezone(item.Timezone) + `</td>
+                        <td>` + (item.HSTS ? '<span class="badge-ok">HSTS</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.HTTP3 ? '<span class="badge-ok">ANO (QUIC)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.PwaManifest ? '<span class="badge-ok">ANO</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.WebSub ? '<span class="badge-ok">ANO (Push)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.IsW3cClean ? '<span class="badge-ok">0 chyb (100%)</span>' : '<span class="badge-warn">' + (item.W3CStatus || 'Neověřeno') + '</span>') + `</td>
+                    `;
+                } else if (currentDeviceTab === 'mobile') {
+                    rowHtml += `
+                        <td>` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + `</td>
+                        <td>` + formatTtfbVal(item.MobileTtfbMs || item.ArtTtfbMs) + `</td>
+                        <td>` + (item.ViewportValid ? '<span class="badge-ok">ANO (width=device)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.ViewportZoomable !== false ? '<span class="badge-ok">Povoleno (Přístupné)</span>' : '<span class="badge-warn">Blokováno (user-scalable=no)</span>') + `</td>
+                        <td>` + (item.PwaManifest ? '<span class="badge-ok">ANO (PWA Ready)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.AppleTouchIcon || item.ThemeColor ? '<span class="badge-ok">ANO</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.FetchPriorityHighM || item.FetchPriority ? '<span class="badge-ok">ANO (high)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.ResponsiveImagesM ? '<span class="badge-ok">ANO (srcset)</span>' : '<span class="badge-warn">Základní</span>') + `</td>
+                        <td><span class="mono">` + (item.MobilePayloadKb || '-') + ` kB</span></td>
+                        <td><span class="badge-ok">` + item.H1Count + `x H1</span></td>
+                        <td>` + formatArtSchema(item.ArtSchema) + `</td>
+                        <td>` + (item.Ethics && item.Masthead ? '<span class="badge-ok">Plné</span>' : '<span class="badge-warn">Část</span>') + `</td>
+                    `;
+                } else if (currentDeviceTab === 'desktop') {
+                    rowHtml += `
+                        <td>` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + `</td>
+                        <td>` + formatTtfbVal(item.DesktopTtfbMs || item.ArtTtfbMs) + `</td>
+                        <td>` + (item.HTTP3 ? '<span class="badge-ok">ANO (QUIC)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.HSTS ? '<span class="badge-ok">ANO (Aktivní)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.Nosniff && item.XFO ? '<span class="badge-ok">Plná ochrana</span>' : '<span class="badge-warn">Částečná</span>') + `</td>
+                        <td>` + (item.IsW3cClean ? '<span class="badge-ok">0 chyb (100%)</span>' : '<span class="badge-warn">' + (item.W3CStatus || 'Neověřeno') + '</span>') + `</td>
+                        <td>` + (item.WebSub ? '<span class="badge-ok">ANO (Push)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.FeedContentType && item.FeedContentType.includes('xml') ? '<span class="badge-ok">' + item.FeedContentType + '</span>' : '<span class="badge-warn">Feed</span>') + `</td>
+                        <td>` + (item.IsSitemapValid ? '<span class="badge-ok">' + item.SitemapStatus + '</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.Preconnect ? '<span class="badge-ok">ANO (' + item.PreconnectCount + ')</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + (item.Speakable ? '<span class="badge-ok">ANO (Assistant)</span>' : '<span class="badge-err">NE</span>') + `</td>
+                        <td>` + formatArtSchema(item.ArtSchema) + `</td>
+                    `;
+                }
+
+                row.innerHTML = rowHtml;
+
+                // Drawer
                 const drawer = document.createElement('tr');
                 drawer.className = 'drawer-row';
                 drawer.id = 'drawer-' + index;
                 drawer.innerHTML = `
-                    <td colspan="35" style="padding: 0;">
+                    <td colspan="20" style="padding: 0;">
                         <div class="drawer-content">
-                            <h3 style="color: #fff; font-size: 1.05rem; margin-bottom: 0.4rem;">🔎 Podrobný technický rozbor a bodové zdůvodnění: ` + item.Name + `</h3>
+                            <h3 style="color: #fff; font-size: 1.05rem; margin-bottom: 0.4rem;">🔎 Podrobný technický audit: ` + item.Name + `</h3>
                             <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-                                Odkaz na článek: <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">` + item.ArticleUrl + `</a>
+                                Testovaný článek: <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">` + item.ArticleUrl + `</a>
                                 &nbsp;|&nbsp;
-                                <a href="https://validator.w3.org/nu/?doc=` + encodeURIComponent(item.ArticleUrl) + `" target="_blank" style="color: #38bdf8; text-decoration: underline;">🌐 Otevřít živý W3C validátor ↗</a>
+                                <a href="https://validator.w3.org/nu/?doc=` + encodeURIComponent(item.ArticleUrl) + `" target="_blank" style="color: #38bdf8; text-decoration: underline;">🌐 Otevřít W3C validátor ↗</a>
                             </p>
-                            <div class="reasons-box">
-                                <strong>Rozpis bodů:</strong><br>
-                                ` + item.ScoreReasons + `
+                            <div class="drawer-sections">
+                                <div class="drawer-card">
+                                    <div class="drawer-card-title">📱 Mobilní verze (Google Pixel 8 Pro / Android 14)</div>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Mobilní skóre:</strong> <span class="score-pill ` + getScoreClass(item.MobileScore || item.TotalScore) + `">` + (item.MobileScore || item.TotalScore) + ` / 100</span></p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>LCP na mobilu:</strong> ` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + ` | <strong>TTFB:</strong> ` + formatTtfbVal(item.MobileTtfbMs || item.ArtTtfbMs) + `</p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Velikost HTML:</strong> ` + (item.MobilePayloadKb || '-') + ` kB | <strong>Viewport:</strong> ` + (item.ViewportValid ? 'Validní' : 'Nevalidní') + `</p>
+                                    <div class="reasons-box">
+                                        <strong>Mobilní bodování:</strong><br>
+                                        ` + (item.MobileReasons || item.ScoreReasons) + `
+                                    </div>
+                                </div>
+                                <div class="drawer-card">
+                                    <div class="drawer-card-title">💻 Desktopová verze (1920×1080)</div>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Desktop skóre:</strong> <span class="score-pill ` + getScoreClass(item.DesktopScore || item.TotalScore) + `">` + (item.DesktopScore || item.TotalScore) + ` / 100</span></p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Desktop LCP:</strong> ` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + ` | <strong>TTFB:</strong> ` + formatTtfbVal(item.DesktopTtfbMs || item.ArtTtfbMs) + `</p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>HTTP/3:</strong> ` + (item.HTTP3 ? 'ANO' : 'NE') + ` | <strong>HSTS:</strong> ` + (item.HSTS ? 'ANO' : 'NE') + ` | <strong>W3C:</strong> ` + (item.W3CStatus || 'Neověřeno') + `</p>
+                                    <div class="reasons-box">
+                                        <strong>Desktopové bodování:</strong><br>
+                                        ` + (item.DesktopReasons || item.ScoreReasons) + `
+                                    </div>
+                                </div>
+                                <div class="drawer-card">
+                                    <div class="drawer-card-title">🏛️ Společné E-E-A-T, Schéma & Syndikace</div>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Schéma:</strong> ` + formatOrgSchema(item.OrgSchema) + ` / ` + formatArtSchema(item.ArtSchema) + `</p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Kodex & Tiráž:</strong> ` + (item.Ethics && item.Masthead ? 'Plné' : 'Částečné/Chybí') + `</p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Garant:</strong> ` + (item.Editor ? (item.EditorName || 'Šéfredaktor') : 'Chybí') + ` | <strong>Zóna:</strong> ` + item.Timezone + `</p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>WebSub Push:</strong> ` + (item.WebSub ? 'ANO' : 'NE') + ` | <strong>ISSN:</strong> ` + item.ISSN + `</p>
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -1849,6 +2326,10 @@
                 else if (rank === 2) rankClass = 'rank-2';
                 else if (rank === 3) rankClass = 'rank-3';
 
+                let primaryScore = item.TotalScore;
+                if (currentDeviceTab === 'mobile') primaryScore = item.MobileScore !== undefined ? item.MobileScore : item.TotalScore;
+                if (currentDeviceTab === 'desktop') primaryScore = item.DesktopScore !== undefined ? item.DesktopScore : item.TotalScore;
+
                 const card = document.createElement('div');
                 card.className = 'portal-card';
                 card.id = 'card-' + index;
@@ -1862,21 +2343,25 @@
                                 <div class="card-domain">` + item.HpUrl + `</div>
                             </div>
                         </div>
-                        <span class="score-pill ` + getScoreClass(item.TotalScore) + `">` + item.TotalScore + ` / 100</span>
+                        <span class="score-pill ` + getScoreClass(primaryScore) + `">` + primaryScore + ` / 100</span>
                     </div>
 
                     <div class="card-metrics">
                         <div class="card-metric-item">
-                            <span class="card-metric-label">Reálné LCP (Článek)</span>
-                            <span>` + formatLcp(item.ArtLcpMs) + `</span>
+                            <span class="card-metric-label">📱 Mobilní LCP (Pixel)</span>
+                            <span>` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + `</span>
                         </div>
                         <div class="card-metric-item">
-                            <span class="card-metric-label">TTFB Odezva (HP/Článek)</span>
-                            <span>` + formatTtfb(item.HpTtfbMs, item.ArtTtfbMs) + `</span>
+                            <span class="card-metric-label">💻 Desktop LCP</span>
+                            <span>` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + `</span>
                         </div>
                         <div class="card-metric-item">
-                            <span class="card-metric-label">W3C Validita</span>
-                            <span>` + formatW3CStatus(item) + `</span>
+                            <span class="card-metric-label">Mobilní Viewport</span>
+                            <span>` + (item.ViewportValid ? '<span class="badge-ok">Validní</span>' : '<span class="badge-err">Nevalidní</span>') + `</span>
+                        </div>
+                        <div class="card-metric-item">
+                            <span class="card-metric-label">PWA & Manifest</span>
+                            <span>` + (item.PwaManifest ? '<span class="badge-ok">PWA Ready</span>' : '<span class="badge-err">NE</span>') + `</span>
                         </div>
                         <div class="card-metric-item">
                             <span class="card-metric-label">Schéma článku</span>
@@ -1884,42 +2369,30 @@
                         </div>
                         <div class="card-metric-item">
                             <span class="card-metric-label">E-E-A-T Kodex & Tiráž</span>
-                            <span>` + (item.Ethics && item.Masthead ? '<span class="badge-ok">Plné (Kodex+Tiráž)</span>' : (item.Ethics || item.Masthead ? '<span class="badge-warn">Částečné</span>' : '<span class="badge-err">Chybí</span>')) + `</span>
+                            <span>` + (item.Ethics && item.Masthead ? '<span class="badge-ok">Plné</span>' : '<span class="badge-err">Chybí</span>') + `</span>
                         </div>
                         <div class="card-metric-item">
-                            <span class="card-metric-label">WebSub Push Hub</span>
-                            <span>` + (item.WebSub ? '<span class="badge-ok">ANO (Push Hub)</span>' : '<span class="badge-err">NE</span>') + `</span>
+                            <span class="card-metric-label">HTTP/3 QUIC</span>
+                            <span>` + (item.HTTP3 ? '<span class="badge-ok">ANO</span>' : '<span class="badge-err">NE</span>') + `</span>
                         </div>
                         <div class="card-metric-item">
-                            <span class="card-metric-label">HTTPS & Zabezpečení</span>
-                            <span>` + (item.HSTS ? '<span class="badge-ok">HSTS + Bezpečné</span>' : '<span class="badge-err">Bez HSTS</span>') + `</span>
-                        </div>
-                        <div class="card-metric-item">
-                            <span class="card-metric-label">Časové pásmo</span>
-                            <span>` + formatTimezone(item.Timezone) + `</span>
-                        </div>
-                        <div class="card-metric-item">
-                            <span class="card-metric-label">HTTP/3 (QUIC)</span>
-                            <span>` + (item.HTTP3 ? '<span class="badge-ok">ANO (QUIC)</span>' : '<span class="badge-err">NE</span>') + `</span>
-                        </div>
-                        <div class="card-metric-item">
-                            <span class="card-metric-label">HTML5 Čistota</span>
-                            <span>` + formatHtml5Clean(item) + `</span>
+                            <span class="card-metric-label">W3C HTML5</span>
+                            <span>` + (item.IsW3cClean ? '<span class="badge-ok">100% Validní</span>' : '<span class="badge-warn">' + (item.W3CStatus || 'Varování') + '</span>') + `</span>
                         </div>
                     </div>
 
                     <button class="card-drawer-btn" onclick="toggleCardDetails(` + index + `)">
-                        <span>🔍 Zobrazit kompletní rozbor a bodování</span>
+                        <span>🔍 Zobrazit kompletní rozbor</span>
                     </button>
 
                     <div class="card-details" id="card-details-` + index + `">
                         <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem;">
                             <a href="` + item.ArticleUrl + `" target="_blank" style="color: var(--primary);">Článek ↗</a> &nbsp;|&nbsp;
-                            <a href="https://validator.w3.org/nu/?doc=` + encodeURIComponent(item.ArticleUrl) + `" target="_blank" style="color: #38bdf8; text-decoration: underline;">Živý W3C validátor ↗</a>
+                            <a href="https://validator.w3.org/nu/?doc=` + encodeURIComponent(item.ArticleUrl) + `" target="_blank" style="color: #38bdf8; text-decoration: underline;">W3C validátor ↗</a>
                         </p>
                         <div class="reasons-box">
-                            <strong>Rozpis bodů:</strong><br>
-                            ` + item.ScoreReasons + `
+                            <strong>Bodování (` + currentDeviceTab.toUpperCase() + `):</strong><br>
+                            ` + (currentDeviceTab === 'mobile' ? (item.MobileReasons || item.ScoreReasons) : (currentDeviceTab === 'desktop' ? (item.DesktopReasons || item.ScoreReasons) : item.ScoreReasons)) + `
                         </div>
                     </div>
                 `;
@@ -1966,9 +2439,6 @@
             });
         }
 
-        let currentSortKey = 'TotalScore';
-        let currentSortDirection = 'desc';
-
         function handleHeaderSort(key) {
             if (currentSortKey === key) {
                 currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
@@ -1976,7 +2446,7 @@
                 currentSortKey = key;
                 if (key === 'Name') {
                     currentSortDirection = 'asc';
-                } else if (key === 'ArtLcpMs' || key === 'HpTtfbMs' || key === 'W3CErrors' || key === 'LegacyCssCount') {
+                } else if (key.includes('LcpMs') || key.includes('TtfbMs') || key.includes('PayloadKb')) {
                     currentSortDirection = 'asc';
                 } else {
                     currentSortDirection = 'desc';
@@ -1990,10 +2460,13 @@
                 let valA = a[currentSortKey];
                 let valB = b[currentSortKey];
 
+                if (valA === undefined) valA = 0;
+                if (valB === undefined) valB = 0;
+
                 if (typeof valA === 'boolean') valA = valA ? 1 : 0;
                 if (typeof valB === 'boolean') valB = valB ? 1 : 0;
 
-                if ((currentSortKey === 'ArtLcpMs' || currentSortKey === 'HpTtfbMs') && currentSortDirection === 'asc') {
+                if ((currentSortKey.includes('LcpMs') || currentSortKey.includes('TtfbMs')) && currentSortDirection === 'asc') {
                     if (!valA || valA === 0) valA = 999999;
                     if (!valB || valB === 0) valB = 999999;
                 }
@@ -2027,8 +2500,7 @@
             filterAll();
         }
 
-        renderTable();
-        renderCards();
+        sortAndRender();
         setViewMode(currentView);
     </script>
 </body>
