@@ -63,7 +63,7 @@ function Measure-ChromeCdp($url, $isMobile) {
         $wsUrl = $newTab.webSocketDebuggerUrl
 
         $ws = New-Object System.Net.WebSockets.ClientWebSocket
-        $cts = New-Object System.Threading.CancellationTokenSource(12000)
+        $cts = New-Object System.Threading.CancellationTokenSource(25000)
         $uri = New-Object System.Uri($wsUrl)
         $ws.ConnectAsync($uri, $cts.Token).Wait()
 
@@ -86,22 +86,27 @@ function Measure-ChromeCdp($url, $isMobile) {
             Send-CDPLocal $ws "Emulation.setTouchEmulationEnabled" @{ enabled = $true } | Out-Null
         }
 
-        Send-CDPLocal $ws "Page.navigate" @{ url = $url } | Out-Null
-        Start-Sleep -Milliseconds 2500
-
-        $js = @"
+        $jsEval = @"
 new Promise((resolve) => {
     let lcpVal = 0;
     try {
-        const po = new PerformanceObserver((entryList) => {
-            const entries = entryList.getEntries();
+        const entries = performance.getEntriesByType('largest-contentful-paint');
+        if (entries && entries.length) {
             const last = entries[entries.length - 1];
-            if (last) lcpVal = Math.round(last.renderTime || last.loadTime || last.startTime);
-        });
-        po.observe({ type: 'largest-contentful-paint', buffered: true });
+            lcpVal = Math.round(last.renderTime || last.loadTime || last.startTime);
+        }
     } catch(e) {}
     
     setTimeout(() => {
+        if (!lcpVal) {
+            try {
+                const entries = performance.getEntriesByType('largest-contentful-paint');
+                if (entries && entries.length) {
+                    const last = entries[entries.length - 1];
+                    lcpVal = Math.round(last.renderTime || last.loadTime || last.startTime);
+                }
+            } catch(e) {}
+        }
         const nav = performance.getEntriesByType('navigation')[0] || {};
         const paints = performance.getEntriesByType('paint') || [];
         const fcp = paints.find(p => p.name === 'first-contentful-paint');
@@ -113,15 +118,33 @@ new Promise((resolve) => {
             dom_ready_ms: Math.round(nav.domContentLoadedEventEnd || 0),
             load_ms: Math.round(nav.loadEventEnd || 0)
         });
-    }, 400);
+    }, 250);
 })
 "@
-        $resJson = Send-CDPLocal $ws "Runtime.evaluate" @{ expression = $js; returnByValue = $true; awaitPromise = $true }
+
+        # 1. Cold Run (první načtení do čisté mezipaměti)
+        Send-CDPLocal $ws "Page.navigate" @{ url = $url } | Out-Null
+        Start-Sleep -Milliseconds 2200
+        $resJsonCold = Send-CDPLocal $ws "Runtime.evaluate" @{ expression = $jsEval; returnByValue = $true; awaitPromise = $true }
+        $parsedCold = ($resJsonCold | ConvertFrom-Json).result.result.value
+
+        # 2. Hot Run (opakované načtení s využitím warm socketu a HTTP cache)
+        Send-CDPLocal $ws "Page.navigate" @{ url = $url } | Out-Null
+        Start-Sleep -Milliseconds 1600
+        $resJsonHot = Send-CDPLocal $ws "Runtime.evaluate" @{ expression = $jsEval; returnByValue = $true; awaitPromise = $true }
+        $parsedHot = ($resJsonHot | ConvertFrom-Json).result.result.value
+
         $ws.CloseAsync([System.Net.WebSockets.WebSocketCloseStatus]::NormalClosure, "Done", $cts.Token).Wait()
         Invoke-RestMethod -Uri "http://localhost:$cdpPort/json/close/$tabId" -Method Get -TimeoutSec 4 | Out-Null
 
-        $parsed = $resJson | ConvertFrom-Json
-        return $parsed.result.result.value
+        return @{
+            lcp_cold_ms  = if ($parsedCold.lcp_ms) { [int]$parsedCold.lcp_ms } else { 0 }
+            ttfb_cold_ms = if ($parsedCold.ttfb_ms) { [int]$parsedCold.ttfb_ms } else { 0 }
+            fcp_cold_ms  = if ($parsedCold.fcp_ms) { [int]$parsedCold.fcp_ms } else { 0 }
+            lcp_hot_ms   = if ($parsedHot.lcp_ms) { [int]$parsedHot.lcp_ms } else { (if ($parsedCold.lcp_ms) { [int]$parsedCold.lcp_ms } else { 0 }) }
+            ttfb_hot_ms  = if ($parsedHot.ttfb_ms) { [int]$parsedHot.ttfb_ms } else { (if ($parsedCold.ttfb_ms) { [int]$parsedCold.ttfb_ms } else { 0 }) }
+            fcp_hot_ms   = if ($parsedHot.fcp_ms) { [int]$parsedHot.fcp_ms } else { (if ($parsedCold.fcp_ms) { [int]$parsedCold.fcp_ms } else { 0 }) }
+        }
     } catch {
         return $null
     }
@@ -196,63 +219,101 @@ foreach ($t in $targets) {
 
     $artUrl = if ($articleUrls.Count -gt 0) { $articleUrls[0] } else { "" }
 
-    # 3. Desktop Article Fetch & CDP Measurement
-    $artTtfbMsD = 0
+    # 3. Desktop Article Fetch & CDP Measurement (Cold & Hot)
+    $artTtfbColdMsD = 0
+    $artTtfbHotMsD = 0
     $artPayloadD = 0
     $artHtml = ""
     $artHeaders = ""
     if ($artUrl) {
-        # Warmup ping to measure representative cached delivery
-        & curl.exe -s -o NUL --connect-timeout 6 --max-time 10 -A $uaDesktop "$artUrl"
-        $artTimingRawD = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaDesktop -H "Accept-Encoding: gzip, deflate, br" $artUrl
-        if ($artTimingRawD) {
-            $atpD = $artTimingRawD.Split(";")
-            if ($atpD.Count -ge 3) {
-                $artTtfbMsD = [int][Math]::Round([double]$atpD[0] * 1000)
-                $artPayloadD = [int][Math]::Round([double]$atpD[2] / 1024)
+        # 1. Cold Desktop curl
+        $artTimingRawColdD = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaDesktop -H "Accept-Encoding: gzip, deflate, br" $artUrl
+        if ($artTimingRawColdD) {
+            $atpCD = $artTimingRawColdD.Split(";")
+            if ($atpCD.Count -ge 3) {
+                $artTtfbColdMsD = [int][Math]::Round([double]$atpCD[0] * 1000)
+            }
+        }
+        # 2. Hot Desktop curl (warmup + keep-alive & CDN edge cache)
+        $artTimingRawHotD = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaDesktop -H "Accept-Encoding: gzip, deflate, br" $artUrl
+        if ($artTimingRawHotD) {
+            $atpHD = $artTimingRawHotD.Split(";")
+            if ($atpHD.Count -ge 3) {
+                $artTtfbHotMsD = [int][Math]::Round([double]$atpHD[0] * 1000)
+                $artPayloadD = [int][Math]::Round([double]$atpHD[2] / 1024)
             }
         }
         $artHeaders = (& curl.exe -s -I --connect-timeout 8 --max-time 15 -A $uaDesktop "$artUrl") -join "`n"
         $artHtml = (& curl.exe -Ls --connect-timeout 8 --max-time 15 -A $uaDesktop "$artUrl") -join "`n"
     }
 
-    $artLcpMsD = 0
+    $artLcpColdMsD = 0
+    $artLcpHotMsD = 0
     $artFcpMsD = 0
     if ($chromeProc -and $artUrl) {
         $cdpPerfD = Measure-ChromeCdp $artUrl $false
         if ($cdpPerfD) {
-            if ($cdpPerfD.lcp_ms) { $artLcpMsD = [int]$cdpPerfD.lcp_ms }
-            if ($cdpPerfD.fcp_ms) { $artFcpMsD = [int]$cdpPerfD.fcp_ms }
+            if ($cdpPerfD.lcp_cold_ms) { $artLcpColdMsD = [int]$cdpPerfD.lcp_cold_ms }
+            if ($cdpPerfD.lcp_hot_ms) { $artLcpHotMsD = [int]$cdpPerfD.lcp_hot_ms }
+            if ($cdpPerfD.fcp_hot_ms) { $artFcpMsD = [int]$cdpPerfD.fcp_hot_ms }
         }
     }
 
-    # 3b. Mobile Article Fetch & CDP Measurement (with Pixel 8 Pro Emulation)
-    $artTtfbMsM = 0
+    # 3b. Mobile Article Fetch & CDP Measurement (Cold & Hot with Pixel 8 Pro Emulation)
+    $artTtfbColdMsM = 0
+    $artTtfbHotMsM = 0
     $artPayloadM = 0
     $artHtmlM = ""
     $artHeadersM = ""
     if ($artUrl) {
-        $artTimingRawM = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaMobile -H "Accept-Encoding: gzip, deflate, br" $artUrl
-        if ($artTimingRawM) {
-            $atpM = $artTimingRawM.Split(";")
-            if ($atpM.Count -ge 3) {
-                $artTtfbMsM = [int][Math]::Round([double]$atpM[0] * 1000)
-                $artPayloadM = [int][Math]::Round([double]$atpM[2] / 1024)
+        # 1. Cold Mobile curl
+        $artTimingRawColdM = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaMobile -H "Accept-Encoding: gzip, deflate, br" $artUrl
+        if ($artTimingRawColdM) {
+            $atpCM = $artTimingRawColdM.Split(";")
+            if ($atpCM.Count -ge 3) {
+                $artTtfbColdMsM = [int][Math]::Round([double]$atpCM[0] * 1000)
+            }
+        }
+        # 2. Hot Mobile curl
+        $artTimingRawHotM = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaMobile -H "Accept-Encoding: gzip, deflate, br" $artUrl
+        if ($artTimingRawHotM) {
+            $atpHM = $artTimingRawHotM.Split(";")
+            if ($atpHM.Count -ge 3) {
+                $artTtfbHotMsM = [int][Math]::Round([double]$atpHM[0] * 1000)
+                $artPayloadM = [int][Math]::Round([double]$atpHM[2] / 1024)
             }
         }
         $artHeadersM = (& curl.exe -s -I --connect-timeout 8 --max-time 15 -A $uaMobile "$artUrl") -join "`n"
         $artHtmlM = (& curl.exe -Ls --connect-timeout 8 --max-time 15 -A $uaMobile "$artUrl") -join "`n"
     }
 
-    $artLcpMsM = 0
+    $artLcpColdMsM = 0
+    $artLcpHotMsM = 0
     $artFcpMsM = 0
     if ($chromeProc -and $artUrl) {
         $cdpPerfM = Measure-ChromeCdp $artUrl $true
         if ($cdpPerfM) {
-            if ($cdpPerfM.lcp_ms) { $artLcpMsM = [int]$cdpPerfM.lcp_ms }
-            if ($cdpPerfM.fcp_ms) { $artFcpMsM = [int]$cdpPerfM.fcp_ms }
+            if ($cdpPerfM.lcp_cold_ms) { $artLcpColdMsM = [int]$cdpPerfM.lcp_cold_ms }
+            if ($cdpPerfM.lcp_hot_ms) { $artLcpHotMsM = [int]$cdpPerfM.lcp_hot_ms }
+            if ($cdpPerfM.fcp_hot_ms) { $artFcpMsM = [int]$cdpPerfM.fcp_hot_ms }
         }
     }
+
+    # Fallback normalizace
+    if ($artLcpHotMsD -eq 0) { $artLcpHotMsD = $artLcpColdMsD }
+    if ($artLcpColdMsD -eq 0) { $artLcpColdMsD = $artLcpHotMsD }
+    if ($artTtfbHotMsD -eq 0) { $artTtfbHotMsD = $artTtfbColdMsD }
+    if ($artTtfbColdMsD -eq 0) { $artTtfbColdMsD = $artTtfbHotMsD }
+
+    if ($artLcpHotMsM -eq 0) { $artLcpHotMsM = $artLcpColdMsM }
+    if ($artLcpColdMsM -eq 0) { $artLcpColdMsM = $artLcpHotMsM }
+    if ($artTtfbHotMsM -eq 0) { $artTtfbHotMsM = $artTtfbColdMsM }
+    if ($artTtfbColdMsM -eq 0) { $artTtfbColdMsM = $artTtfbHotMsM }
+
+    $artTtfbMsD = $artTtfbHotMsD
+    $artLcpMsD = $artLcpHotMsD
+    $artTtfbMsM = $artTtfbHotMsM
+    $artLcpMsM = $artLcpHotMsM
 
     # Fetch additional resolved articles in background
     $artHtmlList = @($artHtml)
@@ -611,13 +672,24 @@ foreach ($t in $targets) {
     if ($hasSpeculationRules) { $desktopScore += 3; $desktopReasons += "+3b: Speculation Rules" }
     if ($hasSpeakable) { $desktopScore += 3; $desktopReasons += "+3b: Google Assistant speakable" }
 
-    # Přísná rychlost na Desktopu
-    if ($artLcpMsD -gt 0 -and $artLcpMsD -lt 250) { $desktopScore += 6; $desktopReasons += "+6b: Desktop LCP bleskové ($artLcpMsD ms)" }
-    elseif ($artLcpMsD -gt 0 -and $artLcpMsD -lt 800) { $desktopScore += 3; $desktopReasons += "+3b: Desktop LCP dobré ($artLcpMsD ms)" }
-    elseif ($artLcpMsD -gt 0 -and $artLcpMsD -lt 1500) { $desktopScore += 1; $desktopReasons += "+1b: Desktop LCP ($artLcpMsD ms)" }
+    # Přísná rychlost na Desktopu (Dual Hot/Cold, max 12 b)
+    # LCP Hot (max 4 b)
+    if ($artLcpHotMsD -gt 0 -and $artLcpHotMsD -lt 250) { $desktopScore += 4; $desktopReasons += "+4b: Desktop LCP Hot bleskové ($artLcpHotMsD ms)" }
+    elseif ($artLcpHotMsD -gt 0 -and $artLcpHotMsD -lt 600) { $desktopScore += 2; $desktopReasons += "+2b: Desktop LCP Hot dobré ($artLcpHotMsD ms)" }
+    elseif ($artLcpHotMsD -gt 0 -and $artLcpHotMsD -lt 1200) { $desktopScore += 1; $desktopReasons += "+1b: Desktop LCP Hot ($artLcpHotMsD ms)" }
 
-    if ($artTtfbMsD -gt 0 -and $artTtfbMsD -lt 60) { $desktopScore += 6; $desktopReasons += "+6b: Desktop TTFB bleskové ($artTtfbMsD ms)" }
-    elseif ($artTtfbMsD -gt 0 -and $artTtfbMsD -lt 150) { $desktopScore += 3; $desktopReasons += "+3b: Desktop TTFB dobré ($artTtfbMsD ms)" }
+    # LCP Cold (max 2 b)
+    if ($artLcpColdMsD -gt 0 -and $artLcpColdMsD -lt 400) { $desktopScore += 2; $desktopReasons += "+2b: Desktop LCP Cold rychlé ($artLcpColdMsD ms)" }
+    elseif ($artLcpColdMsD -gt 0 -and $artLcpColdMsD -lt 1000) { $desktopScore += 1; $desktopReasons += "+1b: Desktop LCP Cold ($artLcpColdMsD ms)" }
+
+    # TTFB Hot (max 4 b)
+    if ($artTtfbHotMsD -gt 0 -and $artTtfbHotMsD -lt 60) { $desktopScore += 4; $desktopReasons += "+4b: Desktop TTFB Hot bleskové ($artTtfbHotMsD ms)" }
+    elseif ($artTtfbHotMsD -gt 0 -and $artTtfbHotMsD -lt 120) { $desktopScore += 2; $desktopReasons += "+2b: Desktop TTFB Hot dobré ($artTtfbHotMsD ms)" }
+    elseif ($artTtfbHotMsD -gt 0 -and $artTtfbHotMsD -lt 200) { $desktopScore += 1; $desktopReasons += "+1b: Desktop TTFB Hot ($artTtfbHotMsD ms)" }
+
+    # TTFB Cold (max 2 b)
+    if ($artTtfbColdMsD -gt 0 -and $artTtfbColdMsD -lt 100) { $desktopScore += 2; $desktopReasons += "+2b: Desktop TTFB Cold bleskové ($artTtfbColdMsD ms)" }
+    elseif ($artTtfbColdMsD -gt 0 -and $artTtfbColdMsD -lt 250) { $desktopScore += 1; $desktopReasons += "+1b: Desktop TTFB Cold ($artTtfbColdMsD ms)" }
 
     if ($desktopScore -gt 100) { $desktopScore = 100 }
 
@@ -638,14 +710,26 @@ foreach ($t in $targets) {
     if ($hasSpeakable) { $mobileScore += 3; $mobileReasons += "+3b: Google Assistant speakable" }
     if ($h1CountM -eq 1 -or $h1Count -eq 1) { $mobileScore += 2; $mobileReasons += "+2b: Čistá H1 hierarchie (1x H1)" }
 
-    # Přísná rychlost na Mobilu
-    if ($artLcpMsM -gt 0 -and $artLcpMsM -lt 150) { $mobileScore += 8; $mobileReasons += "+8b: Mobilní LCP bleskové ($artLcpMsM ms)" }
-    elseif ($artLcpMsM -gt 0 -and $artLcpMsM -lt 400) { $mobileScore += 4; $mobileReasons += "+4b: Mobilní LCP dobré ($artLcpMsM ms)" }
-    elseif ($artLcpMsM -gt 0 -and $artLcpMsM -lt 1000) { $mobileScore += 2; $mobileReasons += "+2b: Mobilní LCP ($artLcpMsM ms)" }
+    # Přísná rychlost na Mobilu (Dual Hot/Cold, max 16 b)
+    # LCP Hot (max 5 b)
+    if ($artLcpHotMsM -gt 0 -and $artLcpHotMsM -lt 150) { $mobileScore += 5; $mobileReasons += "+5b: Mobilní LCP Hot bleskové ($artLcpHotMsM ms)" }
+    elseif ($artLcpHotMsM -gt 0 -and $artLcpHotMsM -lt 350) { $mobileScore += 3; $mobileReasons += "+3b: Mobilní LCP Hot dobré ($artLcpHotMsM ms)" }
+    elseif ($artLcpHotMsM -gt 0 -and $artLcpHotMsM -lt 800) { $mobileScore += 1; $mobileReasons += "+1b: Mobilní LCP Hot ($artLcpHotMsM ms)" }
 
-    if ($artTtfbMsM -gt 0 -and $artTtfbMsM -lt 60) { $mobileScore += 5; $mobileReasons += "+5b: Mobilní TTFB bleskové ($artTtfbMsM ms)" }
-    elseif ($artTtfbMsM -gt 0 -and $artTtfbMsM -lt 150) { $mobileScore += 2; $mobileReasons += "+2b: Mobilní TTFB dobré ($artTtfbMsM ms)" }
+    # LCP Cold (max 3 b)
+    if ($artLcpColdMsM -gt 0 -and $artLcpColdMsM -lt 250) { $mobileScore += 3; $mobileReasons += "+3b: Mobilní LCP Cold bleskové ($artLcpColdMsM ms)" }
+    elseif ($artLcpColdMsM -gt 0 -and $artLcpColdMsM -lt 600) { $mobileScore += 1; $mobileReasons += "+1b: Mobilní LCP Cold dobré ($artLcpColdMsM ms)" }
 
+    # TTFB Hot (max 3 b)
+    if ($artTtfbHotMsM -gt 0 -and $artTtfbHotMsM -lt 60) { $mobileScore += 3; $mobileReasons += "+3b: Mobilní TTFB Hot bleskové ($artTtfbHotMsM ms)" }
+    elseif ($artTtfbHotMsM -gt 0 -and $artTtfbHotMsM -lt 120) { $mobileScore += 2; $mobileReasons += "+2b: Mobilní TTFB Hot dobré ($artTtfbHotMsM ms)" }
+    elseif ($artTtfbHotMsM -gt 0 -and $artTtfbHotMsM -lt 200) { $mobileScore += 1; $mobileReasons += "+1b: Mobilní TTFB Hot ($artTtfbHotMsM ms)" }
+
+    # TTFB Cold (max 2 b)
+    if ($artTtfbColdMsM -gt 0 -and $artTtfbColdMsM -lt 120) { $mobileScore += 2; $mobileReasons += "+2b: Mobilní TTFB Cold bleskové ($artTtfbColdMsM ms)" }
+    elseif ($artTtfbColdMsM -gt 0 -and $artTtfbColdMsM -lt 250) { $mobileScore += 1; $mobileReasons += "+1b: Mobilní TTFB Cold ($artTtfbColdMsM ms)" }
+
+    # Datová zátěž (max 3 b)
     if ($artPayloadM -gt 0 -and $artPayloadM -lt 60) { $mobileScore += 3; $mobileReasons += "+3b: Datově úsporný mobil ($artPayloadM kB)" }
     elseif ($artPayloadM -gt 0 -and $artPayloadM -lt 120) { $mobileScore += 1; $mobileReasons += "+1b: Datová zátěž ($artPayloadM kB)" }
 
@@ -666,14 +750,22 @@ foreach ($t in $targets) {
         DesktopReasons     = ($desktopReasons -join ", ")
         MobileReasons      = ($mobileReasons -join ", ")
         HpTtfbMs           = $hpTtfbMsD
-        ArtTtfbMs          = $artTtfbMsD
-        ArtLcpMs           = $artLcpMsD
+        ArtTtfbMs          = $artTtfbHotMsD
+        ArtLcpMs           = $artLcpHotMsD
         ArtFcpMs           = $artFcpMsD
-        DesktopTtfbMs      = $artTtfbMsD
-        DesktopLcpMs       = $artLcpMsD
+        DesktopTtfbMs      = $artTtfbHotMsD
+        DesktopTtfbHotMs   = $artTtfbHotMsD
+        DesktopTtfbColdMs  = $artTtfbColdMsD
+        DesktopLcpMs       = $artLcpHotMsD
+        DesktopLcpHotMs    = $artLcpHotMsD
+        DesktopLcpColdMs   = $artLcpColdMsD
         DesktopPayloadKb   = $artPayloadD
-        MobileTtfbMs       = $artTtfbMsM
-        MobileLcpMs        = $artLcpMsM
+        MobileTtfbMs       = $artTtfbHotMsM
+        MobileTtfbHotMs    = $artTtfbHotMsM
+        MobileTtfbColdMs   = $artTtfbColdMsM
+        MobileLcpMs        = $artLcpHotMsM
+        MobileLcpHotMs     = $artLcpHotMsM
+        MobileLcpColdMs    = $artLcpColdMsM
         MobilePayloadKb    = $artPayloadM
         ViewportValid      = $isViewportValid
         ViewportZoomable   = $isViewportZoomable

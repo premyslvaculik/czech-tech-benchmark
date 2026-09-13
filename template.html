@@ -576,19 +576,35 @@
             return '<span class="badge-err">Naive</span>';
         }
 
-        function formatTtfbVal(val) {
-            if (!val || val === 0) return '-';
-            if (val < 200) return '<span class="badge-ok mono">' + val + ' ms</span>';
-            if (val < 400) return '<span class="badge-warn mono">' + val + ' ms</span>';
-            return '<span class="badge-err mono">' + val + ' ms</span>';
+        function formatTtfbVal(hot, cold) {
+            if ((!hot || hot === 0) && (!cold || cold === 0)) return '-';
+            const h = hot || cold;
+            let badgeClass = 'badge-ok';
+            if (h >= 400) badgeClass = 'badge-err';
+            else if (h >= 150) badgeClass = 'badge-warn';
+
+            let html = '<span class="' + badgeClass + ' mono">' + h + ' ms</span>';
+            if (cold && cold !== h) {
+                html += '<div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">cold: ' + cold + ' ms</div>';
+            }
+            return html;
         }
 
-        function formatLcpVal(lcp) {
-            if (!lcp || lcp === 0) return '<span class="mono">Neověřeno</span>';
-            if (lcp < 1200) return '<span class="badge-ok mono">' + lcp + ' ms (Blesk)</span>';
-            if (lcp < 2200) return '<span class="badge-ok mono">' + lcp + ' ms</span>';
-            if (lcp < 3500) return '<span class="badge-warn mono">' + lcp + ' ms</span>';
-            return '<span class="badge-err mono">' + lcp + ' ms</span>';
+        function formatLcpVal(lcp, cold) {
+            if ((!lcp || lcp === 0) && (!cold || cold === 0)) return '<span class="mono">Neověřeno</span>';
+            const h = lcp || cold;
+            let badgeClass = 'badge-ok';
+            let extra = '';
+            if (h < 250) { badgeClass = 'badge-ok'; extra = ' (Blesk)'; }
+            else if (h < 1200) { badgeClass = 'badge-ok'; }
+            else if (h < 2500) { badgeClass = 'badge-warn'; }
+            else { badgeClass = 'badge-err'; }
+
+            let html = '<span class="' + badgeClass + ' mono">' + h + ' ms' + extra + '</span>';
+            if (cold && cold !== h) {
+                html += '<div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">cold: ' + cold + ' ms</div>';
+            }
+            return html;
         }
 
         function formatHtml5Clean(item) {
@@ -642,8 +658,8 @@
                         <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
                         <th class="sortable active-sort" data-sort="TotalScore" onclick="handleHeaderSort('TotalScore')">Celkem <span class="sort-icon">▼</span></th>
                         <th class="sortable" data-sort="MobileScore" onclick="handleHeaderSort('MobileScore')">📱 Mobil / 💻 Desk <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="MobileLcpMs" onclick="handleHeaderSort('MobileLcpMs')">LCP (Mobil / Desk) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="MobileTtfbMs" onclick="handleHeaderSort('MobileTtfbMs')">TTFB (Mobil / Desk) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobileLcpMs" onclick="handleHeaderSort('MobileLcpMs')">LCP (Mobil / Desk - Hot) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobileTtfbMs" onclick="handleHeaderSort('MobileTtfbMs')">TTFB (Mobil / Desk - Hot) <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="MobilePayloadKb" onclick="handleHeaderSort('MobilePayloadKb')">HTML Payload <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="ISSN" onclick="handleHeaderSort('ISSN')">ISSN (Národní knihovna) <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="Memberships" onclick="handleHeaderSort('Memberships')">Členství & Organizace <span class="sort-icon">↕</span></th>
@@ -682,8 +698,8 @@
                     <tr>
                         <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
                         <th class="sortable active-sort" data-sort="MobileScore" onclick="handleHeaderSort('MobileScore')">📱 Mobil Skóre <span class="sort-icon">▼</span></th>
-                        <th class="sortable" data-sort="MobileLcpMs" onclick="handleHeaderSort('MobileLcpMs')">LCP (390px Pixel) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="MobileTtfbMs" onclick="handleHeaderSort('MobileTtfbMs')">Mobilní TTFB <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobileLcpMs" onclick="handleHeaderSort('MobileLcpMs')">LCP (390px Pixel - Hot) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="MobileTtfbMs" onclick="handleHeaderSort('MobileTtfbMs')">Mobilní TTFB (Hot) <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="ViewportValid" onclick="handleHeaderSort('ViewportValid')">Viewport (width=device) <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="ViewportZoomable" onclick="handleHeaderSort('ViewportZoomable')">Zoom přístupnost <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="PwaManifest" onclick="handleHeaderSort('PwaManifest')">PWA Web Manifest <span class="sort-icon">↕</span></th>
@@ -701,8 +717,8 @@
                     <tr>
                         <th class="sticky-col sortable" data-sort="Name" onclick="handleHeaderSort('Name')">Portál <span class="sort-icon">↕</span></th>
                         <th class="sortable active-sort" data-sort="DesktopScore" onclick="handleHeaderSort('DesktopScore')">💻 Desktop Skóre <span class="sort-icon">▼</span></th>
-                        <th class="sortable" data-sort="DesktopLcpMs" onclick="handleHeaderSort('DesktopLcpMs')">LCP (1920x1080) <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="DesktopTtfbMs" onclick="handleHeaderSort('DesktopTtfbMs')">Desktop TTFB <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="DesktopLcpMs" onclick="handleHeaderSort('DesktopLcpMs')">LCP (1920x1080 - Hot) <span class="sort-icon">↕</span></th>
+                        <th class="sortable" data-sort="DesktopTtfbMs" onclick="handleHeaderSort('DesktopTtfbMs')">Desktop TTFB (Hot) <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="HTTP3" onclick="handleHeaderSort('HTTP3')">HTTP/3 QUIC <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="HSTS" onclick="handleHeaderSort('HSTS')">HSTS (HTTPS) <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="Nosniff" onclick="handleHeaderSort('Nosniff')">Nosniff & XFO <span class="sort-icon">↕</span></th>
@@ -756,8 +772,8 @@
                 if (currentDeviceTab === 'overall') {
                     rowHtml += `
                         <td><span class="mono">📱 ` + (item.MobileScore !== undefined ? item.MobileScore : item.TotalScore) + `b</span> / <span class="mono">💻 ` + (item.DesktopScore !== undefined ? item.DesktopScore : item.TotalScore) + `b</span></td>
-                        <td>` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + ` / ` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + `</td>
-                        <td>` + formatTtfbVal(item.MobileTtfbMs || item.ArtTtfbMs) + ` / ` + formatTtfbVal(item.DesktopTtfbMs || item.ArtTtfbMs) + `</td>
+                        <td>` + formatLcpVal(item.MobileLcpHotMs || item.MobileLcpMs || item.ArtLcpMs, item.MobileLcpColdMs) + ` / ` + formatLcpVal(item.DesktopLcpHotMs || item.DesktopLcpMs || item.ArtLcpMs, item.DesktopLcpColdMs) + `</td>
+                        <td>` + formatTtfbVal(item.MobileTtfbHotMs || item.MobileTtfbMs || item.ArtTtfbMs, item.MobileTtfbColdMs) + ` / ` + formatTtfbVal(item.DesktopTtfbHotMs || item.DesktopTtfbMs || item.ArtTtfbMs, item.DesktopTtfbColdMs) + `</td>
                         <td><span class="mono">📱 ` + (item.MobilePayloadKb || '-') + ` kB</span> / <span class="mono">💻 ` + (item.DesktopPayloadKb || '-') + ` kB</span></td>
                         <td>` + formatIssn(item.ISSN) + `</td>
                         <td>` + formatMemberships(item.Memberships) + `</td>
@@ -792,8 +808,8 @@
                     `;
                 } else if (currentDeviceTab === 'mobile') {
                     rowHtml += `
-                        <td>` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + `</td>
-                        <td>` + formatTtfbVal(item.MobileTtfbMs || item.ArtTtfbMs) + `</td>
+                        <td>` + formatLcpVal(item.MobileLcpHotMs || item.MobileLcpMs || item.ArtLcpMs, item.MobileLcpColdMs) + `</td>
+                        <td>` + formatTtfbVal(item.MobileTtfbHotMs || item.MobileTtfbMs || item.ArtTtfbMs, item.MobileTtfbColdMs) + `</td>
                         <td>` + (item.ViewportValid ? '<span class="badge-ok">ANO (width=device)</span>' : '<span class="badge-err">NE</span>') + `</td>
                         <td>` + (item.ViewportZoomable !== false ? '<span class="badge-ok">Povoleno (Přístupné)</span>' : '<span class="badge-warn">Blokováno (user-scalable=no)</span>') + `</td>
                         <td>` + (item.PwaManifest ? '<span class="badge-ok">ANO (PWA Ready)</span>' : '<span class="badge-err">NE</span>') + `</td>
@@ -807,8 +823,8 @@
                     `;
                 } else if (currentDeviceTab === 'desktop') {
                     rowHtml += `
-                        <td>` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + `</td>
-                        <td>` + formatTtfbVal(item.DesktopTtfbMs || item.ArtTtfbMs) + `</td>
+                        <td>` + formatLcpVal(item.DesktopLcpHotMs || item.DesktopLcpMs || item.ArtLcpMs, item.DesktopLcpColdMs) + `</td>
+                        <td>` + formatTtfbVal(item.DesktopTtfbHotMs || item.DesktopTtfbMs || item.ArtTtfbMs, item.DesktopTtfbColdMs) + `</td>
                         <td>` + (item.HTTP3 ? '<span class="badge-ok">ANO (QUIC)</span>' : '<span class="badge-err">NE</span>') + `</td>
                         <td>` + (item.HSTS ? '<span class="badge-ok">ANO (Aktivní)</span>' : '<span class="badge-err">NE</span>') + `</td>
                         <td>` + (item.Nosniff && item.XFO ? '<span class="badge-ok">Plná ochrana</span>' : '<span class="badge-warn">Částečná</span>') + `</td>
@@ -841,7 +857,7 @@
                                 <div class="drawer-card">
                                     <div class="drawer-card-title">📱 Mobilní verze (Google Pixel 8 Pro / Android 14)</div>
                                     <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Mobilní skóre:</strong> <span class="score-pill ` + getScoreClass(item.MobileScore || item.TotalScore) + `">` + (item.MobileScore || item.TotalScore) + ` / 100</span></p>
-                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>LCP na mobilu:</strong> ` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + ` | <strong>TTFB:</strong> ` + formatTtfbVal(item.MobileTtfbMs || item.ArtTtfbMs) + `</p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>LCP na mobilu:</strong> ` + formatLcpVal(item.MobileLcpHotMs || item.MobileLcpMs || item.ArtLcpMs, item.MobileLcpColdMs) + ` | <strong>TTFB:</strong> ` + formatTtfbVal(item.MobileTtfbHotMs || item.MobileTtfbMs || item.ArtTtfbMs, item.MobileTtfbColdMs) + `</p>
                                     <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Velikost HTML:</strong> ` + (item.MobilePayloadKb || '-') + ` kB | <strong>Viewport:</strong> ` + (item.ViewportValid ? 'Validní' : 'Nevalidní') + `</p>
                                     <div class="reasons-box">
                                         <strong>Mobilní bodování:</strong><br>
@@ -851,7 +867,7 @@
                                 <div class="drawer-card">
                                     <div class="drawer-card-title">💻 Desktopová verze (1920×1080)</div>
                                     <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Desktop skóre:</strong> <span class="score-pill ` + getScoreClass(item.DesktopScore || item.TotalScore) + `">` + (item.DesktopScore || item.TotalScore) + ` / 100</span></p>
-                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Desktop LCP:</strong> ` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + ` | <strong>TTFB:</strong> ` + formatTtfbVal(item.DesktopTtfbMs || item.ArtTtfbMs) + `</p>
+                                    <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>Desktop LCP:</strong> ` + formatLcpVal(item.DesktopLcpHotMs || item.DesktopLcpMs || item.ArtLcpMs, item.DesktopLcpColdMs) + ` | <strong>TTFB:</strong> ` + formatTtfbVal(item.DesktopTtfbHotMs || item.DesktopTtfbMs || item.ArtTtfbMs, item.DesktopTtfbColdMs) + `</p>
                                     <p style="font-size: 0.78rem; margin-bottom: 0.4rem;"><strong>HTTP/3:</strong> ` + (item.HTTP3 ? 'ANO' : 'NE') + ` | <strong>HSTS:</strong> ` + (item.HSTS ? 'ANO' : 'NE') + ` | <strong>W3C:</strong> ` + (item.W3CStatus || 'Neověřeno') + `</p>
                                     <div class="reasons-box">
                                         <strong>Desktopové bodování:</strong><br>
@@ -908,12 +924,12 @@
 
                     <div class="card-metrics">
                         <div class="card-metric-item">
-                            <span class="card-metric-label">📱 Mobilní LCP (Pixel)</span>
-                            <span>` + formatLcpVal(item.MobileLcpMs || item.ArtLcpMs) + `</span>
+                            <span class="card-metric-label">📱 Mobilní LCP (Pixel - Hot)</span>
+                            <span>` + formatLcpVal(item.MobileLcpHotMs || item.MobileLcpMs || item.ArtLcpMs, item.MobileLcpColdMs) + `</span>
                         </div>
                         <div class="card-metric-item">
-                            <span class="card-metric-label">💻 Desktop LCP</span>
-                            <span>` + formatLcpVal(item.DesktopLcpMs || item.ArtLcpMs) + `</span>
+                            <span class="card-metric-label">💻 Desktop LCP (Hot)</span>
+                            <span>` + formatLcpVal(item.DesktopLcpHotMs || item.DesktopLcpMs || item.ArtLcpMs, item.DesktopLcpColdMs) + `</span>
                         </div>
                         <div class="card-metric-item">
                             <span class="card-metric-label">Mobilní Viewport</span>
