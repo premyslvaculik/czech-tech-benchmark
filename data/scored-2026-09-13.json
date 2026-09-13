@@ -1,0 +1,182 @@
+[
+    {
+        "Name":  "Dotekomanie.cz",
+        "TotalScore":  96,
+        "OverallScore":  96,
+        "DesktopScore":  94,
+        "MobileScore":  97,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: RedakÄŤnĂ­ garant (editor: Přemysl Vaculík), +2b: OborovĂ© ÄŤlenstvĂ­ (UnieVydavatelu,AOV,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +4b: HTTP/3 QUIC, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +5b: W3C WebSub Huby, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (9), +3b: Speculation Rules, +3b: Google Assistant speakable, +3b: Desktop LCP dobrĂ© (392 ms), +3b: Desktop TTFB dobrĂ© (115 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +2b: ISSN registrace (3029-9349), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: RedakÄŤnĂ­ garant (editor: Přemysl Vaculík), +2b: OborovĂ© ÄŤlenstvĂ­ (UnieVydavatelu,AOV,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +4b: Realtime WebSub Push na mobil, +3b: Fediverse Creator (@dotekomanie@mastodonczech.cz), +5b: SĂ©mantickĂ© entity (mentions: Thing), +3b: Google Assistant speakable, +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +8b: MobilnĂ­ LCP bleskovĂ© (104 ms), +2b: MobilnĂ­ TTFB dobrĂ© (117 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (55 kB)"
+    },
+    {
+        "Name":  "Hifimanie.cz",
+        "TotalScore":  86,
+        "OverallScore":  86,
+        "DesktopScore":  82,
+        "MobileScore":  90,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: RedakÄŤnĂ­ garant (editor: Jan Frič), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +4b: HTTP/3 QUIC, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +5b: W3C WebSub Huby, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (6), +3b: Speculation Rules, +3b: Google Assistant speakable, +1b: Desktop LCP (932 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +4b: RedakÄŤnĂ­ garant (editor: Jan Frič), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +4b: Realtime WebSub Push na mobil, +5b: SĂ©mantickĂ© entity (mentions: Thing), +3b: Google Assistant speakable, +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +8b: MobilnĂ­ LCP bleskovĂ© (100 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (30 kB)"
+    },
+    {
+        "Name":  "Svět Androida",
+        "TotalScore":  72,
+        "OverallScore":  72,
+        "DesktopScore":  73,
+        "MobileScore":  71,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+01:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +4b: HTTP/3 QUIC, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Speculation Rules, +6b: Desktop LCP bleskovĂ© (188 ms), +6b: Desktop TTFB bleskovĂ© (54 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+01:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SyndikatNovinaru,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +8b: MobilnĂ­ LCP bleskovĂ© (144 ms), +2b: MobilnĂ­ TTFB dobrĂ© (68 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (41 kB)"
+    },
+    {
+        "Name":  "Letem světem Applem",
+        "TotalScore":  68,
+        "OverallScore":  68,
+        "DesktopScore":  63,
+        "MobileScore":  73,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV), +2b: og:type=article, +2b: max-image-preview:large, +5b: HSTS aktivnĂ­, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (4), +3b: Speculation Rules, +6b: Desktop LCP bleskovĂ© (196 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +8b: MobilnĂ­ LCP bleskovĂ© (96 ms), +2b: MobilnĂ­ TTFB dobrĂ© (69 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (22 kB)"
+    },
+    {
+        "Name":  "Živě.cz",
+        "TotalScore":  58,
+        "OverallScore":  58,
+        "DesktopScore":  54,
+        "MobileScore":  62,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +4b: X-Content-Type-Options nosniff, +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (16), +6b: Desktop LCP bleskovĂ© (200 ms), +3b: Desktop TTFB dobrĂ© (61 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +8b: MobilnĂ­ LCP bleskovĂ© (148 ms), +5b: MobilnĂ­ TTFB bleskovĂ© (55 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (27 kB)"
+    },
+    {
+        "Name":  "MobilMania.cz",
+        "TotalScore":  58,
+        "OverallScore":  58,
+        "DesktopScore":  58,
+        "MobileScore":  59,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +4b: X-Content-Type-Options nosniff, +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (12), +6b: Desktop LCP bleskovĂ© (196 ms), +3b: Desktop TTFB dobrĂ© (62 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +4b: MobilnĂ­ LCP dobrĂ© (156 ms), +2b: MobilnĂ­ TTFB dobrĂ© (61 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (30 kB)"
+    },
+    {
+        "Name":  "AVmania.cz",
+        "TotalScore":  57,
+        "OverallScore":  57,
+        "DesktopScore":  55,
+        "MobileScore":  59,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +4b: X-Content-Type-Options nosniff, +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (16), +6b: Desktop LCP bleskovĂ© (196 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +4b: MobilnĂ­ LCP dobrĂ© (180 ms), +5b: MobilnĂ­ TTFB bleskovĂ© (43 ms)"
+    },
+    {
+        "Name":  "PCTuning.cz",
+        "TotalScore":  54,
+        "OverallScore":  54,
+        "DesktopScore":  53,
+        "MobileScore":  56,
+        "DesktopReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,SyndikatNovinaru,IAB_TCF), +2b: max-image-preview:large, +4b: HTTP/3 QUIC, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (4), +3b: Desktop LCP dobrĂ© (708 ms)",
+        "MobileReasons":  "+4b: Organization, +2b: ISSN registrace (1214-0201), +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,SyndikatNovinaru,IAB_TCF), +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +2b: MobilnĂ­ LCP (636 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (54 kB)"
+    },
+    {
+        "Name":  "SmartMania.cz",
+        "TotalScore":  52,
+        "OverallScore":  52,
+        "DesktopScore":  52,
+        "MobileScore":  52,
+        "DesktopReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +10b: NewsArticle schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (10), +3b: Speculation Rules, +3b: Desktop LCP dobrĂ© (420 ms), +3b: Desktop TTFB dobrĂ© (67 ms)",
+        "MobileReasons":  "+4b: Organization, +2b: ISSN registrace (1801-3066), +10b: NewsArticle schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +4b: MobilnĂ­ LCP dobrĂ© (256 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (50 kB)"
+    },
+    {
+        "Name":  "iROZHLAS.cz",
+        "TotalScore":  52,
+        "OverallScore":  52,
+        "DesktopScore":  56,
+        "MobileScore":  48,
+        "DesktopReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +4b: HTTP/3 QUIC, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Speculation Rules, +3b: Desktop LCP dobrĂ© (376 ms), +6b: Desktop TTFB bleskovĂ© (49 ms)",
+        "MobileReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: ValidnĂ­ mobilnĂ­ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +8b: MobilnĂ­ LCP bleskovĂ© (148 ms), +5b: MobilnĂ­ TTFB bleskovĂ© (48 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (31 kB)"
+    },
+    {
+        "Name":  "CzechCrunch (CC.cz)",
+        "TotalScore":  50,
+        "OverallScore":  50,
+        "DesktopScore":  50,
+        "MobileScore":  50,
+        "DesktopReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (48), +3b: Speculation Rules, +1b: Desktop LCP (812 ms)",
+        "MobileReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +4b: MobilnĂ­ LCP dobrĂ© (184 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (39 kB)"
+    },
+    {
+        "Name":  "Chip.cz",
+        "TotalScore":  49,
+        "OverallScore":  49,
+        "DesktopScore":  50,
+        "MobileScore":  48,
+        "DesktopReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (application/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (8), +6b: Desktop LCP bleskovĂ© (232 ms), +6b: Desktop TTFB bleskovĂ© (57 ms)",
+        "MobileReasons":  "+4b: Organization, +3b: PoĹˇtovnĂ­ adresa sĂ­dla, +10b: NewsArticle schĂ©ma, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +8b: MobilnĂ­ LCP bleskovĂ© (128 ms), +5b: MobilnĂ­ TTFB bleskovĂ© (47 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (29 kB)"
+    },
+    {
+        "Name":  "Mobilenet.cz",
+        "TotalScore":  48,
+        "OverallScore":  48,
+        "DesktopScore":  40,
+        "MobileScore":  56,
+        "DesktopReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ XML Feed (text/xml), +3b: Preconnect \u0026 Hints (24), +3b: Google Assistant speakable, +3b: Desktop LCP dobrĂ© (360 ms), +3b: Desktop TTFB dobrĂ© (97 ms)",
+        "MobileReasons":  "+4b: Organization, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +3b: Google Assistant speakable, +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +8b: MobilnĂ­ LCP bleskovĂ© (132 ms), +2b: MobilnĂ­ TTFB dobrĂ© (96 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (12 kB)"
+    },
+    {
+        "Name":  "Mobilizujeme.cz",
+        "TotalScore":  48,
+        "OverallScore":  48,
+        "DesktopScore":  44,
+        "MobileScore":  52,
+        "DesktopReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: og:type=article, +2b: max-image-preview:large, +4b: HTTP/3 QUIC, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Desktop LCP dobrĂ© (268 ms)",
+        "MobileReasons":  "+8b: NewsMediaOrganization, +5b: Kodex i TirĂˇĹľ, +10b: NewsArticle schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +2b: Touch Icon \u0026 Theme-Color, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +4b: MobilnĂ­ LCP dobrĂ© (232 ms), +2b: MobilnĂ­ TTFB dobrĂ© (138 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (43 kB)"
+    },
+    {
+        "Name":  "Cnews.cz",
+        "TotalScore":  43,
+        "OverallScore":  43,
+        "DesktopScore":  46,
+        "MobileScore":  40,
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +5b: HSTS aktivnĂ­, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (8), +6b: Desktop LCP bleskovĂ© (220 ms), +3b: Desktop TTFB dobrĂ© (95 ms)",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +4b: MobilnĂ­ LCP dobrĂ© (180 ms), +2b: MobilnĂ­ TTFB dobrĂ© (76 ms), +1b: DatovĂˇ zĂˇtÄ›Ĺľ (61 kB)"
+    },
+    {
+        "Name":  "Appliště.cz",
+        "TotalScore":  38,
+        "OverallScore":  38,
+        "DesktopScore":  41,
+        "MobileScore":  36,
+        "DesktopReasons":  "+4b: Organization, +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +4b: HTTP/3 QUIC, +2b: ValidnĂ­ XML Feed (application/rss+xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (15), +3b: Speculation Rules, +1b: Desktop LCP (1392 ms), +3b: Desktop TTFB dobrĂ© (131 ms)",
+        "MobileReasons":  "+4b: Organization, +3b: BlogPosting schĂ©ma, +6b: PlatnĂˇ lokĂˇlnĂ­ zĂłna (+02:00), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,IAB_TCF), +2b: og:type=article, +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1)"
+    },
+    {
+        "Name":  "Wired.cz",
+        "TotalScore":  36,
+        "OverallScore":  36,
+        "DesktopScore":  37,
+        "MobileScore":  36,
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV,IAB_TCF), +2b: og:type=article, +4b: HTTP/3 QUIC, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (2), +1b: Desktop LCP (1328 ms), +3b: Desktop TTFB dobrĂ© (137 ms)",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR,AOV,IAB_TCF), +2b: og:type=article, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +2b: Touch Icon \u0026 Theme-Color, +3b: fetchpriority=high na mobilnĂ­ fotce, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +4b: MobilnĂ­ LCP dobrĂ© (396 ms)"
+    },
+    {
+        "Name":  "ITMix.cz",
+        "TotalScore":  35,
+        "OverallScore":  35,
+        "DesktopScore":  38,
+        "MobileScore":  32,
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: max-image-preview:large, +5b: HSTS aktivnĂ­, +5b: W3C ValidnĂ­ HTML5 (0 chyb (100% ValidnĂ­)), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Preconnect \u0026 Hints (16), +3b: Speculation Rules, +1b: Desktop LCP (1340 ms)",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +2b: UTC ÄŤas (zpoĹľdÄ›nĂ­ v Discover), +4b: SociĂˇlnĂ­ sĂ­tÄ› autora, +2b: OborovĂ© ÄŤlenstvĂ­ (SPIR), +2b: max-image-preview:large, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +2b: Touch Icon \u0026 Theme-Color, +3b: DatovÄ› ĂşspornĂ˝ mobil (20 kB)"
+    },
+    {
+        "Name":  "Techarena.cz",
+        "TotalScore":  30,
+        "OverallScore":  30,
+        "DesktopScore":  29,
+        "MobileScore":  32,
+        "DesktopReasons":  "+4b: Organization, +5b: Article schĂ©ma, +5b: HSTS aktivnĂ­, +4b: X-Content-Type-Options nosniff, +4b: X-Frame-Options ochrana, +2b: ValidnĂ­ XML Feed (text/xml), +2b: Sitemap XML (200 OK (v robots.txt)), +3b: Desktop LCP dobrĂ© (564 ms)",
+        "MobileReasons":  "+4b: Organization, +5b: Article schĂ©ma, +2b: ValidnĂ­ mobilnĂ­ Viewport, +2b: PĹ™Ă­stupnĂ˝ Viewport, +4b: HSTS ĹˇifrovĂˇnĂ­ pro mobil, +4b: Web Manifest \u0026 PWA Ready, +2b: Touch Icon \u0026 Theme-Color, +2b: ResponzivnĂ­ obrĂˇzky (srcset), +2b: ÄŚistĂˇ H1 hierarchie (1x H1), +2b: MobilnĂ­ LCP (432 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (28 kB)"
+    },
+    {
+        "Name":  "Hi-Fi Voice",
+        "TotalScore":  13,
+        "OverallScore":  13,
+        "DesktopScore":  15,
+        "MobileScore":  11,
+        "DesktopReasons":  "+2b: og:type=article, +4b: HTTP/3 QUIC, +4b: X-Content-Type-Options nosniff, +2b: ValidnĂ­ XML Feed (application/rss+xml), +3b: Desktop LCP dobrĂ© (452 ms)",
+        "MobileReasons":  "+2b: og:type=article, +2b: ValidnĂ­ mobilnĂ­ Viewport, +4b: MobilnĂ­ LCP dobrĂ© (200 ms), +3b: DatovÄ› ĂşspornĂ˝ mobil (28 kB)"
+    }
+]

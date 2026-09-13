@@ -9,7 +9,9 @@ $ConsoleOutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $today = (Get-Date).ToString("yyyy-MM-dd")
-$ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
+$uaDesktop = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+$uaMobile = "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36"
+$ua = $uaDesktop
 
 $benchmarkRoot = if ($PSScriptRoot) { (Get-Item "$PSScriptRoot\..").FullName } else { "d:\github\Dotekomanie31\benchmark" }
 $dataDir = "$benchmarkRoot\data"
@@ -52,14 +54,41 @@ if (Test-Path $chromePath) {
     } catch {}
 }
 
-function Eval-ChromePerf($wsUrl) {
-    if (-not $wsUrl) { return $null }
+function Measure-ChromeCdp($url, $isMobile) {
+    if (-not $chromeProc -or -not $url) { return $null }
     try {
+        $newTab = Invoke-RestMethod -Uri "http://localhost:$cdpPort/json/new" -Method Put -TimeoutSec 6
+        if (-not $newTab -or -not $newTab.id) { return $null }
+        $tabId = $newTab.id
+        $wsUrl = $newTab.webSocketDebuggerUrl
+
         $ws = New-Object System.Net.WebSockets.ClientWebSocket
         $cts = New-Object System.Threading.CancellationTokenSource(12000)
         $uri = New-Object System.Uri($wsUrl)
         $ws.ConnectAsync($uri, $cts.Token).Wait()
-        
+
+        function Send-CDPLocal($wsLocal, $method, $params) {
+            $id = Get-Random -Minimum 1000 -Maximum 9999
+            $msg = @{ id = $id; method = $method; params = $params } | ConvertTo-Json -Compress -Depth 5
+            $bytes = [System.Text.Encoding]::UTF8.GetBytes($msg)
+            $segment = New-Object System.ArraySegment[byte]($bytes, 0, $bytes.Length)
+            $wsLocal.SendAsync($segment, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, $cts.Token).Wait()
+            
+            $buffer = New-Object byte[] 65536
+            $recvSegment = New-Object System.ArraySegment[byte]($buffer, 0, $buffer.Length)
+            $recvResult = $wsLocal.ReceiveAsync($recvSegment, $cts.Token).Result
+            return [System.Text.Encoding]::UTF8.GetString($buffer, 0, $recvResult.Count)
+        }
+
+        if ($isMobile) {
+            Send-CDPLocal $ws "Network.setUserAgentOverride" @{ userAgent = $uaMobile } | Out-Null
+            Send-CDPLocal $ws "Emulation.setDeviceMetricsOverride" @{ width = 390; height = 844; deviceScaleFactor = 3; mobile = $true } | Out-Null
+            Send-CDPLocal $ws "Emulation.setTouchEmulationEnabled" @{ enabled = $true } | Out-Null
+        }
+
+        Send-CDPLocal $ws "Page.navigate" @{ url = $url } | Out-Null
+        Start-Sleep -Milliseconds 2500
+
         $js = @"
 new Promise((resolve) => {
     let lcpVal = 0;
@@ -87,18 +116,10 @@ new Promise((resolve) => {
     }, 400);
 })
 "@
-        $id = Get-Random -Minimum 1000 -Maximum 9999
-        $msg = @{ id = $id; method = "Runtime.evaluate"; params = @{ expression = $js; returnByValue = $true; awaitPromise = $true } } | ConvertTo-Json -Compress
-        $bytes = [System.Text.Encoding]::UTF8.GetBytes($msg)
-        $segment = New-Object System.ArraySegment[byte]($bytes, 0, $bytes.Length)
-        $ws.SendAsync($segment, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, $cts.Token).Wait()
-        
-        $buffer = New-Object byte[] 65536
-        $recvSegment = New-Object System.ArraySegment[byte]($buffer, 0, $buffer.Length)
-        $recvResult = $ws.ReceiveAsync($recvSegment, $cts.Token).Result
-        $resJson = [System.Text.Encoding]::UTF8.GetString($buffer, 0, $recvResult.Count)
+        $resJson = Send-CDPLocal $ws "Runtime.evaluate" @{ expression = $js; returnByValue = $true; awaitPromise = $true }
         $ws.CloseAsync([System.Net.WebSockets.WebSocketCloseStatus]::NormalClosure, "Done", $cts.Token).Wait()
-        
+        Invoke-RestMethod -Uri "http://localhost:$cdpPort/json/close/$tabId" -Method Get -TimeoutSec 4 | Out-Null
+
         $parsed = $resJson | ConvertFrom-Json
         return $parsed.result.result.value
     } catch {
@@ -106,36 +127,44 @@ new Promise((resolve) => {
     }
 }
 
-Write-Host "Starting Master Technical Audit for $today across $($targets.Count) portals..."
+Write-Host "Starting Master Technical Audit for $today across $($targets.Count) portals (Dual Mobile & Desktop)..."
 $auditItems = @()
 
 foreach ($t in $targets) {
     $hpUrl = $t.Hp
     $artUrl = if ($t.ArtOverride) { $t.ArtOverride } else { "" }
-
-    # 1. Fetch HP & Headers + Timing (TTFB on clean canonical URL)
-    $hpTimingRaw = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total}" --connect-timeout 8 --max-time 15 -A $ua -H "Accept-Encoding: gzip, deflate, br" $hpUrl
-    $hpTtfbMs = 0
-    $hpTotalMs = 0
-    if ($hpTimingRaw) {
-        $tp = $hpTimingRaw.Split(";")
-        if ($tp.Count -ge 2) {
-            $hpTtfbMs = [int][Math]::Round([double]$tp[0] * 1000)
-            $hpTotalMs = [int][Math]::Round([double]$tp[1] * 1000)
-        }
-    }
-
     $nocache = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-    $hpHeadersRaw = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $ua "$($hpUrl)?nocache=$nocache"
-    $hpHeaders = ($hpHeadersRaw -join "`n")
-    $hpHtmlRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua "$($hpUrl)?nocache=$nocache"
-    $hpHtml = ($hpHtmlRaw -join "`n")
 
-    # 2. Dynamic Multi-Article Resolution - výběr vzorku 3 až 4 čerstvých článků z RSS nebo HP
+    # 1. Desktop Fetch & Timing (HP) - Warmup ping then measurement
+    & curl.exe -s -o NUL --connect-timeout 6 --max-time 10 -A $uaDesktop "$hpUrl"
+    $hpTimingRawD = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaDesktop -H "Accept-Encoding: gzip, deflate, br" $hpUrl
+    $hpTtfbMsD = 0
+    if ($hpTimingRawD) {
+        $tpD = $hpTimingRawD.Split(";")
+        if ($tpD.Count -ge 2) { $hpTtfbMsD = [int][Math]::Round([double]$tpD[0] * 1000) }
+    }
+    $hpHeadersRawD = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $uaDesktop "$($hpUrl)?nocache=$nocache"
+    $hpHeaders = ($hpHeadersRawD -join "`n")
+    $hpHtmlRawD = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $uaDesktop "$($hpUrl)?nocache=$nocache"
+    $hpHtml = ($hpHtmlRawD -join "`n")
+
+    # 1b. Mobile Fetch & Timing (HP)
+    $hpTimingRawM = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaMobile -H "Accept-Encoding: gzip, deflate, br" $hpUrl
+    $hpTtfbMsM = 0
+    if ($hpTimingRawM) {
+        $tpM = $hpTimingRawM.Split(";")
+        if ($tpM.Count -ge 2) { $hpTtfbMsM = [int][Math]::Round([double]$tpM[0] * 1000) }
+    }
+    $hpHeadersRawM = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $uaMobile "$($hpUrl)?nocache=$nocache"
+    $hpHeadersM = ($hpHeadersRawM -join "`n")
+    $hpHtmlRawM = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $uaMobile "$($hpUrl)?nocache=$nocache"
+    $hpHtmlM = ($hpHtmlRawM -join "`n")
+
+    # 2. Dynamic Multi-Article Resolution
     $articleUrls = @()
     if ($t.Rss) {
         try {
-            $rssRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua "$($t.Rss)"
+            $rssRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $uaDesktop "$($t.Rss)"
             $rssText = ($rssRaw -join "`n")
             $itemBlocks = [regex]::Matches($rssText, '<item\b[^>]*>([\s\S]*?)</item>|<entry\b[^>]*>([\s\S]*?)</entry>')
             foreach ($ib in $itemBlocks) {
@@ -165,55 +194,81 @@ foreach ($t in $targets) {
         }
     }
 
-    # 3. Fetch All Resolved Articles + Timing
-    $artHtmlList = @()
-    $artHeadersList = @()
     $artUrl = if ($articleUrls.Count -gt 0) { $articleUrls[0] } else { "" }
-    $artTtfbMs = 0
-    $artTotalMs = 0
 
+    # 3. Desktop Article Fetch & CDP Measurement
+    $artTtfbMsD = 0
+    $artPayloadD = 0
+    $artHtml = ""
+    $artHeaders = ""
     if ($artUrl) {
-        $artTimingRaw = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total}" --connect-timeout 8 --max-time 15 -A $ua -H "Accept-Encoding: gzip, deflate, br" $artUrl
-        if ($artTimingRaw) {
-            $atp = $artTimingRaw.Split(";")
-            if ($atp.Count -ge 2) {
-                $artTtfbMs = [int][Math]::Round([double]$atp[0] * 1000)
-                $artTotalMs = [int][Math]::Round([double]$atp[1] * 1000)
+        # Warmup ping to measure representative cached delivery
+        & curl.exe -s -o NUL --connect-timeout 6 --max-time 10 -A $uaDesktop "$artUrl"
+        $artTimingRawD = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaDesktop -H "Accept-Encoding: gzip, deflate, br" $artUrl
+        if ($artTimingRawD) {
+            $atpD = $artTimingRawD.Split(";")
+            if ($atpD.Count -ge 3) {
+                $artTtfbMsD = [int][Math]::Round([double]$atpD[0] * 1000)
+                $artPayloadD = [int][Math]::Round([double]$atpD[2] / 1024)
             }
+        }
+        $artHeaders = (& curl.exe -s -I --connect-timeout 8 --max-time 15 -A $uaDesktop "$artUrl") -join "`n"
+        $artHtml = (& curl.exe -Ls --connect-timeout 8 --max-time 15 -A $uaDesktop "$artUrl") -join "`n"
+    }
+
+    $artLcpMsD = 0
+    $artFcpMsD = 0
+    if ($chromeProc -and $artUrl) {
+        $cdpPerfD = Measure-ChromeCdp $artUrl $false
+        if ($cdpPerfD) {
+            if ($cdpPerfD.lcp_ms) { $artLcpMsD = [int]$cdpPerfD.lcp_ms }
+            if ($cdpPerfD.fcp_ms) { $artFcpMsD = [int]$cdpPerfD.fcp_ms }
         }
     }
 
-    # 3b. Real-World Chromium LCP measurement via CDP
-    $artLcpMs = 0
-    $artFcpMs = 0
-    if ($chromeProc -and $artUrl) {
-        try {
-            $newTab = Invoke-RestMethod -Uri "http://localhost:$cdpPort/json/new?$([System.Uri]::EscapeDataString($artUrl))" -Method Put -TimeoutSec 8
-            if ($newTab -and $newTab.id) {
-                $tabId = $newTab.id
-                $wsUrl = $newTab.webSocketDebuggerUrl
-                Start-Sleep -Milliseconds 2500
-                $perfData = Eval-ChromePerf -wsUrl $wsUrl
-                if ($perfData) {
-                    if ($perfData.lcp_ms) { $artLcpMs = [int]$perfData.lcp_ms }
-                    if ($perfData.fcp_ms) { $artFcpMs = [int]$perfData.fcp_ms }
-                }
-                Invoke-RestMethod -Uri "http://localhost:$cdpPort/json/close/$tabId" -Method Get -TimeoutSec 4 | Out-Null
+    # 3b. Mobile Article Fetch & CDP Measurement (with Pixel 8 Pro Emulation)
+    $artTtfbMsM = 0
+    $artPayloadM = 0
+    $artHtmlM = ""
+    $artHeadersM = ""
+    if ($artUrl) {
+        $artTimingRawM = curl.exe -s -o NUL -w "%{time_starttransfer};%{time_total};%{size_download}" --connect-timeout 8 --max-time 15 -A $uaMobile -H "Accept-Encoding: gzip, deflate, br" $artUrl
+        if ($artTimingRawM) {
+            $atpM = $artTimingRawM.Split(";")
+            if ($atpM.Count -ge 3) {
+                $artTtfbMsM = [int][Math]::Round([double]$atpM[0] * 1000)
+                $artPayloadM = [int][Math]::Round([double]$atpM[2] / 1024)
             }
-        } catch {}
+        }
+        $artHeadersM = (& curl.exe -s -I --connect-timeout 8 --max-time 15 -A $uaMobile "$artUrl") -join "`n"
+        $artHtmlM = (& curl.exe -Ls --connect-timeout 8 --max-time 15 -A $uaMobile "$artUrl") -join "`n"
     }
 
-    foreach ($aUrl in $articleUrls) {
+    $artLcpMsM = 0
+    $artFcpMsM = 0
+    if ($chromeProc -and $artUrl) {
+        $cdpPerfM = Measure-ChromeCdp $artUrl $true
+        if ($cdpPerfM) {
+            if ($cdpPerfM.lcp_ms) { $artLcpMsM = [int]$cdpPerfM.lcp_ms }
+            if ($cdpPerfM.fcp_ms) { $artFcpMsM = [int]$cdpPerfM.fcp_ms }
+        }
+    }
+
+    # Fetch additional resolved articles in background
+    $artHtmlList = @($artHtml)
+    $artHeadersList = @($artHeaders)
+    for ($i = 1; $i -lt $articleUrls.Count; $i++) {
         try {
-            $aHeadRaw = & curl.exe -s -I --connect-timeout 8 --max-time 15 -A $ua "$aUrl"
-            $aHtmlRaw = & curl.exe -Ls --connect-timeout 8 --max-time 15 -A $ua "$aUrl"
-            $artHeadersList += ($aHeadRaw -join "`n")
-            $artHtmlList += ($aHtmlRaw -join "`n")
+            $extraUrl = $articleUrls[$i]
+            $aHead = (& curl.exe -s -I --connect-timeout 6 --max-time 10 -A $uaDesktop "$extraUrl") -join "`n"
+            $aHtml = (& curl.exe -Ls --connect-timeout 6 --max-time 10 -A $uaDesktop "$extraUrl") -join "`n"
+            $artHeadersList += $aHead
+            $artHtmlList += $aHtml
         } catch {}
     }
-
     $artHtmlCombined = ($artHtmlList -join "`n")
     $artHeadersCombined = ($artHeadersList -join "`n")
+
     $artHtml = if ($artHtmlList.Count -gt 0) { $artHtmlList[0] } else { "" }
     $artHeaders = if ($artHeadersList.Count -gt 0) { $artHeadersList[0] } else { "" }
 
@@ -367,13 +422,19 @@ foreach ($t in $targets) {
     $feedHasHub = $false
     if ($t.Rss) {
         try {
-            $feedHeadersRaw = & curl.exe -s -I -L --connect-timeout 8 --max-time 12 -A $ua "$($t.Rss)"
+            $feedHeadersRaw = & curl.exe -s -I -L --connect-timeout 8 --max-time 12 -A $ua -H "Accept: application/rss+xml, application/atom+xml, application/xml, text/xml, */*" "$($t.Rss)"
             $feedHeaderText = ($feedHeadersRaw -join "`n")
             if ($feedHeaderText -match '(?i)content-type:\s*([^\r\n;]+)') {
                 $feedContentType = $matches[1].Trim()
             }
-            if ($rssText -match 'rel=["'']hub["'']' -or $rssText -match '<(atom:)?link[^>]+rel=["'']hub["'']') {
+            # Fetch feed body to verify WebSub Hub and real XML content
+            $feedBodyRaw = & curl.exe -s -L --connect-timeout 8 --max-time 12 -A $ua -H "Accept: application/rss+xml, application/atom+xml, application/xml, text/xml, */*" "$($t.Rss)"
+            $feedBodyText = ($feedBodyRaw -join "`n")
+            if ($feedBodyText -match 'rel=["'']hub["'']' -or $feedBodyText -match '<(atom:)?link[^>]+rel=["'']hub["'']' -or $feedHeaderText -match 'rel="hub"') {
                 $feedHasHub = $true
+            }
+            if ($feedContentType -notmatch 'xml' -and ($feedBodyText -match '^\s*<\?xml' -or $feedBodyText -match '^\s*<rss' -or $feedBodyText -match '^\s*<feed')) {
+                $feedContentType = "application/rss+xml"
             }
         } catch {}
     }
@@ -492,120 +553,187 @@ foreach ($t in $targets) {
     # SwG / Reader Revenue
     $hasSwG = ($artHtml -match 'news\.google\.com/swg' -or $artHtml -match 'subscriptions\.google' -or $hpHtml -match 'swg-basic\.js')
 
-    # === EXACT FAIR SCORING (100 Max) ===
-    $score = 0
-    $reasons = @()
+    # Mobile specific checks
+    $hasViewport = ($artHtmlM -match '<meta\b[^>]+name=["'']viewport["''][^>]*>')
+    $hasViewportWidthDevice = ($artHtmlM -match '<meta\b[^>]+content=["''][^"'']*width=device-width[^"'']*["''][^>]*>')
+    $isViewportZoomable = -not ($artHtmlM -match 'user-scalable\s*=\s*(no|0)|maximum-scale\s*=\s*1(\.0)?')
+    $isViewportValid = ($hasViewport -and $hasViewportWidthDevice)
 
-    # 1. Organizace & ISSN (20 b)
-    if ($orgSchemaType -eq "NewsMediaOrganization") { $score += 8; $reasons += "+8b: NewsMediaOrganization" }
-    elseif ($orgSchemaType -eq "Organization") { $score += 4; $reasons += "+4b: Organization" }
+    $hasThemeColor = ($artHtmlM -match '<meta\b[^>]+name=["'']theme-color["'']')
+    $hasAppleTouchIcon = ($artHtmlM -match '<link\b[^>]+rel=["''][^"'']*apple-touch-icon[^"'']*["'']')
+    $hasManifestM = ($artHtmlM -match '<link\b[^>]+rel=["'']manifest["'']')
+    $hasFetchPriorityM = ($artHtmlM -match 'fetchpriority=["'']high["'']')
+    $hasResponsiveImagesM = ($artHtmlM -match '<picture|srcset=')
+    $h1CountM = ([regex]::Matches($artHtmlM, '<h1\b[^>]*>', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)).Count
+
+    # === EXACT FAIR SCORING (Dual Mobile & Desktop 100 Max) ===
+    # === STRICT CALIBRATED DUAL SCORING (Max 100) ===
+    # A. Společný redakční, E-E-A-T & Discover základ (Max 48 b)
+    $baseScore = 0
+    $baseReasons = @()
+
+    # Organizace & Sídlo (18 b)
+    if ($orgSchemaType -eq "NewsMediaOrganization") { $baseScore += 8; $baseReasons += "+8b: NewsMediaOrganization" }
+    elseif ($orgSchemaType -eq "Organization") { $baseScore += 4; $baseReasons += "+4b: Organization" }
     
-    if ($hasEthics -and $hasMasthead) { $score += 5; $reasons += "+5b: Kodex i Tiráž" }
-    elseif ($hasEthics -or $hasMasthead) { $score += 2; $reasons += "+2b: Část E-E-A-T" }
+    if ($hasEthics -and $hasMasthead) { $baseScore += 5; $baseReasons += "+5b: Kodex i Tiráž" }
+    elseif ($hasEthics -or $hasMasthead) { $baseScore += 2; $baseReasons += "+2b: Část E-E-A-T" }
 
-    if ($hasPostal) { $score += 3; $reasons += "+3b: Poštovní adresa sídla" }
-    if ($issnNumber -ne "none") { $score += 2; $reasons += "+2b: ISSN registrace ($issnNumber)" }
-    if ($memberships.Count -gt 0) { $score += 2; $reasons += "+2b: Oborové členství ($orgText)" }
+    if ($hasPostal) { $baseScore += 3; $baseReasons += "+3b: Poštovní adresa sídla" }
+    if ($issnNumber -ne "none") { $baseScore += 2; $baseReasons += "+2b: ISSN registrace ($issnNumber)" }
 
-    # 2. Článek & E-E-A-T (30 b)
-    if ($artSchemaType -eq "NewsArticle") { $score += 10; $reasons += "+10b: NewsArticle schéma" }
-    elseif ($artSchemaType -eq "Article") { $score += 5; $reasons += "+5b: Article schéma" }
-    elseif ($artSchemaType -eq "BlogPosting") { $score += 3; $reasons += "+3b: BlogPosting schéma" }
+    # Článek & Autorita (26 b)
+    if ($artSchemaType -eq "NewsArticle") { $baseScore += 10; $baseReasons += "+10b: NewsArticle schéma" }
+    elseif ($artSchemaType -eq "Article") { $baseScore += 5; $baseReasons += "+5b: Article schéma" }
+    elseif ($artSchemaType -eq "BlogPosting") { $baseScore += 3; $baseReasons += "+3b: BlogPosting schéma" }
 
-    if ($datePubTz -eq "+02:00" -or $datePubTz -eq "+01:00") { $score += 6; $reasons += "+6b: Platná lokální zóna ($datePubTz)" }
-    elseif ($datePubTz -match "Z|\+00:00") { $score += 3; $reasons += "+3b: UTC čas (zpoždění v Discover)" }
+    if ($datePubTz -eq "+02:00" -or $datePubTz -eq "+01:00") { $baseScore += 6; $baseReasons += "+6b: Platná lokální zóna ($datePubTz)" }
+    elseif ($datePubTz -match "Z|\+00:00") { $baseScore += 2; $baseReasons += "+2b: UTC čas (zpoždění v Discover)" }
 
-    if ($hasAuthorSameAs) { $score += 4; $reasons += "+4b: Sociální sítě autora" }
-    if ($hasEditor) { $score += 4; $reasons += "+4b: Redakční garant (editor: $editorName)" }
-    if ($hasMentions) { $score += 4; $reasons += "+4b: Sémantické entity (mentions: Thing)" }
-    if ($hasSpeakable) { $score += 2; $reasons += "+2b: Google Assistant speakable" }
+    if ($hasAuthorSameAs) { $baseScore += 4; $baseReasons += "+4b: Sociální sítě autora" }
+    if ($hasEditor) { $baseScore += 4; $baseReasons += "+4b: Redakční garant (editor: $editorName)" }
+    if ($memberships.Count -gt 0) { $baseScore += 2; $baseReasons += "+2b: Oborové členství ($orgText)" }
 
-    # 3. OpenGraph & Discover (15 b)
-    if ($ogType -eq "article") { $score += 4; $reasons += "+4b: og:type=article" }
-    if ($ogPubTz -eq "+02:00" -or $ogPubTz -eq "+01:00") { $score += 4; $reasons += "+4b: OG publikováno v lokálním čase" }
-    elseif ($ogPubTz -match "Z|\+00:00") { $score += 2; $reasons += "+2b: OG publikováno v UTC" }
-    if ($twitterCard -eq "summary_large_image") { $score += 4; $reasons += "+4b: Twitter Large Card" }
-    if ($hasDiscoverLarge) { $score += 3; $reasons += "+3b: max-image-preview:large" }
+    # Sociální sítě & Discover (4 b)
+    if ($ogType -eq "article") { $baseScore += 2; $baseReasons += "+2b: og:type=article" }
+    if ($hasDiscoverLarge) { $baseScore += 2; $baseReasons += "+2b: max-image-preview:large" }
 
-    # 4. Rychlost, WebSub & Moderní Web (20 b)
-    if ($hasWebSub) { $score += 5; $reasons += "+5b: W3C WebSub Realtime Push Huby" }
-    if ($isFeedXml) { $score += 2; $reasons += "+2b: Validní XML Feed ($feedContentType)" }
-    if ($hasHttp3) { $score += 3; $reasons += "+3b: HTTP/3 QUIC podpora" }
-    if ($hasManifest) { $score += 2; $reasons += "+2b: Web Manifest & PWA" }
-    if ($hasPreconnect) { $score += 2; $reasons += "+2b: Preconnect & DNS Hints ($preconnectCount)" }
-    if ($hasFetchPriorityHigh) { $score += 2; $reasons += "+2b: fetchpriority=high u LCP fotky" }
-    if ($hasSpeculationRules) { $score += 2; $reasons += "+2b: Speculation Rules instant prerender" }
-    if ($hasFediverse) { $score += 2; $reasons += "+2b: Fediverse Creator ($fediverseCreator)" }
+    # B. Desktop specifické body (Max 52 b add-on -> 100 Max)
+    $desktopScore = $baseScore
+    $desktopReasons = @($baseReasons)
 
-    # 5. Bezpečnost & Standardy (15 b)
-    if ($hasHsts) { $score += 4; $reasons += "+4b: HSTS aktivní" }
-    if ($hasNosniff) { $score += 3; $reasons += "+3b: X-Content-Type-Options nosniff" }
-    if ($hasXfo) { $score += 3; $reasons += "+3b: X-Frame-Options ochrana" }
-    if ($isSitemapValid) { $score += 2; $reasons += "+2b: Sitemap XML ($sitemapStatus)" }
-    if ($isW3cClean) { $score += 3; $reasons += "+3b: W3C Validní HTML5 ($w3cStatus)" }
-    elseif ($h1Count -eq 1) { $score += 2; $reasons += "+2b: Čistá H1 hierarchie (1x H1)" }
+    if ($hasHttp3) { $desktopScore += 4; $desktopReasons += "+4b: HTTP/3 QUIC" }
+    if ($hasHsts) { $desktopScore += 5; $desktopReasons += "+5b: HSTS aktivní" }
+    if ($hasNosniff) { $desktopScore += 4; $desktopReasons += "+4b: X-Content-Type-Options nosniff" }
+    if ($hasXfo) { $desktopScore += 4; $desktopReasons += "+4b: X-Frame-Options ochrana" }
+    if ($isW3cClean) { $desktopScore += 5; $desktopReasons += "+5b: W3C Validní HTML5 ($w3cStatus)" }
+    if ($hasWebSub) { $desktopScore += 5; $desktopReasons += "+5b: W3C WebSub Huby" }
+    if ($isFeedXml) { $desktopScore += 2; $desktopReasons += "+2b: Validní XML Feed ($feedContentType)" }
+    if ($isSitemapValid) { $desktopScore += 2; $desktopReasons += "+2b: Sitemap XML ($sitemapStatus)" }
+    if ($hasPreconnect) { $desktopScore += 3; $desktopReasons += "+3b: Preconnect & Hints ($preconnectCount)" }
+    if ($hasSpeculationRules) { $desktopScore += 3; $desktopReasons += "+3b: Speculation Rules" }
+    if ($hasSpeakable) { $desktopScore += 3; $desktopReasons += "+3b: Google Assistant speakable" }
 
-    if ($score -gt 100) { $score = 100 }
+    # Přísná rychlost na Desktopu
+    if ($artLcpMsD -gt 0 -and $artLcpMsD -lt 250) { $desktopScore += 6; $desktopReasons += "+6b: Desktop LCP bleskové ($artLcpMsD ms)" }
+    elseif ($artLcpMsD -gt 0 -and $artLcpMsD -lt 800) { $desktopScore += 3; $desktopReasons += "+3b: Desktop LCP dobré ($artLcpMsD ms)" }
+    elseif ($artLcpMsD -gt 0 -and $artLcpMsD -lt 1500) { $desktopScore += 1; $desktopReasons += "+1b: Desktop LCP ($artLcpMsD ms)" }
+
+    if ($artTtfbMsD -gt 0 -and $artTtfbMsD -lt 60) { $desktopScore += 6; $desktopReasons += "+6b: Desktop TTFB bleskové ($artTtfbMsD ms)" }
+    elseif ($artTtfbMsD -gt 0 -and $artTtfbMsD -lt 150) { $desktopScore += 3; $desktopReasons += "+3b: Desktop TTFB dobré ($artTtfbMsD ms)" }
+
+    if ($desktopScore -gt 100) { $desktopScore = 100 }
+
+    # C. Mobilní specifické body (Max 52 b add-on -> 100 Max)
+    $mobileScore = $baseScore
+    $mobileReasons = @($baseReasons)
+
+    if ($isViewportValid) { $mobileScore += 2; $mobileReasons += "+2b: Validní mobilní Viewport" }
+    if ($isViewportZoomable) { $mobileScore += 2; $mobileReasons += "+2b: Přístupný Viewport" }
+    if ($hasHsts) { $mobileScore += 4; $mobileReasons += "+4b: HSTS šifrování pro mobil" }
+    if ($hasManifestM -or $hasManifest) { $mobileScore += 4; $mobileReasons += "+4b: Web Manifest & PWA Ready" }
+    if ($hasAppleTouchIcon -or $hasThemeColor) { $mobileScore += 2; $mobileReasons += "+2b: Touch Icon & Theme-Color" }
+    if ($hasFetchPriorityM -or $hasFetchPriorityHigh) { $mobileScore += 3; $mobileReasons += "+3b: fetchpriority=high na mobilní fotce" }
+    if ($hasResponsiveImagesM) { $mobileScore += 2; $mobileReasons += "+2b: Responzivní obrázky (srcset)" }
+    if ($hasWebSub) { $mobileScore += 4; $mobileReasons += "+4b: Realtime WebSub Push na mobil" }
+    if ($hasFediverse) { $mobileScore += 3; $mobileReasons += "+3b: Fediverse Creator ($fediverseCreator)" }
+    if ($hasMentions) { $mobileScore += 5; $mobileReasons += "+5b: Sémantické entity (mentions: Thing)" }
+    if ($hasSpeakable) { $mobileScore += 3; $mobileReasons += "+3b: Google Assistant speakable" }
+    if ($h1CountM -eq 1 -or $h1Count -eq 1) { $mobileScore += 2; $mobileReasons += "+2b: Čistá H1 hierarchie (1x H1)" }
+
+    # Přísná rychlost na Mobilu
+    if ($artLcpMsM -gt 0 -and $artLcpMsM -lt 150) { $mobileScore += 8; $mobileReasons += "+8b: Mobilní LCP bleskové ($artLcpMsM ms)" }
+    elseif ($artLcpMsM -gt 0 -and $artLcpMsM -lt 400) { $mobileScore += 4; $mobileReasons += "+4b: Mobilní LCP dobré ($artLcpMsM ms)" }
+    elseif ($artLcpMsM -gt 0 -and $artLcpMsM -lt 1000) { $mobileScore += 2; $mobileReasons += "+2b: Mobilní LCP ($artLcpMsM ms)" }
+
+    if ($artTtfbMsM -gt 0 -and $artTtfbMsM -lt 60) { $mobileScore += 5; $mobileReasons += "+5b: Mobilní TTFB bleskové ($artTtfbMsM ms)" }
+    elseif ($artTtfbMsM -gt 0 -and $artTtfbMsM -lt 150) { $mobileScore += 2; $mobileReasons += "+2b: Mobilní TTFB dobré ($artTtfbMsM ms)" }
+
+    if ($artPayloadM -gt 0 -and $artPayloadM -lt 60) { $mobileScore += 3; $mobileReasons += "+3b: Datově úsporný mobil ($artPayloadM kB)" }
+    elseif ($artPayloadM -gt 0 -and $artPayloadM -lt 120) { $mobileScore += 1; $mobileReasons += "+1b: Datová zátěž ($artPayloadM kB)" }
+
+    if ($mobileScore -gt 100) { $mobileScore = 100 }
+
+    # D. Celkové kombinované skóre
+    $overallScore = [int][Math]::Round(($desktopScore + $mobileScore) / 2)
 
     $item = [PSCustomObject]@{
-        Name           = $t.Name
-        HpUrl          = $t.Hp
-        ArticleUrl     = $artUrl -replace '\?nocache=\d+', ''
-        ISSN           = $issnNumber
-        Memberships    = $orgText
-        HSTS           = $hasHsts
-        Nosniff        = $hasNosniff
-        XFO            = $hasXfo
-        HTTP3          = $hasHttp3
-        HpTtfbMs       = $hpTtfbMs
-        ArtTtfbMs      = $artTtfbMs
-        ArtLcpMs       = $artLcpMs
-        ArtFcpMs       = $artFcpMs
-        OrgSchema      = $orgSchemaType
-        ArtSchema      = $artSchemaType
-        Ethics         = $hasEthics
-        Masthead       = $hasMasthead
-        PostalAddress  = $hasPostal
-        AuthorSameAs   = $hasAuthorSameAs
-        Editor         = $hasEditor
-        EditorName     = $editorName
-        Mentions       = $hasMentions
-        MentionsCount  = $mentionsCount
-        Speakable      = $hasSpeakable
-        Timezone       = $datePubTz
-        OgType         = $ogType
-        OgImageFormat  = $imageFormat
-        DiscoverLarge  = $hasDiscoverLarge
-        FetchPriority  = $hasFetchPriorityHigh
-        Preconnect     = $hasPreconnect
-        PreconnectCount= $preconnectCount
-        Speculation    = $hasSpeculationRules
-        Manifest       = $hasManifest
-        ManifestMime   = $manifestMime
-        WebSub         = $hasWebSub
-        FeedContentType= $feedContentType
-        FeedHasHub     = $feedHasHub
-        SitemapStatus  = $sitemapStatus
-        IsSitemapValid = $isSitemapValid
-        Fediverse      = $hasFediverse
-        FediverseUser  = $fediverseCreator
-        Html5Clean     = $html5Clean
-        LegacyCssCount = $legacyCssCount
-        LegacyJsCount  = $legacyJsCount
-        W3CErrors      = $w3cErrors
-        W3CWarnings    = $w3cWarnings
-        W3CStatus      = $w3cStatus
-        IsW3cClean     = $isW3cClean
-        MediaSchema    = $mediaSchema
-        BlocksAi       = $blocksAi
-        ConsentV2      = $hasConsentV2
-        CMP            = $cmpSystem
-        Comments       = $commentsSystem
-        H1Count        = $h1Count
-        DomTags        = $domTags
-        SwG            = $hasSwG
-        TotalScore     = $score
-        ScoreReasons   = ($reasons -join ", ")
+        Name               = $t.Name
+        HpUrl              = $t.Hp
+        ArticleUrl         = $artUrl -replace '\?nocache=\d+', ''
+        TotalScore         = $overallScore
+        OverallScore       = $overallScore
+        DesktopScore       = $desktopScore
+        MobileScore        = $mobileScore
+        ScoreReasons       = ($desktopReasons -join ", ")
+        DesktopReasons     = ($desktopReasons -join ", ")
+        MobileReasons      = ($mobileReasons -join ", ")
+        HpTtfbMs           = $hpTtfbMsD
+        ArtTtfbMs          = $artTtfbMsD
+        ArtLcpMs           = $artLcpMsD
+        ArtFcpMs           = $artFcpMsD
+        DesktopTtfbMs      = $artTtfbMsD
+        DesktopLcpMs       = $artLcpMsD
+        DesktopPayloadKb   = $artPayloadD
+        MobileTtfbMs       = $artTtfbMsM
+        MobileLcpMs        = $artLcpMsM
+        MobilePayloadKb    = $artPayloadM
+        ViewportValid      = $isViewportValid
+        ViewportZoomable   = $isViewportZoomable
+        PwaManifest        = ($hasManifestM -or $hasManifest)
+        AppleTouchIcon     = $hasAppleTouchIcon
+        ThemeColor         = $hasThemeColor
+        FetchPriorityHighM = $hasFetchPriorityM
+        ResponsiveImagesM  = $hasResponsiveImagesM
+        ISSN               = $issnNumber
+        Memberships        = $orgText
+        HSTS               = $hasHsts
+        Nosniff            = $hasNosniff
+        XFO                = $hasXfo
+        HTTP3              = $hasHttp3
+        OrgSchema          = $orgSchemaType
+        ArtSchema          = $artSchemaType
+        Ethics             = $hasEthics
+        Masthead           = $hasMasthead
+        PostalAddress      = $hasPostal
+        AuthorSameAs       = $hasAuthorSameAs
+        Editor             = $hasEditor
+        EditorName         = $editorName
+        Mentions           = $hasMentions
+        MentionsCount      = $mentionsCount
+        Speakable          = $hasSpeakable
+        Timezone           = $datePubTz
+        OgType             = $ogType
+        OgImageFormat      = $imageFormat
+        DiscoverLarge      = $hasDiscoverLarge
+        FetchPriority      = $hasFetchPriorityHigh
+        Preconnect         = $hasPreconnect
+        PreconnectCount    = $preconnectCount
+        Speculation        = $hasSpeculationRules
+        Manifest           = $hasManifest
+        ManifestMime       = $manifestMime
+        WebSub             = $hasWebSub
+        FeedContentType    = $feedContentType
+        FeedHasHub         = $feedHasHub
+        SitemapStatus      = $sitemapStatus
+        IsSitemapValid     = $isSitemapValid
+        Fediverse          = $hasFediverse
+        FediverseUser      = $fediverseCreator
+        Html5Clean         = $html5Clean
+        LegacyCssCount     = $legacyCssCount
+        LegacyJsCount      = $legacyJsCount
+        W3CErrors          = $w3cErrors
+        W3CWarnings        = $w3cWarnings
+        W3CStatus          = $w3cStatus
+        IsW3cClean         = $isW3cClean
+        MediaSchema        = $mediaSchema
+        BlocksAi           = $blocksAi
+        ConsentV2          = $hasConsentV2
+        CMP                = $cmpSystem
+        Comments           = $commentsSystem
+        H1Count            = $h1Count
+        DomTags            = $domTags
+        SwG                = $hasSwG
     }
 
     $auditItems += $item
@@ -618,7 +746,7 @@ $sorted = $auditItems | Sort-Object -Property TotalScore -Descending
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $jsonRaw = $sorted | ConvertTo-Json -Depth 5
 [System.IO.File]::WriteAllText("$dataDir\raw-audit-$today.json", $jsonRaw, $utf8NoBom)
-[System.IO.File]::WriteAllText("$dataDir\scored-$today.json", ($sorted | Select-Object Name, TotalScore, ScoreReasons | ConvertTo-Json -Depth 3), $utf8NoBom)
+[System.IO.File]::WriteAllText("$dataDir\scored-$today.json", ($sorted | Select-Object Name, TotalScore, OverallScore, DesktopScore, MobileScore, DesktopReasons, MobileReasons | ConvertTo-Json -Depth 3), $utf8NoBom)
 
 Write-Host "Data saved. Generating Master HTML Matrix..."
 
@@ -641,6 +769,9 @@ if (Test-Path $templateFile) {
     # Optional sync to public-benchmark (only when explicitly requested via -PushPublic)
     if ($PushPublic) {
         $pubDir = "$PSScriptRoot\..\..\public-benchmark"
+        if (!(Test-Path "$pubDir\.git")) {
+            $pubDir = "C:\Users\premy\.gemini\antigravity-ide\brain\72564e42-88cb-4920-a972-1524155e7956\scratch\czech-tech-benchmark"
+        }
         if (Test-Path "$pubDir\.git") {
             Write-Host "Syncing to public-benchmark repository..."
             Copy-Item -Path "$dataDir\raw-audit-$today.json" -Destination "$pubDir\data\" -Force
@@ -650,10 +781,11 @@ if (Test-Path $templateFile) {
             Copy-Item -Path "$benchmarkRoot\README.md" -Destination "$pubDir\README.md" -Force
             Copy-Item -Path "$benchmarkRoot\targets.txt" -Destination "$pubDir\targets.txt" -Force
             Copy-Item -Path "$benchmarkRoot\template.html" -Destination "$pubDir\template.html" -Force
+            Copy-Item -Path "$benchmarkRoot\scripts\run-audit.ps1" -Destination "$pubDir\scripts\run-audit.ps1" -Force
             
             git -C $pubDir add -A
-            git -C $pubDir commit -m "Update benchmark data for $today" --quiet
-            git -C $pubDir push origin main --quiet
+            git -C $pubDir commit -m "Update benchmark data for $today (20 portals)"
+            git -C $pubDir push origin main
             Write-Host "Public benchmark repository updated and pushed."
         }
     }
