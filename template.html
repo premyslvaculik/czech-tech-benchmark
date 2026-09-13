@@ -675,7 +675,6 @@
                         <th class="sortable" data-sort="CMP" onclick="handleHeaderSort('CMP')">Consent Mode v2 & CMP <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="Comments" onclick="handleHeaderSort('Comments')">Komentářový systém <span class="sort-icon">↕</span></th>
                         <th class="sortable" data-sort="DomTags" onclick="handleHeaderSort('DomTags')">Nadpisy H1 & DOM uzly <span class="sort-icon">↕</span></th>
-                        <th class="sortable" data-sort="SwG" onclick="handleHeaderSort('SwG')">Google SwG Subscriptions <span class="sort-icon">↕</span></th>
                     </tr>
                 `;
             } else if (currentDeviceTab === 'mobile') {
@@ -790,7 +789,6 @@
                         <td>` + formatCmp(item.CMP, item.ConsentV2) + `</td>
                         <td>` + formatComments(item.Comments) + `</td>
                         <td><span class="badge-ok">` + (item.H1Count || 1) + `x H1</span> / <span class="mono">` + (item.DomTags || 800) + ` tagů</span></td>
-                        <td>` + (item.SwG ? '<span class="badge-ok">ANO (Reader Revenue)</span>' : '<span class="badge-err">NE</span>') + `</td>
                     `;
                 } else if (currentDeviceTab === 'mobile') {
                     rowHtml += `

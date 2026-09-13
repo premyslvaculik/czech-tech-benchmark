@@ -550,9 +550,6 @@ foreach ($t in $targets) {
     $h1Count = ([regex]::Matches($artHtml, '<h1\b[^>]*>', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)).Count
     $domTags = ([regex]::Matches($artHtml, '<[a-zA-Z0-9]+(\s|>)')).Count
 
-    # SwG / Reader Revenue
-    $hasSwG = ($artHtml -match 'news\.google\.com/swg' -or $artHtml -match 'subscriptions\.google' -or $hpHtml -match 'swg-basic\.js')
-
     # Mobile specific checks
     $hasViewport = ($artHtmlM -match '<meta\b[^>]+name=["'']viewport["''][^>]*>')
     $hasViewportWidthDevice = ($artHtmlM -match '<meta\b[^>]+content=["''][^"'']*width=device-width[^"'']*["''][^>]*>')
@@ -733,7 +730,6 @@ foreach ($t in $targets) {
         Comments           = $commentsSystem
         H1Count            = $h1Count
         DomTags            = $domTags
-        SwG                = $hasSwG
     }
 
     $auditItems += $item
